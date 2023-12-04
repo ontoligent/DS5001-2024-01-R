@@ -1,4 +1,5 @@
 # SYSTEM
+notebooks/env.ini
 .Rhistory
 .Rproj.user
 repo.Rproj

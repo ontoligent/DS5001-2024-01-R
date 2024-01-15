@@ -1,0 +1,3186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.262">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Exploratory Text Analytics - 16&nbsp; How to Create an N-Gram Model from ScratchHow to Create an N-Gram Model from Scratch</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../lessons/M04_NLP/M04_00_NLTK_Intro.html" rel="next">
+<link href="../../lessons/M03_LanguageModels/M03_04-Entropy-and-Term-Length.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-title">How to Create an N-Gram Model from ScratchHow to Create an N-Gram Model from Scratch</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Exploratory Text Analytics</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ontoligent/DS5001-2024-01-R" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">M01 Introduction</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_01_getting-started.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Setting Up Your Jupyter Environmnet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_02_hello.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: Hello, World!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_03_first-foray.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: First Foray</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_04_FurtherExploration.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: Further Exploration</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">M02 TextModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_01_Importing-Persuasion.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Text into Data: Importing a Text, or, Clip, Chunk, and Split</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_02_TokenizingWithSciKitLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Tokenizing with SciKit Learn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_03_Challenge.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Challenge: Convert Another Text</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">M03 LanguageModels</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_01_Babel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Baby Babel</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_01a_EntropyExamples.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy Examples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V1.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models v1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models (v2)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V3.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models (v3)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_SimpleLangModel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Demonstration of Simple Language Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_03_Entropy-and-Perplexity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy and Peplexity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_04-Entropy-and-Term-Length.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy and Term Length</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_EZ.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">How to Create an N-Gram Model from ScratchHow to Create an N-Gram Model from Scratch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">M04 NLP</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_00_NLTK_Intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">NLTK Parsers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_01_Pipeline.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">NLP and the Pipeline</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_02_HMM.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Predict POS with an HMM</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">M05 VectorSpaceModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_01_BOW_TFIDF.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Vector Spaces, BOW, and TFIDF</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_02_TimeTokenMatrices.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Time-Token Matrices</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_03_TFIDF_Exploration.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Variant TFIDFs and Document Significance</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false">M06 CusteringSimilarity</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M06_CusteringSimilarity/M06_01_SimilarityMeasures.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Similarity and Distance Measures</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false">M07 FeaturesAndComponents</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M07_FeaturesAndComponents/M07_01_PCA.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">PCA from Scratch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false">M08 TopicModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_01_GibbsSampler.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Gibbs Sampler</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_02_LDASciKitLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LDA with SciKit Learn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_03_TopicSimilarity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Topic Similarity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_04_TopicContiguity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Topic Contiguity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_05_PyLDAVis.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">PyLDAVis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Untitled.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">M08a Visualization</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_01_Gensim.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Other Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_02_GensimRunCompareLDA.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_03_MALLET.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_04_Mazo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">M09 WordEmbedding</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_01_GloVe.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_02_PMI_SVD.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_03_SkipgramRepresentation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_04_word2vec.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_05_FastText.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Untitled.html</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/run_fasttext.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">FastText Model</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="false">M10 SentimentAnalysis</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_01_GeneralInquirer.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_02_CombineLexicons.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_03_Novel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_04_AustenMelville.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_05_WordShiftGraphs.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_06_Doc2Vec.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" aria-expanded="false">M11 Narrative</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_01_ExportBooksWithSentiment.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_02_SyuzhetPlots.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_03_Syuzhet_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_04_Syuzhet_RGeneral.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" aria-expanded="false">M12 Classification</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_01_NaiveBayesWineReviews.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_01b_SKLearnMNB.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_02_PerceptronWine.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_03.ExpectedMutualInformation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_04_Viz.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" aria-expanded="false">M13 LLMs</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-14" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_01_ChatGPTDemo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_02_ChatGPTDemo2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_03_ChatGPT4Demo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_play.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">M13_play.html</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/tokenizer_training.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Loading the dataset</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" aria-expanded="false">M90 DispersionPlots</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-15" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M90_DispersionPlots/m01.04-austen-kde.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Synopsis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M90_DispersionPlots/onehot.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">onehot.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" aria-expanded="false">M91 Charrette</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-16" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M91_Charrette/CharretteFIguresAndCharacters.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Figures and Characters</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M91_Charrette/CharretteTokens.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Config</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-17" aria-expanded="false">M92 Helpers</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-17" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-17" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M92_Helpers/M00_01_VectorizationWithSKLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M92_Helpers/M00_02_SpaCy.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#set-up-environment" id="toc-set-up-environment" class="nav-link active" data-scroll-target="#set-up-environment">Set Up Environment</a>
+  <ul class="collapse">
+  <li><a href="#configure" id="toc-configure" class="nav-link" data-scroll-target="#configure">Configure</a></li>
+  </ul></li>
+  <li><a href="#get-some-training-data" id="toc-get-some-training-data" class="nav-link" data-scroll-target="#get-some-training-data">Get Some Training Data</a></li>
+  <li><a href="#select-oov-terms" id="toc-select-oov-terms" class="nav-link" data-scroll-target="#select-oov-terms">Select OOV terms</a></li>
+  <li><a href="#generate-ngram-models" id="toc-generate-ngram-models" class="nav-link" data-scroll-target="#generate-ngram-models">Generate NGram Models</a>
+  <ul class="collapse">
+  <li><a href="#prepare-tokens-for-ngram-binding" id="toc-prepare-tokens-for-ngram-binding" class="nav-link" data-scroll-target="#prepare-tokens-for-ngram-binding">Prepare tokens for ngram binding</a></li>
+  <li><a href="#bind-modified-token-sequence-into-an-ngram-table" id="toc-bind-modified-token-sequence-into-an-ngram-table" class="nav-link" data-scroll-target="#bind-modified-token-sequence-into-an-ngram-table">Bind modified token sequence into an ngram table</a></li>
+  <li><a href="#generate-models" id="toc-generate-models" class="nav-link" data-scroll-target="#generate-models">Generate models</a></li>
+  </ul></li>
+  <li><a href="#test-models" id="toc-test-models" class="nav-link" data-scroll-target="#test-models">Test Models</a>
+  <ul class="collapse">
+  <li><a href="#generate-training-data" id="toc-generate-training-data" class="nav-link" data-scroll-target="#generate-training-data">Generate Training Data</a></li>
+  <li><a href="#identify-oov-terms" id="toc-identify-oov-terms" class="nav-link" data-scroll-target="#identify-oov-terms">Identify OOV terms</a></li>
+  <li><a href="#convert-test-tokens-into-ngrams" id="toc-convert-test-tokens-into-ngrams" class="nav-link" data-scroll-target="#convert-test-tokens-into-ngrams">Convert test tokens into ngrams</a></li>
+  <li><a href="#bind-the-models-to-test-data" id="toc-bind-the-models-to-test-data" class="nav-link" data-scroll-target="#bind-the-models-to-test-data">Bind the models to test data</a></li>
+  <li><a href="#apply-fallback" id="toc-apply-fallback" class="nav-link" data-scroll-target="#apply-fallback">Apply fallback</a></li>
+  <li><a href="#compute-sentence-scores" id="toc-compute-sentence-scores" class="nav-link" data-scroll-target="#compute-sentence-scores">Compute sentence scores</a></li>
+  </ul></li>
+  <li><a href="#visualize" id="toc-visualize" class="nav-link" data-scroll-target="#visualize">Visualize</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.dev/ontoligent/DS5001-2024-01-R/blob/main/lessons/M03_LanguageModels/M03_EZ.ipynb" class="toc-action">Edit this page</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-title">How to Create an N-Gram Model from ScratchHow to Create an N-Gram Model from Scratch</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Course</span><span class="kw">:</span><span class="at">  DS 5001</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Module</span><span class="kw">:</span><span class="at">  M03 Language Models</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Topic</span><span class="kw">:</span><span class="at">   How to Create an N-Gram Model from ScratchHow to Create an N-Gram Model from Scratch</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Author</span><span class="kw">:</span><span class="at">  R.C. Alvarado</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">Date</span><span class="kw">:</span><span class="at">    6 February 2023</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Purpose</strong>: To demonstrate how a simple ngram language models are created from data and applied to the prediction of sentences. No effort is made to define classes or functions; instead the code is meant to show the logic as clearly as possible.</p>
+<section id="set-up-environment" class="level1">
+<h1>Set Up Environment</h1>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="configure" class="level3">
+<h3 class="anchored" data-anchor-id="configure">Configure</h3>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> configparser</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> configparser.ConfigParser()</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>config.read(<span class="st">"../env.ini"</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>data_dir <span class="op">=</span> config[<span class="st">'DEFAULT'</span>][<span class="st">'data_home'</span>]</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>output_dir <span class="op">=</span> config[<span class="st">'DEFAULT'</span>][<span class="st">'output_dir'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="get-some-training-data" class="level1">
+<h1>Get Some Training Data</h1>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data_dir <span class="op">=</span> output_dir</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>OHCO <span class="op">=</span> [<span class="st">'book_id'</span>,<span class="st">'chap_num'</span>,<span class="st">'para_num'</span>,<span class="st">'sent_num'</span>,<span class="st">'token_num'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>TOKEN <span class="op">=</span> pd.read_csv(data_dir <span class="op">+</span> <span class="st">"/austen-combo-TOKENS.csv"</span>).set_index(OHCO)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>VOCAB <span class="op">=</span> pd.read_csv(data_dir <span class="op">+</span> <span class="st">"/austen-combo-VOCAB.csv"</span>).set_index(<span class="st">'term_str'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>TOKEN.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>token_str</th>
+      <th>term_str</th>
+    </tr>
+    <tr>
+      <th>book_id</th>
+      <th>chap_num</th>
+      <th>para_num</th>
+      <th>sent_num</th>
+      <th>token_num</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">1</th>
+      <th rowspan="5" valign="top">1</th>
+      <th rowspan="5" valign="top">1</th>
+      <th rowspan="5" valign="top">0</th>
+      <th>0</th>
+      <td>The</td>
+      <td>the</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>family</td>
+      <td>family</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>of</td>
+      <td>of</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Dashwood</td>
+      <td>dashwood</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>had</td>
+      <td>had</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>VOCAB.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>n</th>
+      <th>n_chars</th>
+      <th>p</th>
+      <th>i</th>
+      <th>h</th>
+    </tr>
+    <tr>
+      <th>term_str</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>3</td>
+      <td>1</td>
+      <td>0.000015</td>
+      <td>16.058901</td>
+      <td>0.000235</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>1</td>
+      <td>2</td>
+      <td>0.000005</td>
+      <td>17.643863</td>
+      <td>0.000086</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>1</td>
+      <td>2</td>
+      <td>0.000005</td>
+      <td>17.643863</td>
+      <td>0.000086</td>
+    </tr>
+    <tr>
+      <th>1760</th>
+      <td>1</td>
+      <td>4</td>
+      <td>0.000005</td>
+      <td>17.643863</td>
+      <td>0.000086</td>
+    </tr>
+    <tr>
+      <th>1784</th>
+      <td>1</td>
+      <td>4</td>
+      <td>0.000005</td>
+      <td>17.643863</td>
+      <td>0.000086</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="select-oov-terms" class="level1">
+<h1>Select OOV terms</h1>
+<p>For our OOV terms, we select very short words that appear only once.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>VOCAB[<span class="st">'modified_term_str'</span>] <span class="op">=</span> VOCAB.index</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>VOCAB.loc[(VOCAB.n <span class="op">==</span> <span class="dv">1</span>) <span class="op">&amp;</span> (VOCAB.n_chars <span class="op">&lt;</span> <span class="dv">3</span>), <span class="st">'modified_term_str'</span>] <span class="op">=</span> <span class="st">"&lt;UNK&gt;"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>VOCAB</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>n</th>
+      <th>n_chars</th>
+      <th>p</th>
+      <th>i</th>
+      <th>h</th>
+      <th>modified_term_str</th>
+    </tr>
+    <tr>
+      <th>term_str</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>3</td>
+      <td>1</td>
+      <td>0.000015</td>
+      <td>16.058901</td>
+      <td>0.000235</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>1</td>
+      <td>2</td>
+      <td>0.000005</td>
+      <td>17.643863</td>
+      <td>0.000086</td>
+      <td>&lt;UNK&gt;</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>1</td>
+      <td>2</td>
+      <td>0.000005</td>
+      <td>17.643863</td>
+      <td>0.000086</td>
+      <td>&lt;UNK&gt;</td>
+    </tr>
+    <tr>
+      <th>1760</th>
+      <td>1</td>
+      <td>4</td>
+      <td>0.000005</td>
+      <td>17.643863</td>
+      <td>0.000086</td>
+      <td>1760</td>
+    </tr>
+    <tr>
+      <th>1784</th>
+      <td>1</td>
+      <td>4</td>
+      <td>0.000005</td>
+      <td>17.643863</td>
+      <td>0.000086</td>
+      <td>1784</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>youthful</th>
+      <td>3</td>
+      <td>8</td>
+      <td>0.000015</td>
+      <td>16.058901</td>
+      <td>0.000235</td>
+      <td>youthful</td>
+    </tr>
+    <tr>
+      <th>z</th>
+      <td>1</td>
+      <td>1</td>
+      <td>0.000005</td>
+      <td>17.643863</td>
+      <td>0.000086</td>
+      <td>&lt;UNK&gt;</td>
+    </tr>
+    <tr>
+      <th>zeal</th>
+      <td>7</td>
+      <td>4</td>
+      <td>0.000034</td>
+      <td>14.836508</td>
+      <td>0.000507</td>
+      <td>zeal</td>
+    </tr>
+    <tr>
+      <th>zealous</th>
+      <td>4</td>
+      <td>7</td>
+      <td>0.000020</td>
+      <td>15.643863</td>
+      <td>0.000306</td>
+      <td>zealous</td>
+    </tr>
+    <tr>
+      <th>zealously</th>
+      <td>2</td>
+      <td>9</td>
+      <td>0.000010</td>
+      <td>16.643863</td>
+      <td>0.000163</td>
+      <td>zealously</td>
+    </tr>
+  </tbody>
+</table>
+<p>8238 rows × 6 columns</p>
+</div>
+</div>
+</div>
+<p>We apply the modified term list to our tokens.</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>TOKEN[<span class="st">'modified_term_str'</span>] <span class="op">=</span> TOKEN.term_str.<span class="bu">map</span>(VOCAB.modified_term_str)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>TOKEN[TOKEN.modified_term_str <span class="op">==</span> <span class="st">'&lt;UNK&gt;'</span>].sample(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>token_str</th>
+      <th>term_str</th>
+      <th>modified_term_str</th>
+    </tr>
+    <tr>
+      <th>book_id</th>
+      <th>chap_num</th>
+      <th>para_num</th>
+      <th>sent_num</th>
+      <th>token_num</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2</th>
+      <th>22</th>
+      <th>41</th>
+      <th>2</th>
+      <th>1</th>
+      <td>n</td>
+      <td>n</td>
+      <td>&lt;UNK&gt;</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <th>38</th>
+      <th>28</th>
+      <th>7</th>
+      <th>3</th>
+      <td>em</td>
+      <td>em</td>
+      <td>&lt;UNK&gt;</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">2</th>
+      <th>1</th>
+      <th>2</th>
+      <th>2</th>
+      <th>3</th>
+      <td>9</td>
+      <td>9</td>
+      <td>&lt;UNK&gt;</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <th>71</th>
+      <th>4</th>
+      <th>13</th>
+      <td>Wm</td>
+      <td>wm</td>
+      <td>&lt;UNK&gt;</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <th>40</th>
+      <th>17</th>
+      <th>1</th>
+      <th>1</th>
+      <td>ho</td>
+      <td>ho</td>
+      <td>&lt;UNK&gt;</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="generate-ngram-models" class="level1">
+<h1>Generate NGram Models</h1>
+<p>Here, we want to take our list of modified tokens and add a sentence boundary symbol <code>&lt;s&gt;</code> before the first token of each sentence.<br>
+Then we want to bind offset versions of the this token list into a dataframe with as many columns as our ngram is wide.<br>
+So, for example, for a trigram table representing the novle <em>Emma</em>, we want something like this:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="M03_EZ_files/figure-html/c87c66a7-39f9-4a03-9af5-cd4942aaab41-1-d20d4544-c1fc-4846-8955-0f5d1363ff33.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">image.png</figcaption><p></p>
+</figure>
+</div>
+<p>Note how each succussive column is the same data but shifted up one row.<br>
+Note also that this table contains all the data required to count instances of trigrams and all lower-order n-grams, i.e.&nbsp;bigram and unigram.</p>
+<section id="prepare-tokens-for-ngram-binding" class="level2">
+<h2 class="anchored" data-anchor-id="prepare-tokens-for-ngram-binding">Prepare tokens for ngram binding</h2>
+<p>First, we filter all tokens that start sentences.<br>
+Our OHCO index helps us here: any token with <code>token_num == 0</code> is at the start of a sentence, since the renumbering starts with each sentence.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>S <span class="op">=</span> TOKEN.query(<span class="st">"token_num == 0"</span>)[[<span class="st">'modified_term_str'</span>]].index</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We assign an absolute sentence number to each inital token and then label all the tokens in a given sentence by their sentence number.<br>
+We must do this because the current <code>sent_num</code> index column refers to the order of the sentence within the paragraph.<br>
+We want the order of the sentence within the corpus.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>TOKEN.loc[S, <span class="st">'sent_num2'</span>] <span class="op">=</span> [n<span class="op">+</span><span class="dv">1</span> <span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(S))] <span class="co"># Assign ordinals </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>TOKEN.sent_num2 <span class="op">=</span> TOKEN.sent_num2.ffill().astype(<span class="st">'int'</span>) <span class="co"># Label all members of sentence with ordinal</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we prepend each sentence with the <code>&lt;s&gt;</code> sign.</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>TOKEN2 <span class="op">=</span> TOKEN.groupby(<span class="st">'sent_num2'</span>).modified_term_str<span class="op">\</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    .<span class="bu">apply</span>(<span class="kw">lambda</span> x: pd.Series([<span class="st">'&lt;s&gt;'</span>] <span class="op">+</span> <span class="bu">list</span>(x))).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Inspect the results:</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">' '</span>.join(TOKEN2.head(<span class="dv">20</span>).to_list()) <span class="op">+</span> <span class="st">' ...'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>'&lt;s&gt; the family of dashwood had long been settled in sussex &lt;s&gt; their estate was large and their residence was ...'</code></pre>
+</div>
+</div>
+</section>
+<section id="bind-modified-token-sequence-into-an-ngram-table" class="level2">
+<h2 class="anchored" data-anchor-id="bind-modified-token-sequence-into-an-ngram-table">Bind modified token sequence into an ngram table</h2>
+<p>Next, we choose the maximum ngram length for our models.</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>ngram <span class="op">=</span> <span class="dv">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we concatenate a set of offset versions of our token list.<br>
+For this we use the <code>pd.concat()</code> method to bind our token lists, and<br>
+we use the <code>df.shift()</code> method to offset our token list for each position in the resulting ngram list.</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>NGRAMS <span class="op">=</span> pd.concat([TOKEN2.shift(<span class="dv">0</span><span class="op">-</span>i) <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(ngram)], axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>NGRAMS.index.name <span class="op">=</span> <span class="st">'ngram_num'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We create our word index names following the convention <code>w0, w1, ..., wN</code>.</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>widx <span class="op">=</span> [<span class="ss">f"w</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(ngram)]</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>NGRAMS.columns <span class="op">=</span> widx</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>NGRAMS</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>w0</th>
+      <th>w1</th>
+      <th>w2</th>
+    </tr>
+    <tr>
+      <th>ngram_num</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>&lt;s&gt;</td>
+      <td>the</td>
+      <td>family</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>the</td>
+      <td>family</td>
+      <td>of</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>family</td>
+      <td>of</td>
+      <td>dashwood</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>of</td>
+      <td>dashwood</td>
+      <td>had</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>dashwood</td>
+      <td>had</td>
+      <td>long</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>217675</th>
+      <td>of</td>
+      <td>persuasion</td>
+      <td>by</td>
+    </tr>
+    <tr>
+      <th>217676</th>
+      <td>persuasion</td>
+      <td>by</td>
+      <td>jane</td>
+    </tr>
+    <tr>
+      <th>217677</th>
+      <td>by</td>
+      <td>jane</td>
+      <td>austen</td>
+    </tr>
+    <tr>
+      <th>217678</th>
+      <td>jane</td>
+      <td>austen</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>217679</th>
+      <td>austen</td>
+      <td>None</td>
+      <td>None</td>
+    </tr>
+  </tbody>
+</table>
+<p>217680 rows × 3 columns</p>
+</div>
+</div>
+</div>
+</section>
+<section id="generate-models" class="level2">
+<h2 class="anchored" data-anchor-id="generate-models">Generate models</h2>
+<p>Next we create a list of models.<br>
+Since the model index will be zero-based (given Python), the trigram model will be <code>M[2]</code>, for example.<br>
+We can use the maximum ngram table to derive all of the lower order models.</p>
+<p>For each model, we will compute the relevant probabilities and information for each ngram.</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>M <span class="op">=</span> [<span class="va">None</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(ngram)]</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(ngram):</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> i <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>        M[i] <span class="op">=</span> NGRAMS.value_counts(<span class="st">'w0'</span>).to_frame(<span class="st">'n'</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>        M[i][<span class="st">'p'</span>] <span class="op">=</span> M[i].n <span class="op">/</span> M[i].n.<span class="bu">sum</span>()</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>        M[i][<span class="st">'i'</span>] <span class="op">=</span> np.log2(<span class="dv">1</span><span class="op">/</span>M[i].p)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>        M[i] <span class="op">=</span> NGRAMS.value_counts(widx[:i<span class="op">+</span><span class="dv">1</span>]).to_frame(<span class="st">'n'</span>)    </span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>        M[i][<span class="st">'cp'</span>] <span class="op">=</span> M[i].n <span class="op">/</span> M[i<span class="op">-</span><span class="dv">1</span>].n</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>        M[i][<span class="st">'ci'</span>] <span class="op">=</span> np.log2(<span class="dv">1</span><span class="op">/</span>M[i].cp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>M[<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>n</th>
+      <th>cp</th>
+      <th>ci</th>
+    </tr>
+    <tr>
+      <th>w0</th>
+      <th>w1</th>
+      <th>w2</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>mrs</th>
+      <th>&lt;s&gt;</th>
+      <th>jennings</th>
+      <td>234</td>
+      <td>0.442344</td>
+      <td>1.176759</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">&lt;s&gt;</th>
+      <th>it</th>
+      <th>was</th>
+      <td>177</td>
+      <td>0.407834</td>
+      <td>1.293946</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">i</th>
+      <th>am</th>
+      <td>142</td>
+      <td>0.142714</td>
+      <td>2.808806</td>
+    </tr>
+    <tr>
+      <th>have</th>
+      <td>132</td>
+      <td>0.132663</td>
+      <td>2.914159</td>
+    </tr>
+    <tr>
+      <th>mrs</th>
+      <th>&lt;s&gt;</th>
+      <th>dashwood</th>
+      <td>121</td>
+      <td>0.228733</td>
+      <td>2.128261</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th rowspan="4" valign="top">happy</th>
+      <th>anne</th>
+      <th>could</th>
+      <td>1</td>
+      <td>1.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>ardour</th>
+      <th>of</th>
+      <td>1</td>
+      <td>1.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">as</th>
+      <th>all</th>
+      <td>1</td>
+      <td>0.333333</td>
+      <td>1.584963</td>
+    </tr>
+    <tr>
+      <th>to</th>
+      <td>1</td>
+      <td>0.333333</td>
+      <td>1.584963</td>
+    </tr>
+    <tr>
+      <th>zealously</th>
+      <th>discharging</th>
+      <th>all</th>
+      <td>1</td>
+      <td>1.000000</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>167055 rows × 3 columns</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="test-models" class="level1">
+<h1>Test Models</h1>
+<section id="generate-training-data" class="level2">
+<h2 class="anchored" data-anchor-id="generate-training-data">Generate Training Data</h2>
+<p>Import and pad the test sentences.</p>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>TEST_SENTS <span class="op">=</span> pd.read_csv(<span class="st">"test_sentences.txt"</span>, header<span class="op">=</span><span class="va">None</span>, names<span class="op">=</span>[<span class="st">'sent_str'</span>])</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>TEST_SENTS.sent_str <span class="op">=</span> <span class="st">'&lt;s&gt; '</span> <span class="op">+</span> TEST_SENTS.sent_str </span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>TEST_SENTS.index.name <span class="op">=</span> <span class="st">'sent_num'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>TEST_SENTS.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>sent_str</th>
+    </tr>
+    <tr>
+      <th>sent_num</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>&lt;s&gt; the quick brown fox jumped over the lazy dogs</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>&lt;s&gt; The event had every promise of happiness f...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>&lt;s&gt; Mr Weston was a man of unexceptionable cha...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>&lt;s&gt; ChatGPT is not the singularity</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>&lt;s&gt; but it was a black morning's work for her</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<p>Tokenize and normalize.</p>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>TEST_TOKENS <span class="op">=</span> TEST_SENTS.sent_str.<span class="bu">apply</span>(<span class="kw">lambda</span> x: pd.Series(x.split())).stack().to_frame(<span class="st">'token_str'</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>TEST_TOKENS[<span class="st">'term_str'</span>] <span class="op">=</span> TEST_TOKENS.token_str.<span class="bu">str</span>.replace(<span class="vs">r"[\W_]+"</span>, <span class="st">""</span>, regex<span class="op">=</span><span class="va">True</span>).<span class="bu">str</span>.lower()</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>TEST_TOKENS.index.names <span class="op">=</span> [<span class="st">'sent_num'</span>, <span class="st">'token_num'</span>]</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>TEST_TOKENS.loc[TEST_TOKENS.token_str <span class="op">==</span> <span class="st">'&lt;s&gt;'</span>, <span class="st">'term_str'</span>] <span class="op">=</span> <span class="st">'&lt;s&gt;'</span> <span class="co"># These will have filtered out in the normalization</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>TEST_TOKENS.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>token_str</th>
+      <th>term_str</th>
+    </tr>
+    <tr>
+      <th>sent_num</th>
+      <th>token_num</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">0</th>
+      <th>0</th>
+      <td>&lt;s&gt;</td>
+      <td>&lt;s&gt;</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>the</td>
+      <td>the</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>quick</td>
+      <td>quick</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>brown</td>
+      <td>brown</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>fox</td>
+      <td>fox</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="identify-oov-terms" class="level2">
+<h2 class="anchored" data-anchor-id="identify-oov-terms">Identify OOV terms</h2>
+<p>Create a Series of OOV terms from our unigram model.<br>
+We prefer this to our VOCAB table since the former includes the <code>&lt;s&gt;</code> symbol.</p>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>V <span class="op">=</span> M[<span class="dv">0</span>].sort_index().reset_index().w0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>V.sample(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+<pre><code>3878        inforced
+6886         spurned
+4014      intimation
+6839          speech
+7653    unfathomable
+6951         steward
+4898        obedient
+2051      directions
+4213    lamentations
+4053        involved
+Name: w0, dtype: object</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>TEST_TOKENS.loc[<span class="op">~</span>TEST_TOKENS.term_str.isin(V), <span class="st">'term_str'</span>] <span class="op">=</span> <span class="st">"&lt;UNK&gt;"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>TEST_TOKENS[TEST_TOKENS.term_str <span class="op">==</span> <span class="st">'&lt;UNK&gt;'</span>].value_counts(<span class="st">'token_str'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>token_str
+Weston            2
+ChatGPT           1
+Hartfield         1
+Isabella          1
+Isabella's        1
+Woodhouse         1
+childhood         1
+illnesses         1
+intellectual      1
+lazy              1
+tenderer          1
+valetudinarian    1
+Name: count, dtype: int64</code></pre>
+</div>
+</div>
+</section>
+<section id="convert-test-tokens-into-ngrams" class="level2">
+<h2 class="anchored" data-anchor-id="convert-test-tokens-into-ngrams">Convert test tokens into ngrams</h2>
+<p>Use offset and bind method using <code>pd.concat()</code> and <code>df.shift(0)</code>, as above.</p>
+<div class="cell" data-tags="[]" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>TEST <span class="op">=</span> pd.concat([TEST_TOKENS.shift(<span class="dv">0</span><span class="op">-</span>i)[[<span class="st">'term_str'</span>]] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(ngram)], axis<span class="op">=</span><span class="dv">1</span>).fillna(<span class="st">'&lt;s&gt;'</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>TEST.columns <span class="op">=</span> widx</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>TEST <span class="op">=</span> TEST.reset_index()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>TEST.tail()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="32">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>sent_num</th>
+      <th>token_num</th>
+      <th>w0</th>
+      <th>w1</th>
+      <th>w2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>474</th>
+      <td>42</td>
+      <td>10</td>
+      <td>give</td>
+      <td>her</td>
+      <td>pleasant</td>
+    </tr>
+    <tr>
+      <th>475</th>
+      <td>42</td>
+      <td>11</td>
+      <td>her</td>
+      <td>pleasant</td>
+      <td>society</td>
+    </tr>
+    <tr>
+      <th>476</th>
+      <td>42</td>
+      <td>12</td>
+      <td>pleasant</td>
+      <td>society</td>
+      <td>again</td>
+    </tr>
+    <tr>
+      <th>477</th>
+      <td>42</td>
+      <td>13</td>
+      <td>society</td>
+      <td>again</td>
+      <td>&lt;s&gt;</td>
+    </tr>
+    <tr>
+      <th>478</th>
+      <td>42</td>
+      <td>14</td>
+      <td>again</td>
+      <td>&lt;s&gt;</td>
+      <td>&lt;s&gt;</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="bind-the-models-to-test-data" class="level2">
+<h2 class="anchored" data-anchor-id="bind-the-models-to-test-data">Bind the models to test data</h2>
+<p>We add our model data to the test data as a set of features.<br>
+Note: if you re-run this cell, you will grow the table unnecessarily.<br>
+Be sure to regenerate the TEST dataframe first.</p>
+<div class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>TEST <span class="op">=</span> TEST.merge(M[<span class="dv">0</span>].i, on<span class="op">=</span>[<span class="st">'w0'</span>], how<span class="op">=</span><span class="st">'left'</span>).rename(columns<span class="op">=</span>{<span class="st">'i'</span>:<span class="st">'i0'</span>})</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>TEST <span class="op">=</span> TEST.merge(M[<span class="dv">1</span>].ci, on<span class="op">=</span>[<span class="st">'w0'</span>,<span class="st">'w1'</span>], how<span class="op">=</span><span class="st">'left'</span>).rename(columns<span class="op">=</span>{<span class="st">'ci'</span>:<span class="st">'i1'</span>})</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>TEST <span class="op">=</span> TEST.merge(M[<span class="dv">2</span>].ci, on<span class="op">=</span>[<span class="st">'w0'</span>,<span class="st">'w1'</span>,<span class="st">'w2'</span>], how<span class="op">=</span><span class="st">'left'</span>).rename(columns<span class="op">=</span>{<span class="st">'ci'</span>:<span class="st">'i2'</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>TEST</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="34">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>sent_num</th>
+      <th>token_num</th>
+      <th>w0</th>
+      <th>w1</th>
+      <th>w2</th>
+      <th>i0</th>
+      <th>i1</th>
+      <th>i2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>&lt;s&gt;</td>
+      <td>the</td>
+      <td>quick</td>
+      <td>4.079116</td>
+      <td>4.692731</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>1</td>
+      <td>the</td>
+      <td>quick</td>
+      <td>brown</td>
+      <td>4.871732</td>
+      <td>12.860117</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>2</td>
+      <td>quick</td>
+      <td>brown</td>
+      <td>fox</td>
+      <td>13.483922</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>3</td>
+      <td>brown</td>
+      <td>fox</td>
+      <td>jumped</td>
+      <td>15.731849</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>4</td>
+      <td>fox</td>
+      <td>jumped</td>
+      <td>over</td>
+      <td>17.731849</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>474</th>
+      <td>42</td>
+      <td>10</td>
+      <td>give</td>
+      <td>her</td>
+      <td>pleasant</td>
+      <td>10.052369</td>
+      <td>2.979040</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>475</th>
+      <td>42</td>
+      <td>11</td>
+      <td>her</td>
+      <td>pleasant</td>
+      <td>society</td>
+      <td>5.860329</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>476</th>
+      <td>42</td>
+      <td>12</td>
+      <td>pleasant</td>
+      <td>society</td>
+      <td>again</td>
+      <td>12.924494</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>477</th>
+      <td>42</td>
+      <td>13</td>
+      <td>society</td>
+      <td>again</td>
+      <td>&lt;s&gt;</td>
+      <td>12.522396</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>478</th>
+      <td>42</td>
+      <td>14</td>
+      <td>again</td>
+      <td>&lt;s&gt;</td>
+      <td>&lt;s&gt;</td>
+      <td>9.607728</td>
+      <td>1.876194</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>479 rows × 8 columns</p>
+</div>
+</div>
+</div>
+</section>
+<section id="apply-fallback" class="level2">
+<h2 class="anchored" data-anchor-id="apply-fallback">Apply fallback</h2>
+<p>Note that some values are null values, i.e.&nbsp;<code>NaN</code> – these are cases of ngram combinations that do not appear in the training data.<br>
+We we replace null values using “stupid fallback.” This means that if is bigram does not exist, we replace it with the unigram value of the last term, and if a trigram does not exist, we replace it with the bigram value of the last two terms.<br>
+This is not the best method of interpolation but it has the virtue of being very easy to implement.</p>
+<p>We could write a general routine that iterates through <code>i</code> for <code>range(ngram)</code>, but we just implement the two cases for trigrams here.</p>
+<div class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>TEST.loc[TEST.i1.isna(), <span class="st">'i1'</span>] <span class="op">=</span> TEST.w1.<span class="bu">map</span>(M[<span class="dv">0</span>].i)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>TEST <span class="op">=</span> TEST.merge(M[<span class="dv">1</span>].ci, left_on<span class="op">=</span>[<span class="st">'w1'</span>,<span class="st">'w2'</span>], right_on<span class="op">=</span>[<span class="st">'w0'</span>,<span class="st">'w1'</span>])</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>TEST.loc[TEST.i2.isna(), <span class="st">'i2'</span>] <span class="op">=</span> TEST.ci</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>TEST <span class="op">=</span> TEST.drop(<span class="st">'ci'</span>, axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>TEST.sort_values(<span class="st">'i0'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="37">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>sent_num</th>
+      <th>token_num</th>
+      <th>w0</th>
+      <th>w1</th>
+      <th>w2</th>
+      <th>i0</th>
+      <th>i1</th>
+      <th>i2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>&lt;s&gt;</td>
+      <td>the</td>
+      <td>quick</td>
+      <td>4.079116</td>
+      <td>4.692731</td>
+      <td>12.860117</td>
+    </tr>
+    <tr>
+      <th>120</th>
+      <td>12</td>
+      <td>0</td>
+      <td>&lt;s&gt;</td>
+      <td>the</td>
+      <td>equal</td>
+      <td>4.079116</td>
+      <td>4.692731</td>
+      <td>12.860117</td>
+    </tr>
+    <tr>
+      <th>247</th>
+      <td>29</td>
+      <td>0</td>
+      <td>&lt;s&gt;</td>
+      <td>he</td>
+      <td>could</td>
+      <td>4.079116</td>
+      <td>4.546824</td>
+      <td>5.520946</td>
+    </tr>
+    <tr>
+      <th>112</th>
+      <td>11</td>
+      <td>0</td>
+      <td>&lt;s&gt;</td>
+      <td>but</td>
+      <td>the</td>
+      <td>4.079116</td>
+      <td>3.859943</td>
+      <td>4.207828</td>
+    </tr>
+    <tr>
+      <th>310</th>
+      <td>39</td>
+      <td>0</td>
+      <td>&lt;s&gt;</td>
+      <td>being</td>
+      <td>settled</td>
+      <td>4.079116</td>
+      <td>13.652733</td>
+      <td>7.588715</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>3</td>
+      <td>5</td>
+      <td>singularity</td>
+      <td>&lt;s&gt;</td>
+      <td>but</td>
+      <td>17.731849</td>
+      <td>4.079116</td>
+      <td>3.859943</td>
+    </tr>
+    <tr>
+      <th>102</th>
+      <td>9</td>
+      <td>3</td>
+      <td>nursed</td>
+      <td>her</td>
+      <td>through</td>
+      <td>17.731849</td>
+      <td>0.000000</td>
+      <td>10.871520</td>
+    </tr>
+    <tr>
+      <th>111</th>
+      <td>10</td>
+      <td>7</td>
+      <td>owing</td>
+      <td>here</td>
+      <td>&lt;s&gt;</td>
+      <td>17.731849</td>
+      <td>10.777653</td>
+      <td>2.494765</td>
+    </tr>
+    <tr>
+      <th>207</th>
+      <td>22</td>
+      <td>2</td>
+      <td>emma</td>
+      <td>was</td>
+      <td>aware</td>
+      <td>17.731849</td>
+      <td>6.088895</td>
+      <td>11.642954</td>
+    </tr>
+    <tr>
+      <th>97</th>
+      <td>30</td>
+      <td>9</td>
+      <td>ages</td>
+      <td>&lt;s&gt;</td>
+      <td>and</td>
+      <td>17.731849</td>
+      <td>4.079116</td>
+      <td>3.270109</td>
+    </tr>
+  </tbody>
+</table>
+<p>339 rows × 8 columns</p>
+</div>
+</div>
+</div>
+</section>
+<section id="compute-sentence-scores" class="level2">
+<h2 class="anchored" data-anchor-id="compute-sentence-scores">Compute sentence scores</h2>
+<div class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> n <span class="kw">in</span> <span class="bu">range</span>(ngram):</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>    TEST_SENTS[<span class="ss">f'pp</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">'</span>] <span class="op">=</span> np.exp2(TEST.groupby(<span class="st">'sent_num'</span>)[<span class="ss">f'i</span><span class="sc">{</span>n<span class="sc">}</span><span class="ss">'</span>].mean())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>TEST_SENTS.sort_values(<span class="st">'pp0'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>sent_str</th>
+      <th>pp0</th>
+      <th>pp1</th>
+      <th>pp2</th>
+    </tr>
+    <tr>
+      <th>sent_num</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>28</th>
+      <td>&lt;s&gt; but he was no companion for her</td>
+      <td>145.356229</td>
+      <td>26.750155</td>
+      <td>18.182994</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>&lt;s&gt; but it was a black morning's work for her</td>
+      <td>148.603536</td>
+      <td>18.804269</td>
+      <td>10.627530</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>&lt;s&gt; How was she to bear the change</td>
+      <td>174.540021</td>
+      <td>121.726344</td>
+      <td>46.473587</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>&lt;s&gt; knowing all the ways of the family</td>
+      <td>203.954617</td>
+      <td>78.585142</td>
+      <td>15.826059</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>&lt;s&gt; and a Miss Taylor in the house</td>
+      <td>216.450798</td>
+      <td>19.743031</td>
+      <td>40.828353</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>&lt;s&gt; and who had such an affection for her as c...</td>
+      <td>295.444852</td>
+      <td>55.404579</td>
+      <td>34.041964</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>&lt;s&gt; and with all her advantages natural and do...</td>
+      <td>327.763999</td>
+      <td>27.775623</td>
+      <td>53.561150</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>&lt;s&gt; one to whom she could speak every thought ...</td>
+      <td>333.072366</td>
+      <td>87.039292</td>
+      <td>45.592088</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>&lt;s&gt; She had been a friend and companion such a...</td>
+      <td>344.039462</td>
+      <td>27.441482</td>
+      <td>64.903447</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>&lt;s&gt; It was true that her friend was going only...</td>
+      <td>358.001018</td>
+      <td>43.181856</td>
+      <td>27.713239</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>&lt;s&gt; He could not meet her in conversation rati...</td>
+      <td>378.801093</td>
+      <td>38.265239</td>
+      <td>49.525454</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>&lt;s&gt; for having been a valetudinarian all his l...</td>
+      <td>383.667904</td>
+      <td>40.771211</td>
+      <td>80.694590</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>&lt;s&gt; and many a long October and November eveni...</td>
+      <td>389.406420</td>
+      <td>136.349662</td>
+      <td>54.718426</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>&lt;s&gt; and their little children to fill the hous...</td>
+      <td>391.223616</td>
+      <td>113.877552</td>
+      <td>42.397179</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>&lt;s&gt; The event had every promise of happiness f...</td>
+      <td>393.759284</td>
+      <td>60.528665</td>
+      <td>67.116953</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>&lt;s&gt; only half a mile from them</td>
+      <td>394.854646</td>
+      <td>46.774250</td>
+      <td>10.894267</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>&lt;s&gt; on their being left to each other was yet ...</td>
+      <td>411.111651</td>
+      <td>119.071898</td>
+      <td>28.912701</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>&lt;s&gt; but the intercourse of the last seven years</td>
+      <td>418.390104</td>
+      <td>48.586749</td>
+      <td>20.959050</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>&lt;s&gt; he was a much older man in ways than in ye...</td>
+      <td>427.202624</td>
+      <td>93.165547</td>
+      <td>38.228065</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>&lt;s&gt; his talents could not have recommended him...</td>
+      <td>501.170933</td>
+      <td>69.430468</td>
+      <td>26.787393</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>&lt;s&gt; she was now in great danger of suffering f...</td>
+      <td>512.020374</td>
+      <td>135.538631</td>
+      <td>18.431313</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>&lt;s&gt; The want of Miss Taylor would be felt ever...</td>
+      <td>535.364012</td>
+      <td>39.960976</td>
+      <td>27.494460</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>&lt;s&gt; was much increased by his constitution and...</td>
+      <td>569.744472</td>
+      <td>102.931097</td>
+      <td>63.524772</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>&lt;s&gt; before Christmas brought the next visit fr...</td>
+      <td>572.355290</td>
+      <td>99.000372</td>
+      <td>43.546936</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>&lt;s&gt; how she had devoted all her powers to atta...</td>
+      <td>589.100181</td>
+      <td>105.508183</td>
+      <td>50.872073</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>&lt;s&gt; and though everywhere beloved for the frie...</td>
+      <td>594.848425</td>
+      <td>52.417260</td>
+      <td>26.515802</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>&lt;s&gt; how she had taught and how she had played ...</td>
+      <td>604.938770</td>
+      <td>45.573731</td>
+      <td>49.321784</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>&lt;s&gt; She dearly loved her father</td>
+      <td>663.003856</td>
+      <td>28.601827</td>
+      <td>28.635560</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>&lt;s&gt; interested in all its concerns</td>
+      <td>776.264971</td>
+      <td>185.023233</td>
+      <td>16.641210</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>&lt;s&gt; and how nursed her through the various ill...</td>
+      <td>804.234190</td>
+      <td>137.937208</td>
+      <td>47.038614</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>&lt;s&gt; and Mr Woodhouse had not married early</td>
+      <td>808.640927</td>
+      <td>64.835521</td>
+      <td>135.226451</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>&lt;s&gt; She recalled her past kindness the kindnes...</td>
+      <td>872.746711</td>
+      <td>268.506479</td>
+      <td>50.863875</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>&lt;s&gt; but Emma was aware that great must be the ...</td>
+      <td>961.017774</td>
+      <td>124.048832</td>
+      <td>65.118492</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>&lt;s&gt; and peculiarly interested in herself in ev...</td>
+      <td>982.605937</td>
+      <td>109.948370</td>
+      <td>83.233794</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>&lt;s&gt; the equal footing and perfect unreserve wh...</td>
+      <td>990.162956</td>
+      <td>103.359760</td>
+      <td>195.536922</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>&lt;s&gt; The evil of the actual disparity in their ...</td>
+      <td>1223.095280</td>
+      <td>31.453849</td>
+      <td>42.645729</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>&lt;s&gt; Her sister though comparatively but little...</td>
+      <td>1357.426160</td>
+      <td>490.423261</td>
+      <td>108.557770</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>&lt;s&gt; without activity of mind or body</td>
+      <td>1483.243374</td>
+      <td>110.746912</td>
+      <td>36.256001</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>&lt;s&gt; being settled in London only sixteen miles...</td>
+      <td>1572.934773</td>
+      <td>262.014959</td>
+      <td>51.376731</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>&lt;s&gt; Mr Weston was a man of unexceptionable cha...</td>
+      <td>1949.212515</td>
+      <td>141.911737</td>
+      <td>54.870981</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>&lt;s&gt; A large debt of gratitude was owing here</td>
+      <td>4329.897084</td>
+      <td>74.565473</td>
+      <td>65.622680</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>&lt;s&gt; the quick brown fox jumped over the lazy dogs</td>
+      <td>5110.625578</td>
+      <td>80.265694</td>
+      <td>103.403175</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>&lt;s&gt; ChatGPT is not the singularity</td>
+      <td>8600.816138</td>
+      <td>31.931954</td>
+      <td>13.392336</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>TEST_SENTS.sort_values(<span class="st">'pp1'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="40">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>sent_str</th>
+      <th>pp0</th>
+      <th>pp1</th>
+      <th>pp2</th>
+    </tr>
+    <tr>
+      <th>sent_num</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>4</th>
+      <td>&lt;s&gt; but it was a black morning's work for her</td>
+      <td>148.603536</td>
+      <td>18.804269</td>
+      <td>10.627530</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>&lt;s&gt; and a Miss Taylor in the house</td>
+      <td>216.450798</td>
+      <td>19.743031</td>
+      <td>40.828353</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>&lt;s&gt; but he was no companion for her</td>
+      <td>145.356229</td>
+      <td>26.750155</td>
+      <td>18.182994</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>&lt;s&gt; She had been a friend and companion such a...</td>
+      <td>344.039462</td>
+      <td>27.441482</td>
+      <td>64.903447</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>&lt;s&gt; and with all her advantages natural and do...</td>
+      <td>327.763999</td>
+      <td>27.775623</td>
+      <td>53.561150</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>&lt;s&gt; She dearly loved her father</td>
+      <td>663.003856</td>
+      <td>28.601827</td>
+      <td>28.635560</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>&lt;s&gt; The evil of the actual disparity in their ...</td>
+      <td>1223.095280</td>
+      <td>31.453849</td>
+      <td>42.645729</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>&lt;s&gt; ChatGPT is not the singularity</td>
+      <td>8600.816138</td>
+      <td>31.931954</td>
+      <td>13.392336</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>&lt;s&gt; He could not meet her in conversation rati...</td>
+      <td>378.801093</td>
+      <td>38.265239</td>
+      <td>49.525454</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>&lt;s&gt; The want of Miss Taylor would be felt ever...</td>
+      <td>535.364012</td>
+      <td>39.960976</td>
+      <td>27.494460</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>&lt;s&gt; for having been a valetudinarian all his l...</td>
+      <td>383.667904</td>
+      <td>40.771211</td>
+      <td>80.694590</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>&lt;s&gt; It was true that her friend was going only...</td>
+      <td>358.001018</td>
+      <td>43.181856</td>
+      <td>27.713239</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>&lt;s&gt; how she had taught and how she had played ...</td>
+      <td>604.938770</td>
+      <td>45.573731</td>
+      <td>49.321784</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>&lt;s&gt; only half a mile from them</td>
+      <td>394.854646</td>
+      <td>46.774250</td>
+      <td>10.894267</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>&lt;s&gt; but the intercourse of the last seven years</td>
+      <td>418.390104</td>
+      <td>48.586749</td>
+      <td>20.959050</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>&lt;s&gt; and though everywhere beloved for the frie...</td>
+      <td>594.848425</td>
+      <td>52.417260</td>
+      <td>26.515802</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>&lt;s&gt; and who had such an affection for her as c...</td>
+      <td>295.444852</td>
+      <td>55.404579</td>
+      <td>34.041964</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>&lt;s&gt; The event had every promise of happiness f...</td>
+      <td>393.759284</td>
+      <td>60.528665</td>
+      <td>67.116953</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>&lt;s&gt; and Mr Woodhouse had not married early</td>
+      <td>808.640927</td>
+      <td>64.835521</td>
+      <td>135.226451</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>&lt;s&gt; his talents could not have recommended him...</td>
+      <td>501.170933</td>
+      <td>69.430468</td>
+      <td>26.787393</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>&lt;s&gt; A large debt of gratitude was owing here</td>
+      <td>4329.897084</td>
+      <td>74.565473</td>
+      <td>65.622680</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>&lt;s&gt; knowing all the ways of the family</td>
+      <td>203.954617</td>
+      <td>78.585142</td>
+      <td>15.826059</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>&lt;s&gt; the quick brown fox jumped over the lazy dogs</td>
+      <td>5110.625578</td>
+      <td>80.265694</td>
+      <td>103.403175</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>&lt;s&gt; one to whom she could speak every thought ...</td>
+      <td>333.072366</td>
+      <td>87.039292</td>
+      <td>45.592088</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>&lt;s&gt; he was a much older man in ways than in ye...</td>
+      <td>427.202624</td>
+      <td>93.165547</td>
+      <td>38.228065</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>&lt;s&gt; before Christmas brought the next visit fr...</td>
+      <td>572.355290</td>
+      <td>99.000372</td>
+      <td>43.546936</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>&lt;s&gt; was much increased by his constitution and...</td>
+      <td>569.744472</td>
+      <td>102.931097</td>
+      <td>63.524772</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>&lt;s&gt; the equal footing and perfect unreserve wh...</td>
+      <td>990.162956</td>
+      <td>103.359760</td>
+      <td>195.536922</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>&lt;s&gt; how she had devoted all her powers to atta...</td>
+      <td>589.100181</td>
+      <td>105.508183</td>
+      <td>50.872073</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>&lt;s&gt; and peculiarly interested in herself in ev...</td>
+      <td>982.605937</td>
+      <td>109.948370</td>
+      <td>83.233794</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>&lt;s&gt; without activity of mind or body</td>
+      <td>1483.243374</td>
+      <td>110.746912</td>
+      <td>36.256001</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>&lt;s&gt; and their little children to fill the hous...</td>
+      <td>391.223616</td>
+      <td>113.877552</td>
+      <td>42.397179</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>&lt;s&gt; on their being left to each other was yet ...</td>
+      <td>411.111651</td>
+      <td>119.071898</td>
+      <td>28.912701</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>&lt;s&gt; How was she to bear the change</td>
+      <td>174.540021</td>
+      <td>121.726344</td>
+      <td>46.473587</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>&lt;s&gt; but Emma was aware that great must be the ...</td>
+      <td>961.017774</td>
+      <td>124.048832</td>
+      <td>65.118492</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>&lt;s&gt; she was now in great danger of suffering f...</td>
+      <td>512.020374</td>
+      <td>135.538631</td>
+      <td>18.431313</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>&lt;s&gt; and many a long October and November eveni...</td>
+      <td>389.406420</td>
+      <td>136.349662</td>
+      <td>54.718426</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>&lt;s&gt; and how nursed her through the various ill...</td>
+      <td>804.234190</td>
+      <td>137.937208</td>
+      <td>47.038614</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>&lt;s&gt; Mr Weston was a man of unexceptionable cha...</td>
+      <td>1949.212515</td>
+      <td>141.911737</td>
+      <td>54.870981</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>&lt;s&gt; interested in all its concerns</td>
+      <td>776.264971</td>
+      <td>185.023233</td>
+      <td>16.641210</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>&lt;s&gt; being settled in London only sixteen miles...</td>
+      <td>1572.934773</td>
+      <td>262.014959</td>
+      <td>51.376731</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>&lt;s&gt; She recalled her past kindness the kindnes...</td>
+      <td>872.746711</td>
+      <td>268.506479</td>
+      <td>50.863875</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>&lt;s&gt; Her sister though comparatively but little...</td>
+      <td>1357.426160</td>
+      <td>490.423261</td>
+      <td>108.557770</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>TEST_SENTS.sort_values(<span class="st">'pp2'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="41">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>sent_str</th>
+      <th>pp0</th>
+      <th>pp1</th>
+      <th>pp2</th>
+    </tr>
+    <tr>
+      <th>sent_num</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>4</th>
+      <td>&lt;s&gt; but it was a black morning's work for her</td>
+      <td>148.603536</td>
+      <td>18.804269</td>
+      <td>10.627530</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>&lt;s&gt; only half a mile from them</td>
+      <td>394.854646</td>
+      <td>46.774250</td>
+      <td>10.894267</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>&lt;s&gt; ChatGPT is not the singularity</td>
+      <td>8600.816138</td>
+      <td>31.931954</td>
+      <td>13.392336</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>&lt;s&gt; knowing all the ways of the family</td>
+      <td>203.954617</td>
+      <td>78.585142</td>
+      <td>15.826059</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>&lt;s&gt; interested in all its concerns</td>
+      <td>776.264971</td>
+      <td>185.023233</td>
+      <td>16.641210</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>&lt;s&gt; but he was no companion for her</td>
+      <td>145.356229</td>
+      <td>26.750155</td>
+      <td>18.182994</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>&lt;s&gt; she was now in great danger of suffering f...</td>
+      <td>512.020374</td>
+      <td>135.538631</td>
+      <td>18.431313</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>&lt;s&gt; but the intercourse of the last seven years</td>
+      <td>418.390104</td>
+      <td>48.586749</td>
+      <td>20.959050</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>&lt;s&gt; and though everywhere beloved for the frie...</td>
+      <td>594.848425</td>
+      <td>52.417260</td>
+      <td>26.515802</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>&lt;s&gt; his talents could not have recommended him...</td>
+      <td>501.170933</td>
+      <td>69.430468</td>
+      <td>26.787393</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>&lt;s&gt; The want of Miss Taylor would be felt ever...</td>
+      <td>535.364012</td>
+      <td>39.960976</td>
+      <td>27.494460</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>&lt;s&gt; It was true that her friend was going only...</td>
+      <td>358.001018</td>
+      <td>43.181856</td>
+      <td>27.713239</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>&lt;s&gt; She dearly loved her father</td>
+      <td>663.003856</td>
+      <td>28.601827</td>
+      <td>28.635560</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>&lt;s&gt; on their being left to each other was yet ...</td>
+      <td>411.111651</td>
+      <td>119.071898</td>
+      <td>28.912701</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>&lt;s&gt; and who had such an affection for her as c...</td>
+      <td>295.444852</td>
+      <td>55.404579</td>
+      <td>34.041964</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>&lt;s&gt; without activity of mind or body</td>
+      <td>1483.243374</td>
+      <td>110.746912</td>
+      <td>36.256001</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>&lt;s&gt; he was a much older man in ways than in ye...</td>
+      <td>427.202624</td>
+      <td>93.165547</td>
+      <td>38.228065</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>&lt;s&gt; and a Miss Taylor in the house</td>
+      <td>216.450798</td>
+      <td>19.743031</td>
+      <td>40.828353</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>&lt;s&gt; and their little children to fill the hous...</td>
+      <td>391.223616</td>
+      <td>113.877552</td>
+      <td>42.397179</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>&lt;s&gt; The evil of the actual disparity in their ...</td>
+      <td>1223.095280</td>
+      <td>31.453849</td>
+      <td>42.645729</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>&lt;s&gt; before Christmas brought the next visit fr...</td>
+      <td>572.355290</td>
+      <td>99.000372</td>
+      <td>43.546936</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>&lt;s&gt; one to whom she could speak every thought ...</td>
+      <td>333.072366</td>
+      <td>87.039292</td>
+      <td>45.592088</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>&lt;s&gt; How was she to bear the change</td>
+      <td>174.540021</td>
+      <td>121.726344</td>
+      <td>46.473587</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>&lt;s&gt; and how nursed her through the various ill...</td>
+      <td>804.234190</td>
+      <td>137.937208</td>
+      <td>47.038614</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>&lt;s&gt; how she had taught and how she had played ...</td>
+      <td>604.938770</td>
+      <td>45.573731</td>
+      <td>49.321784</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>&lt;s&gt; He could not meet her in conversation rati...</td>
+      <td>378.801093</td>
+      <td>38.265239</td>
+      <td>49.525454</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>&lt;s&gt; She recalled her past kindness the kindnes...</td>
+      <td>872.746711</td>
+      <td>268.506479</td>
+      <td>50.863875</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>&lt;s&gt; how she had devoted all her powers to atta...</td>
+      <td>589.100181</td>
+      <td>105.508183</td>
+      <td>50.872073</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>&lt;s&gt; being settled in London only sixteen miles...</td>
+      <td>1572.934773</td>
+      <td>262.014959</td>
+      <td>51.376731</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>&lt;s&gt; and with all her advantages natural and do...</td>
+      <td>327.763999</td>
+      <td>27.775623</td>
+      <td>53.561150</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>&lt;s&gt; and many a long October and November eveni...</td>
+      <td>389.406420</td>
+      <td>136.349662</td>
+      <td>54.718426</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>&lt;s&gt; Mr Weston was a man of unexceptionable cha...</td>
+      <td>1949.212515</td>
+      <td>141.911737</td>
+      <td>54.870981</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>&lt;s&gt; was much increased by his constitution and...</td>
+      <td>569.744472</td>
+      <td>102.931097</td>
+      <td>63.524772</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>&lt;s&gt; She had been a friend and companion such a...</td>
+      <td>344.039462</td>
+      <td>27.441482</td>
+      <td>64.903447</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>&lt;s&gt; but Emma was aware that great must be the ...</td>
+      <td>961.017774</td>
+      <td>124.048832</td>
+      <td>65.118492</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>&lt;s&gt; A large debt of gratitude was owing here</td>
+      <td>4329.897084</td>
+      <td>74.565473</td>
+      <td>65.622680</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>&lt;s&gt; The event had every promise of happiness f...</td>
+      <td>393.759284</td>
+      <td>60.528665</td>
+      <td>67.116953</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>&lt;s&gt; for having been a valetudinarian all his l...</td>
+      <td>383.667904</td>
+      <td>40.771211</td>
+      <td>80.694590</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>&lt;s&gt; and peculiarly interested in herself in ev...</td>
+      <td>982.605937</td>
+      <td>109.948370</td>
+      <td>83.233794</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>&lt;s&gt; the quick brown fox jumped over the lazy dogs</td>
+      <td>5110.625578</td>
+      <td>80.265694</td>
+      <td>103.403175</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>&lt;s&gt; Her sister though comparatively but little...</td>
+      <td>1357.426160</td>
+      <td>490.423261</td>
+      <td>108.557770</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>&lt;s&gt; and Mr Woodhouse had not married early</td>
+      <td>808.640927</td>
+      <td>64.835521</td>
+      <td>135.226451</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>&lt;s&gt; the equal footing and perfect unreserve wh...</td>
+      <td>990.162956</td>
+      <td>103.359760</td>
+      <td>195.536922</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>TEST_SENTS.mean(numeric_only<span class="op">=</span><span class="va">True</span>).plot.bar()<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="M03_EZ_files/figure-html/cell-43-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="visualize" class="level1">
+<h1>Visualize</h1>
+<div class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> TEST_SENTS.copy()</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>Z[<span class="st">'sent_str'</span>] <span class="op">=</span> Z.sent_str.<span class="bu">str</span>.replace(<span class="st">'&lt;s&gt; '</span>, <span class="st">''</span>)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> Z.set_index(<span class="st">'sent_str'</span>)</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>Z <span class="op">=</span> (Z <span class="op">-</span> Z.mean()) <span class="op">/</span> Z.std()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Z.style.background_gradient(cmap='YlGnBu', axis=None)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>Z[<span class="st">'pp_mean'</span>] <span class="op">=</span> Z.mean(axis<span class="op">=</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>Z.sort_values(<span class="st">'pp_mean'</span>, ascending<span class="op">=</span><span class="va">False</span>).plot.barh(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">15</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="M03_EZ_files/figure-html/cell-47-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>Z.plot.scatter(<span class="st">'pp0'</span>, <span class="st">'pp1'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="M03_EZ_files/figure-html/cell-48-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>Z.plot.scatter(<span class="st">'pp1'</span>, <span class="st">'pp2'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="M03_EZ_files/figure-html/cell-49-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>Z.plot.scatter(<span class="st">'pp0'</span>, <span class="st">'pp2'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="M03_EZ_files/figure-html/cell-50-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../lessons/M03_LanguageModels/M03_04-Entropy-and-Term-Length.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Entropy and Term Length</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../lessons/M04_NLP/M04_00_NLTK_Intro.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-title">NLTK Parsers</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,147 @@
+project:
+  title: "{{< var site_title >}}"
+  type: book
+  output-dir: docs
+
+execute:
+  freeze: true
+
+book:
+  # title: "{{< var course_num >}}: {{< var course_title >}} | {{< var academic_term >}} | {{< var cohort_type >}}"
+  title:  "{{< var course_title >}}"
+  author: "{{< instructor >}}"
+  date: "12/07/2023"
+  reader-mode: false
+  page-navigation: true
+  repo-actions: [edit]
+  repo-url: "https://github.com/ontoligent/DS5001-2024-01-R"
+  chapters:
+  - index.qmd
+  - part: "M01 Introduction"
+    chapters:
+    - lessons/M01_Intro/M01_01_getting-started.ipynb
+    - lessons/M01_Intro/M01_02_hello.ipynb
+    - lessons/M01_Intro/M01_03_first-foray.ipynb
+    - lessons/M01_Intro/M01_04_FurtherExploration.ipynb
+  - part: "M02 TextModels"
+    chapters:
+    - lessons/M02_TextModels/M02_01_Importing-Persuasion.ipynb
+    - lessons/M02_TextModels/M02_02_TokenizingWithSciKitLearn.ipynb
+    - lessons/M02_TextModels/M02_03_Challenge.ipynb
+  - part: "M03 LanguageModels"
+    chapters:
+    - lessons/M03_LanguageModels/M03_01_Babel.ipynb
+    - lessons/M03_LanguageModels/M03_01a_EntropyExamples.ipynb
+    - lessons/M03_LanguageModels/M03_02_LanguageModels_V1.ipynb
+    - lessons/M03_LanguageModels/M03_02_LanguageModels_V2.ipynb
+    - lessons/M03_LanguageModels/M03_02_LanguageModels_V3.ipynb
+    - lessons/M03_LanguageModels/M03_02_SimpleLangModel.ipynb
+    - lessons/M03_LanguageModels/M03_03_Entropy-and-Perplexity.ipynb
+    - lessons/M03_LanguageModels/M03_04-Entropy-and-Term-Length.ipynb
+    - lessons/M03_LanguageModels/M03_EZ.ipynb
+  - part: "M04 NLP"
+    chapters:
+    - lessons/M04_NLP/M04_00_NLTK_Intro.ipynb
+    - lessons/M04_NLP/M04_01_Pipeline.ipynb
+    - lessons/M04_NLP/M04_02_HMM.ipynb
+  - part: "M05 VectorSpaceModels"
+    chapters:
+    - lessons/M05_VectorSpaceModels/M05_01_BOW_TFIDF.ipynb
+    - lessons/M05_VectorSpaceModels/M05_02_TimeTokenMatrices.ipynb
+    - lessons/M05_VectorSpaceModels/M05_03_TFIDF_Exploration.ipynb
+  - part: "M06 CusteringSimilarity"
+    chapters:
+    - lessons/M06_CusteringSimilarity/M06_01_SimilarityMeasures.ipynb
+  - part: "M07 FeaturesAndComponents"
+    chapters:
+    - lessons/M07_FeaturesAndComponents/M07_01_PCA.ipynb
+  - part: "M08 TopicModels"
+    chapters:
+    - lessons/M08_TopicModels/M08_01_GibbsSampler.ipynb
+    - lessons/M08_TopicModels/M08_02_LDASciKitLearn.ipynb
+    - lessons/M08_TopicModels/M08_03_TopicSimilarity.ipynb
+    - lessons/M08_TopicModels/M08_04_TopicContiguity.ipynb
+    - lessons/M08_TopicModels/M08_05_PyLDAVis.ipynb
+    - lessons/M08_TopicModels/Untitled.ipynb
+  - part: "M08a Visualization"
+    chapters:
+    - lessons/M08a_Visualization/M08a_01_Gensim.ipynb
+    - lessons/M08a_Visualization/M08a_02_GensimRunCompareLDA.ipynb
+    - lessons/M08a_Visualization/M08a_03_MALLET.ipynb
+    - lessons/M08a_Visualization/M08a_04_Mazo.ipynb
+  - part: "M09 WordEmbedding"
+    chapters:
+    - lessons/M09_WordEmbedding/M09_01_GloVe.ipynb
+    - lessons/M09_WordEmbedding/M09_02_PMI_SVD.ipynb
+    - lessons/M09_WordEmbedding/M09_03_SkipgramRepresentation.ipynb
+    - lessons/M09_WordEmbedding/M09_04_word2vec.ipynb
+    - lessons/M09_WordEmbedding/M09_05_FastText.ipynb
+    - lessons/M09_WordEmbedding/Untitled.ipynb
+    - lessons/M09_WordEmbedding/run_fasttext.ipynb
+  - part: "M10 SentimentAnalysis"
+    chapters:
+    - lessons/M10_SentimentAnalysis/M10_01_GeneralInquirer.ipynb
+    - lessons/M10_SentimentAnalysis/M10_02_CombineLexicons.ipynb
+    - lessons/M10_SentimentAnalysis/M10_03_Novel.ipynb
+    - lessons/M10_SentimentAnalysis/M10_04_AustenMelville.ipynb
+    - lessons/M10_SentimentAnalysis/M10_05_WordShiftGraphs.ipynb
+    - lessons/M10_SentimentAnalysis/M10_06_Doc2Vec.ipynb
+  - part: "M11 Narrative"
+    chapters:
+    - lessons/M11_Narrative/M11_01_ExportBooksWithSentiment.ipynb
+    - lessons/M11_Narrative/M11_02_SyuzhetPlots.ipynb
+    - lessons/M11_Narrative/M11_03_Syuzhet_R.ipynb
+    - lessons/M11_Narrative/M11_04_Syuzhet_RGeneral.ipynb
+  - part: "M12 Classification"
+    chapters:
+    - lessons/M12_Classification/M12_01_NaiveBayesWineReviews.ipynb
+    - lessons/M12_Classification/M12_01b_SKLearnMNB.ipynb
+    - lessons/M12_Classification/M12_02_PerceptronWine.ipynb
+    - lessons/M12_Classification/M12_03.ExpectedMutualInformation.ipynb
+    - lessons/M12_Classification/M12_04_Viz.ipynb
+    - lessons/M12_Classification/Untitled.ipynb
+  - part: "M13 LLMs"
+    chapters:
+    - lessons/M13_LLMs/M13_01_ChatGPTDemo.ipynb
+    - lessons/M13_LLMs/M13_02_ChatGPTDemo2.ipynb
+    - lessons/M13_LLMs/M13_03_ChatGPT4Demo.ipynb
+    - lessons/M13_LLMs/M13_play.ipynb
+    - lessons/M13_LLMs/tokenizer_training.ipynb
+  - part: "M90 DispersionPlots"
+    chapters:
+    - lessons/M90_DispersionPlots/m01.04-austen-kde.ipynb
+    - lessons/M90_DispersionPlots/onehot.ipynb
+  - part: "M91 Charrette"
+    chapters:
+    - lessons/M91_Charrette/CharretteFIguresAndCharacters.ipynb
+    - lessons/M91_Charrette/CharretteTokens.ipynb
+  - part: "M92 Helpers"
+    chapters:
+    - lessons/M92_Helpers/M00_01_VectorizationWithSKLearn.ipynb
+    - lessons/M92_Helpers/M00_02_SpaCy.ipynb  
+
+  sidebar:
+    style: docked
+    reader-mode: false
+    # style: floating
+    background: light
+    collapse-level: 1
+    subtitle: Fall 2024
+
+# comments:
+#   hypothesis: true
+
+bibliography: references.bib
+
+format:
+  html:
+    toc: true
+    theme: cosmo
+    number-sections: false
+    fig-cap-location: bottom
+    link-external-icon: true
+    link-external-newwindow: true
+    reader-mode: false
+  # pdf:
+  #   documentclass: scrreport    
+

@@ -1,0 +1,2803 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.262">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Exploratory Text Analytics - 35&nbsp; Metadata</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../lessons/M09_WordEmbedding/M09_02_PMI_SVD.html" rel="next">
+<link href="../../lessons/M08a_Visualization/M08a_04_Mazo.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Metadata</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Exploratory Text Analytics</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ontoligent/DS5001-2024-01-R" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">M01 Introduction</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_01_getting-started.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Setting Up Your Jupyter Environmnet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_02_hello.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: Hello, World!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_03_first-foray.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: First Foray</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_04_FurtherExploration.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: Further Exploration</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">M02 TextModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_01_Importing-Persuasion.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Text into Data: Importing a Text, or, Clip, Chunk, and Split</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_02_TokenizingWithSciKitLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Tokenizing with SciKit Learn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_03_Challenge.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Challenge: Convert Another Text</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">M03 LanguageModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_01_Babel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Baby Babel</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_01a_EntropyExamples.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy Examples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V1.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models v1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models (v2)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V3.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models (v3)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_SimpleLangModel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Demonstration of Simple Language Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_03_Entropy-and-Perplexity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy and Peplexity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_04-Entropy-and-Term-Length.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy and Term Length</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_EZ.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">How to Create an N-Gram Model from ScratchHow to Create an N-Gram Model from Scratch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">M04 NLP</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_00_NLTK_Intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">NLTK Parsers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_01_Pipeline.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">NLP and the Pipeline</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_02_HMM.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Predict POS with an HMM</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">M05 VectorSpaceModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_01_BOW_TFIDF.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Vector Spaces, BOW, and TFIDF</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_02_TimeTokenMatrices.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Time-Token Matrices</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_03_TFIDF_Exploration.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Variant TFIDFs and Document Significance</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false">M06 CusteringSimilarity</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M06_CusteringSimilarity/M06_01_SimilarityMeasures.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Similarity and Distance Measures</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false">M07 FeaturesAndComponents</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M07_FeaturesAndComponents/M07_01_PCA.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">PCA from Scratch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false">M08 TopicModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_01_GibbsSampler.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Gibbs Sampler</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_02_LDASciKitLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LDA with SciKit Learn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_03_TopicSimilarity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Topic Similarity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_04_TopicContiguity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Topic Contiguity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_05_PyLDAVis.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">PyLDAVis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Untitled.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">M08a Visualization</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_01_Gensim.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Other Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_02_GensimRunCompareLDA.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_03_MALLET.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_04_Mazo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="true">M09 WordEmbedding</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_01_GloVe.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_02_PMI_SVD.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_03_SkipgramRepresentation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_04_word2vec.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_05_FastText.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Untitled.html</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/run_fasttext.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">FastText Model</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="false">M10 SentimentAnalysis</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_01_GeneralInquirer.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_02_CombineLexicons.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_03_Novel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_04_AustenMelville.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_05_WordShiftGraphs.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_06_Doc2Vec.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" aria-expanded="false">M11 Narrative</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_01_ExportBooksWithSentiment.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_02_SyuzhetPlots.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_03_Syuzhet_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_04_Syuzhet_RGeneral.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" aria-expanded="false">M12 Classification</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_01_NaiveBayesWineReviews.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_01b_SKLearnMNB.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_02_PerceptronWine.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_03.ExpectedMutualInformation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_04_Viz.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" aria-expanded="false">M13 LLMs</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-14" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_01_ChatGPTDemo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_02_ChatGPTDemo2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_03_ChatGPT4Demo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_play.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">M13_play.html</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/tokenizer_training.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Loading the dataset</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" aria-expanded="false">M90 DispersionPlots</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-15" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M90_DispersionPlots/m01.04-austen-kde.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Synopsis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M90_DispersionPlots/onehot.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">onehot.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" aria-expanded="false">M91 Charrette</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-16" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M91_Charrette/CharretteFIguresAndCharacters.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Figures and Characters</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M91_Charrette/CharretteTokens.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Config</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-17" aria-expanded="false">M92 Helpers</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-17" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-17" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M92_Helpers/M00_01_VectorizationWithSKLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M92_Helpers/M00_02_SpaCy.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#set-up" id="toc-set-up" class="nav-link active" data-scroll-target="#set-up">Set Up</a></li>
+  <li><a href="#import-glove-data" id="toc-import-glove-data" class="nav-link" data-scroll-target="#import-glove-data">Import GloVe data</a></li>
+  <li><a href="#remove-non-words" id="toc-remove-non-words" class="nav-link" data-scroll-target="#remove-non-words">Remove non-words</a></li>
+  <li><a href="#define-some-semantic-functions" id="toc-define-some-semantic-functions" class="nav-link" data-scroll-target="#define-some-semantic-functions">Define some semantic functions</a></li>
+  <li><a href="#test-similarity-function" id="toc-test-similarity-function" class="nav-link" data-scroll-target="#test-similarity-function">Test similarity function</a></li>
+  <li><a href="#test-analogy-functions" id="toc-test-analogy-functions" class="nav-link" data-scroll-target="#test-analogy-functions">Test analogy functions</a></li>
+  <li><a href="#experiment" id="toc-experiment" class="nav-link" data-scroll-target="#experiment">Experiment</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.dev/ontoligent/DS5001-2024-01-R/blob/main/lessons/M09_WordEmbedding/M09_01_GloVe.ipynb" class="toc-action">Edit this page</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-title">Metadata</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Course</span><span class="kw">:</span><span class="at">    DS 5001 </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Module</span><span class="kw">:</span><span class="at">    09 Lab</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Topic</span><span class="kw">:</span><span class="at">     Using GloVe</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Author</span><span class="kw">:</span><span class="at">    R.C. Alvarado</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">Date</span><span class="kw">:</span><span class="at">      28 March 2023 (revised)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Purpose:</strong> We use some pretrained word vectors from <a href="https://nlp.stanford.edu/projects/glove/">the developers of GloVe</a>.</p>
+<section id="set-up" class="level1">
+<h1>Set Up</h1>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data_in <span class="op">=</span> <span class="st">'../data/glove'</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># db_file = f'{data_in}/glove2.db'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics.pairwise <span class="im">import</span> cosine_similarity</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="import-glove-data" class="level1">
+<h1>Import GloVe data</h1>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>glove <span class="op">=</span> pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>data_in<span class="sc">}</span><span class="ss">/glove.6B/glove.6B.50d.txt"</span>, sep<span class="op">=</span><span class="st">"\s"</span>, header<span class="op">=</span><span class="va">None</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/14/rnyfspnx2q131jp_752t9fc80000gn/T/ipykernel_41125/3908683698.py:1: ParserWarning: Falling back to the 'python' engine because the 'c' engine does not support regex separators (separators &gt; 1 char and different from '\s+' are interpreted as regex); you can avoid this warning by specifying engine='python'.
+  glove = pd.read_csv(f"{data_in}/glove.6B/glove.6B.50d.txt", sep="\s", header=None)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>glove <span class="op">=</span> glove.set_index(<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>glove.index.name <span class="op">=</span> <span class="st">'term_str'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>glove.index.has_duplicates</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>True</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>glove.index.value_counts()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>the           1
+fedden        1
+chlorinate    1
+kalapana      1
+40.64         1
+             ..
+olatunde      1
+alemao        1
+zanca         1
+natsteel      1
+sandberger    1
+Name: term_str, Length: 399997, dtype: int64</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>glove.loc[[<span class="st">'the'</span>,<span class="st">'quick'</span>,<span class="st">'brown'</span>,<span class="st">'fox'</span>,<span class="st">'jumped'</span>,<span class="st">'over'</span>,<span class="st">'lazy'</span>,<span class="st">'dogs'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="44">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+      <th>9</th>
+      <th>10</th>
+      <th>...</th>
+      <th>41</th>
+      <th>42</th>
+      <th>43</th>
+      <th>44</th>
+      <th>45</th>
+      <th>46</th>
+      <th>47</th>
+      <th>48</th>
+      <th>49</th>
+      <th>50</th>
+    </tr>
+    <tr>
+      <th>term_str</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>the</th>
+      <td>0.41800</td>
+      <td>0.249680</td>
+      <td>-0.41242</td>
+      <td>0.121700</td>
+      <td>0.34527</td>
+      <td>-0.044457</td>
+      <td>-0.49688</td>
+      <td>-0.178620</td>
+      <td>-0.000660</td>
+      <td>-0.65660</td>
+      <td>...</td>
+      <td>-0.298710</td>
+      <td>-0.157490</td>
+      <td>-0.34758</td>
+      <td>-0.045637</td>
+      <td>-0.442510</td>
+      <td>0.18785</td>
+      <td>0.002785</td>
+      <td>-0.184110</td>
+      <td>-0.11514</td>
+      <td>-0.785810</td>
+    </tr>
+    <tr>
+      <th>quick</th>
+      <td>0.13967</td>
+      <td>-0.537980</td>
+      <td>-0.18047</td>
+      <td>-0.251420</td>
+      <td>0.16203</td>
+      <td>-0.138680</td>
+      <td>-0.24637</td>
+      <td>0.751110</td>
+      <td>0.272640</td>
+      <td>0.61035</td>
+      <td>...</td>
+      <td>0.350060</td>
+      <td>0.524650</td>
+      <td>-0.51747</td>
+      <td>0.003471</td>
+      <td>0.736250</td>
+      <td>0.16252</td>
+      <td>0.852790</td>
+      <td>0.852680</td>
+      <td>0.57892</td>
+      <td>0.644830</td>
+    </tr>
+    <tr>
+      <th>brown</th>
+      <td>-0.88497</td>
+      <td>0.716850</td>
+      <td>-0.40379</td>
+      <td>-0.106980</td>
+      <td>0.81457</td>
+      <td>1.025800</td>
+      <td>-1.26980</td>
+      <td>-0.493820</td>
+      <td>-0.278390</td>
+      <td>-0.92251</td>
+      <td>...</td>
+      <td>0.037507</td>
+      <td>0.764340</td>
+      <td>-0.64120</td>
+      <td>-0.595940</td>
+      <td>0.465890</td>
+      <td>0.31494</td>
+      <td>-0.340720</td>
+      <td>-0.591670</td>
+      <td>-0.31057</td>
+      <td>0.732740</td>
+    </tr>
+    <tr>
+      <th>fox</th>
+      <td>0.44206</td>
+      <td>0.059552</td>
+      <td>0.15861</td>
+      <td>0.927770</td>
+      <td>0.18760</td>
+      <td>0.242560</td>
+      <td>-1.59300</td>
+      <td>-0.798470</td>
+      <td>-0.340990</td>
+      <td>-0.24021</td>
+      <td>...</td>
+      <td>-0.036646</td>
+      <td>0.782510</td>
+      <td>-1.00720</td>
+      <td>-0.590570</td>
+      <td>-0.784900</td>
+      <td>-0.39113</td>
+      <td>-0.497270</td>
+      <td>-0.428300</td>
+      <td>-0.15204</td>
+      <td>1.506400</td>
+    </tr>
+    <tr>
+      <th>jumped</th>
+      <td>-0.51460</td>
+      <td>-0.591540</td>
+      <td>1.60210</td>
+      <td>0.134290</td>
+      <td>0.88569</td>
+      <td>0.121370</td>
+      <td>-1.15810</td>
+      <td>-0.501000</td>
+      <td>0.053087</td>
+      <td>0.37916</td>
+      <td>...</td>
+      <td>-0.578110</td>
+      <td>-0.186740</td>
+      <td>0.60172</td>
+      <td>0.004171</td>
+      <td>0.066152</td>
+      <td>-0.46572</td>
+      <td>-0.054225</td>
+      <td>-0.495990</td>
+      <td>0.49307</td>
+      <td>-0.572150</td>
+    </tr>
+    <tr>
+      <th>over</th>
+      <td>0.12972</td>
+      <td>0.088073</td>
+      <td>0.24375</td>
+      <td>0.078102</td>
+      <td>-0.12783</td>
+      <td>0.278310</td>
+      <td>-0.48693</td>
+      <td>0.196490</td>
+      <td>-0.395580</td>
+      <td>-0.28362</td>
+      <td>...</td>
+      <td>-0.081068</td>
+      <td>0.391570</td>
+      <td>0.17300</td>
+      <td>0.225400</td>
+      <td>-0.128360</td>
+      <td>0.40951</td>
+      <td>-0.260790</td>
+      <td>0.090912</td>
+      <td>-0.60515</td>
+      <td>-0.982700</td>
+    </tr>
+    <tr>
+      <th>lazy</th>
+      <td>-0.27611</td>
+      <td>-0.597120</td>
+      <td>-0.49227</td>
+      <td>-1.037200</td>
+      <td>-0.35878</td>
+      <td>-0.097425</td>
+      <td>-0.21014</td>
+      <td>-0.092836</td>
+      <td>-0.054118</td>
+      <td>0.45420</td>
+      <td>...</td>
+      <td>-0.440960</td>
+      <td>0.097736</td>
+      <td>-0.17589</td>
+      <td>1.179900</td>
+      <td>0.131520</td>
+      <td>-1.07950</td>
+      <td>0.456850</td>
+      <td>-0.633120</td>
+      <td>1.27520</td>
+      <td>1.167200</td>
+    </tr>
+    <tr>
+      <th>dogs</th>
+      <td>0.66293</td>
+      <td>-0.966960</td>
+      <td>-0.14334</td>
+      <td>-0.756590</td>
+      <td>0.24905</td>
+      <td>0.221720</td>
+      <td>-0.94465</td>
+      <td>-0.381720</td>
+      <td>0.876490</td>
+      <td>-0.65629</td>
+      <td>...</td>
+      <td>-0.152350</td>
+      <td>-0.135670</td>
+      <td>0.45379</td>
+      <td>1.124500</td>
+      <td>1.659500</td>
+      <td>-0.43319</td>
+      <td>-0.170270</td>
+      <td>-0.685280</td>
+      <td>0.29151</td>
+      <td>0.046649</td>
+    </tr>
+  </tbody>
+</table>
+<p>8 rows × 50 columns</p>
+</div>
+</div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>glove.sample(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+      <th>9</th>
+      <th>10</th>
+      <th>...</th>
+      <th>41</th>
+      <th>42</th>
+      <th>43</th>
+      <th>44</th>
+      <th>45</th>
+      <th>46</th>
+      <th>47</th>
+      <th>48</th>
+      <th>49</th>
+      <th>50</th>
+    </tr>
+    <tr>
+      <th>term_str</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>wrests</th>
+      <td>-0.404540</td>
+      <td>-1.901700</td>
+      <td>1.05480</td>
+      <td>-0.054192</td>
+      <td>-1.059200</td>
+      <td>0.30774</td>
+      <td>0.84635</td>
+      <td>0.822740</td>
+      <td>0.328700</td>
+      <td>0.027596</td>
+      <td>...</td>
+      <td>0.911030</td>
+      <td>0.202900</td>
+      <td>-0.42547</td>
+      <td>0.697050</td>
+      <td>-1.499700</td>
+      <td>-0.330990</td>
+      <td>1.167700</td>
+      <td>-0.045740</td>
+      <td>0.079461</td>
+      <td>-0.69059</td>
+    </tr>
+    <tr>
+      <th>footage</th>
+      <td>0.600360</td>
+      <td>-0.089296</td>
+      <td>0.70540</td>
+      <td>0.432460</td>
+      <td>0.075903</td>
+      <td>-0.16065</td>
+      <td>-0.63160</td>
+      <td>-0.061264</td>
+      <td>0.490740</td>
+      <td>0.264070</td>
+      <td>...</td>
+      <td>0.815910</td>
+      <td>0.506310</td>
+      <td>-0.38727</td>
+      <td>-0.675990</td>
+      <td>0.096804</td>
+      <td>-0.750310</td>
+      <td>-0.156600</td>
+      <td>0.045359</td>
+      <td>-0.341170</td>
+      <td>-0.47274</td>
+    </tr>
+    <tr>
+      <th>premodern</th>
+      <td>-0.403840</td>
+      <td>-0.500380</td>
+      <td>-0.94482</td>
+      <td>-0.309030</td>
+      <td>-0.403770</td>
+      <td>-0.14626</td>
+      <td>0.80062</td>
+      <td>0.167330</td>
+      <td>-0.108880</td>
+      <td>0.369950</td>
+      <td>...</td>
+      <td>-0.080176</td>
+      <td>-0.556040</td>
+      <td>0.90006</td>
+      <td>1.069900</td>
+      <td>-0.134950</td>
+      <td>0.197940</td>
+      <td>0.462100</td>
+      <td>0.201380</td>
+      <td>-0.358610</td>
+      <td>-0.21241</td>
+    </tr>
+    <tr>
+      <th>unimaginable</th>
+      <td>1.018000</td>
+      <td>-0.003556</td>
+      <td>-0.24592</td>
+      <td>-0.627990</td>
+      <td>0.272370</td>
+      <td>-0.19304</td>
+      <td>1.54620</td>
+      <td>0.531560</td>
+      <td>0.038944</td>
+      <td>0.973040</td>
+      <td>...</td>
+      <td>-1.038800</td>
+      <td>0.036784</td>
+      <td>0.72901</td>
+      <td>0.252020</td>
+      <td>-0.652310</td>
+      <td>0.107100</td>
+      <td>-0.291880</td>
+      <td>0.296530</td>
+      <td>-0.378910</td>
+      <td>-0.13745</td>
+    </tr>
+    <tr>
+      <th>jetport</th>
+      <td>-1.002200</td>
+      <td>0.690770</td>
+      <td>-0.48382</td>
+      <td>0.911930</td>
+      <td>-1.291100</td>
+      <td>-0.65726</td>
+      <td>-0.22062</td>
+      <td>0.590900</td>
+      <td>0.948180</td>
+      <td>0.631590</td>
+      <td>...</td>
+      <td>0.036332</td>
+      <td>-0.603570</td>
+      <td>0.19029</td>
+      <td>-0.328620</td>
+      <td>-0.792630</td>
+      <td>0.617450</td>
+      <td>0.162850</td>
+      <td>1.294500</td>
+      <td>0.139440</td>
+      <td>-0.59739</td>
+    </tr>
+    <tr>
+      <th>outpaces</th>
+      <td>0.059691</td>
+      <td>-0.260820</td>
+      <td>1.19630</td>
+      <td>-0.201200</td>
+      <td>-0.494630</td>
+      <td>-0.25999</td>
+      <td>-0.13380</td>
+      <td>0.307760</td>
+      <td>0.995940</td>
+      <td>0.769630</td>
+      <td>...</td>
+      <td>-0.663670</td>
+      <td>-0.503100</td>
+      <td>-0.15110</td>
+      <td>-0.044545</td>
+      <td>-0.210350</td>
+      <td>-0.190750</td>
+      <td>0.078001</td>
+      <td>0.748210</td>
+      <td>-0.145590</td>
+      <td>0.37634</td>
+    </tr>
+    <tr>
+      <th>mehmedovic</th>
+      <td>-0.332350</td>
+      <td>-0.124570</td>
+      <td>0.25102</td>
+      <td>0.167780</td>
+      <td>0.318490</td>
+      <td>0.54145</td>
+      <td>-0.20790</td>
+      <td>0.556040</td>
+      <td>-0.237740</td>
+      <td>-0.093305</td>
+      <td>...</td>
+      <td>-0.532860</td>
+      <td>-0.167390</td>
+      <td>-0.25954</td>
+      <td>-0.436120</td>
+      <td>0.499320</td>
+      <td>-0.672520</td>
+      <td>-0.593100</td>
+      <td>-0.565790</td>
+      <td>0.287010</td>
+      <td>0.85458</td>
+    </tr>
+    <tr>
+      <th>boty</th>
+      <td>-0.522280</td>
+      <td>0.300870</td>
+      <td>-0.45771</td>
+      <td>0.435740</td>
+      <td>-0.604350</td>
+      <td>-0.90836</td>
+      <td>0.66205</td>
+      <td>0.979960</td>
+      <td>0.889160</td>
+      <td>0.381550</td>
+      <td>...</td>
+      <td>0.019760</td>
+      <td>-1.050700</td>
+      <td>0.89501</td>
+      <td>-0.876110</td>
+      <td>0.315780</td>
+      <td>-0.236210</td>
+      <td>0.084520</td>
+      <td>0.199110</td>
+      <td>0.168530</td>
+      <td>-0.20004</td>
+    </tr>
+    <tr>
+      <th>trances</th>
+      <td>0.916280</td>
+      <td>-1.074100</td>
+      <td>-0.72827</td>
+      <td>-0.425400</td>
+      <td>-0.007542</td>
+      <td>-0.27021</td>
+      <td>0.66726</td>
+      <td>1.148400</td>
+      <td>-0.026326</td>
+      <td>1.402700</td>
+      <td>...</td>
+      <td>-0.156330</td>
+      <td>-0.418750</td>
+      <td>-0.34330</td>
+      <td>0.493080</td>
+      <td>-0.572970</td>
+      <td>-0.893380</td>
+      <td>1.106500</td>
+      <td>-0.819120</td>
+      <td>-0.366190</td>
+      <td>-1.07140</td>
+    </tr>
+    <tr>
+      <th>islahi</th>
+      <td>-0.538620</td>
+      <td>-1.036500</td>
+      <td>-0.38347</td>
+      <td>-0.789650</td>
+      <td>0.306730</td>
+      <td>-0.63187</td>
+      <td>0.41165</td>
+      <td>-0.277810</td>
+      <td>0.217770</td>
+      <td>0.581810</td>
+      <td>...</td>
+      <td>0.232400</td>
+      <td>0.367920</td>
+      <td>-0.90042</td>
+      <td>0.321230</td>
+      <td>-0.041095</td>
+      <td>-0.001336</td>
+      <td>-0.089041</td>
+      <td>-0.577800</td>
+      <td>-0.038594</td>
+      <td>0.25848</td>
+    </tr>
+  </tbody>
+</table>
+<p>10 rows × 50 columns</p>
+</div>
+</div>
+</div>
+</section>
+<section id="remove-non-words" class="level1">
+<h1>Remove non-words</h1>
+<p>There are a lot of useless tokens in the vocabulary. These may be good for generating the features, but we don’t need them in our queries.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># glove = glove.reset_index()</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># glove = glove[glove.term_str.str.match(r'^[a-z]+$')]</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># glove = glove.set_index('term_str')</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># glove.shape</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="define-some-semantic-functions" class="level1">
+<h1>Define some semantic functions</h1>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_word_vector(term_str):</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Get a numpy array from the glove matrix and shape for input into cosine function"""</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    wv <span class="op">=</span> glove.loc[term_str].values.reshape(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>).T</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> wv</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_sims(term_str, n<span class="op">=</span><span class="dv">10</span>):</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Get the top n words for a given word based on cosine similarity"""</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    wv <span class="op">=</span> get_word_vector(term_str)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    sims <span class="op">=</span> cosine_similarity(glove.values, wv)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(sims, index<span class="op">=</span>glove.index, columns<span class="op">=</span>[<span class="st">'score'</span>])<span class="op">\</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        .sort_values(<span class="st">'score'</span>, ascending<span class="op">=</span><span class="va">False</span>).head(n)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_nearest_vector(wv):</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Get the nearest word vector to a given word vector"""</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    sims <span class="op">=</span> cosine_similarity(glove.values, wv)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pd.DataFrame(sims, index<span class="op">=</span>glove.index, columns<span class="op">=</span>[<span class="st">'score'</span>])<span class="op">\</span></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>        .sort_values(<span class="st">'score'</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">2</span>).iloc[<span class="dv">1</span>]</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_analogy(a, b, c):</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Infer missing analogical term"""</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>        A <span class="op">=</span> get_word_vector(a)</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>        B <span class="op">=</span> get_word_vector(b)</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>        C <span class="op">=</span> get_word_vector(c)</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>        D <span class="op">=</span> np.add(np.subtract(B, A), C)</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>        X <span class="op">=</span> get_nearest_vector(D)</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> X.name</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">ValueError</span> <span class="im">as</span> e:</span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(e)</span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">None</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="test-similarity-function" class="level1">
+<h1>Test similarity function</h1>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>get_sims(<span class="st">'queen'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>score</th>
+    </tr>
+    <tr>
+      <th>term_str</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>queen</th>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>princess</th>
+      <td>0.851517</td>
+    </tr>
+    <tr>
+      <th>lady</th>
+      <td>0.805061</td>
+    </tr>
+    <tr>
+      <th>elizabeth</th>
+      <td>0.787304</td>
+    </tr>
+    <tr>
+      <th>king</th>
+      <td>0.783904</td>
+    </tr>
+    <tr>
+      <th>prince</th>
+      <td>0.782186</td>
+    </tr>
+    <tr>
+      <th>coronation</th>
+      <td>0.769278</td>
+    </tr>
+    <tr>
+      <th>consort</th>
+      <td>0.762610</td>
+    </tr>
+    <tr>
+      <th>royal</th>
+      <td>0.744286</td>
+    </tr>
+    <tr>
+      <th>crown</th>
+      <td>0.738265</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>get_sims(<span class="st">'king'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="12">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>score</th>
+    </tr>
+    <tr>
+      <th>term_str</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>king</th>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>prince</th>
+      <td>0.823618</td>
+    </tr>
+    <tr>
+      <th>queen</th>
+      <td>0.783904</td>
+    </tr>
+    <tr>
+      <th>ii</th>
+      <td>0.774623</td>
+    </tr>
+    <tr>
+      <th>emperor</th>
+      <td>0.773625</td>
+    </tr>
+    <tr>
+      <th>son</th>
+      <td>0.766719</td>
+    </tr>
+    <tr>
+      <th>uncle</th>
+      <td>0.762715</td>
+    </tr>
+    <tr>
+      <th>kingdom</th>
+      <td>0.754216</td>
+    </tr>
+    <tr>
+      <th>throne</th>
+      <td>0.753991</td>
+    </tr>
+    <tr>
+      <th>brother</th>
+      <td>0.749241</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>get_sims(<span class="st">'milk'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>score</th>
+    </tr>
+    <tr>
+      <th>term_str</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>milk</th>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>sugar</th>
+      <td>0.821547</td>
+    </tr>
+    <tr>
+      <th>drink</th>
+      <td>0.815409</td>
+    </tr>
+    <tr>
+      <th>soda</th>
+      <td>0.808969</td>
+    </tr>
+    <tr>
+      <th>peanut</th>
+      <td>0.806213</td>
+    </tr>
+    <tr>
+      <th>juice</th>
+      <td>0.803572</td>
+    </tr>
+    <tr>
+      <th>dairy</th>
+      <td>0.792757</td>
+    </tr>
+    <tr>
+      <th>meat</th>
+      <td>0.791714</td>
+    </tr>
+    <tr>
+      <th>butter</th>
+      <td>0.789752</td>
+    </tr>
+    <tr>
+      <th>cream</th>
+      <td>0.784265</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>get_sims(<span class="st">'beer'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>score</th>
+    </tr>
+    <tr>
+      <th>term_str</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>beer</th>
+      <td>1.000000</td>
+    </tr>
+    <tr>
+      <th>drink</th>
+      <td>0.849374</td>
+    </tr>
+    <tr>
+      <th>drinks</th>
+      <td>0.833444</td>
+    </tr>
+    <tr>
+      <th>coffee</th>
+      <td>0.804246</td>
+    </tr>
+    <tr>
+      <th>vodka</th>
+      <td>0.797950</td>
+    </tr>
+    <tr>
+      <th>beers</th>
+      <td>0.793020</td>
+    </tr>
+    <tr>
+      <th>champagne</th>
+      <td>0.776821</td>
+    </tr>
+    <tr>
+      <th>brewed</th>
+      <td>0.772739</td>
+    </tr>
+    <tr>
+      <th>soda</th>
+      <td>0.768293</td>
+    </tr>
+    <tr>
+      <th>wine</th>
+      <td>0.764609</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="test-analogy-functions" class="level1">
+<h1>Test analogy functions</h1>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>get_analogy(<span class="st">'dog'</span>,<span class="st">'male'</span>,<span class="st">'cat'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<pre><code>'female'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>get_analogy(<span class="st">'male'</span>,<span class="st">'doctor'</span>,<span class="st">'female'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+<pre><code>'nurse'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>get_analogy(<span class="st">'king'</span>, <span class="st">'queen'</span>, <span class="st">'male'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>'female'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>get_analogy(<span class="st">'queen'</span>,<span class="st">'female'</span>,<span class="st">'king'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>'male'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>get_analogy(<span class="st">'female'</span>,<span class="st">'princess'</span>,<span class="st">'male'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>'duchess'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>get_analogy(<span class="st">'right'</span>,<span class="st">'male'</span>,<span class="st">'left'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>'male'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>get_analogy(<span class="st">'male'</span>, <span class="st">'female'</span>, <span class="st">'right'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>'put'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>get_analogy(<span class="st">'right'</span>,<span class="st">'left'</span>,<span class="st">'male'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>'male'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>get_analogy(<span class="st">'left'</span>,<span class="st">'right'</span>,<span class="st">'black'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+<pre><code>'white'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>get_analogy(<span class="st">'left'</span>,<span class="st">'right'</span>,<span class="st">'white'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="24">
+<pre><code>'black'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>get_analogy(<span class="st">'sun'</span>,<span class="st">'moon'</span>,<span class="st">'male'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>'male'</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>get_analogy(<span class="st">'day'</span>,<span class="st">'sun'</span>,<span class="st">'night'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+<pre><code>'sky'</code></pre>
+</div>
+</div>
+</section>
+<section id="experiment" class="level1">
+<h1>Experiment</h1>
+<p>Demonstrate how to project embeddings onto documents</p>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>LIB <span class="op">=</span> pd.read_csv(<span class="st">"../data/output/austen-melville-LIB_FIXED.csv"</span>).set_index(<span class="st">'book_id'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>CORPUS <span class="op">=</span> pd.read_csv(<span class="st">"../data/output/austen-melville-CORPUS.csv"</span>)<span class="op">\</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>    .merge(glove, on<span class="op">=</span><span class="st">"term_str"</span>)<span class="op">\</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>    .set_index([<span class="st">'book_id'</span>, <span class="st">'chap_id'</span>, <span class="st">'para_num'</span>, <span class="st">'sent_num'</span>, <span class="st">'token_num'</span>])<span class="op">\</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>    .iloc[:, <span class="dv">4</span>:]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>CORPUS</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+      <th>9</th>
+      <th>10</th>
+      <th>...</th>
+      <th>41</th>
+      <th>42</th>
+      <th>43</th>
+      <th>44</th>
+      <th>45</th>
+      <th>46</th>
+      <th>47</th>
+      <th>48</th>
+      <th>49</th>
+      <th>50</th>
+    </tr>
+    <tr>
+      <th>book_id</th>
+      <th>chap_id</th>
+      <th>para_num</th>
+      <th>sent_num</th>
+      <th>token_num</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">105</th>
+      <th rowspan="5" valign="top">1</th>
+      <th>1</th>
+      <th>0</th>
+      <th>0</th>
+      <td>0.15408</td>
+      <td>0.759330</td>
+      <td>-0.471300</td>
+      <td>-0.684190</td>
+      <td>0.66657</td>
+      <td>0.020698</td>
+      <td>-0.82138</td>
+      <td>0.32687</td>
+      <td>-0.804420</td>
+      <td>-1.34970</td>
+      <td>...</td>
+      <td>0.84756</td>
+      <td>1.014000</td>
+      <td>-0.72303</td>
+      <td>-0.65163</td>
+      <td>0.135110</td>
+      <td>0.507210</td>
+      <td>-0.820150</td>
+      <td>-1.29290</td>
+      <td>0.28219</td>
+      <td>0.480000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <th>0</th>
+      <th>12</th>
+      <td>0.15408</td>
+      <td>0.759330</td>
+      <td>-0.471300</td>
+      <td>-0.684190</td>
+      <td>0.66657</td>
+      <td>0.020698</td>
+      <td>-0.82138</td>
+      <td>0.32687</td>
+      <td>-0.804420</td>
+      <td>-1.34970</td>
+      <td>...</td>
+      <td>0.84756</td>
+      <td>1.014000</td>
+      <td>-0.72303</td>
+      <td>-0.65163</td>
+      <td>0.135110</td>
+      <td>0.507210</td>
+      <td>-0.820150</td>
+      <td>-1.29290</td>
+      <td>0.28219</td>
+      <td>0.480000</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <th>0</th>
+      <th>87</th>
+      <td>0.15408</td>
+      <td>0.759330</td>
+      <td>-0.471300</td>
+      <td>-0.684190</td>
+      <td>0.66657</td>
+      <td>0.020698</td>
+      <td>-0.82138</td>
+      <td>0.32687</td>
+      <td>-0.804420</td>
+      <td>-1.34970</td>
+      <td>...</td>
+      <td>0.84756</td>
+      <td>1.014000</td>
+      <td>-0.72303</td>
+      <td>-0.65163</td>
+      <td>0.135110</td>
+      <td>0.507210</td>
+      <td>-0.820150</td>
+      <td>-1.29290</td>
+      <td>0.28219</td>
+      <td>0.480000</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <th>0</th>
+      <th>11</th>
+      <td>0.15408</td>
+      <td>0.759330</td>
+      <td>-0.471300</td>
+      <td>-0.684190</td>
+      <td>0.66657</td>
+      <td>0.020698</td>
+      <td>-0.82138</td>
+      <td>0.32687</td>
+      <td>-0.804420</td>
+      <td>-1.34970</td>
+      <td>...</td>
+      <td>0.84756</td>
+      <td>1.014000</td>
+      <td>-0.72303</td>
+      <td>-0.65163</td>
+      <td>0.135110</td>
+      <td>0.507210</td>
+      <td>-0.820150</td>
+      <td>-1.29290</td>
+      <td>0.28219</td>
+      <td>0.480000</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <th>0</th>
+      <th>8</th>
+      <td>0.15408</td>
+      <td>0.759330</td>
+      <td>-0.471300</td>
+      <td>-0.684190</td>
+      <td>0.66657</td>
+      <td>0.020698</td>
+      <td>-0.82138</td>
+      <td>0.32687</td>
+      <td>-0.804420</td>
+      <td>-1.34970</td>
+      <td>...</td>
+      <td>0.84756</td>
+      <td>1.014000</td>
+      <td>-0.72303</td>
+      <td>-0.65163</td>
+      <td>0.135110</td>
+      <td>0.507210</td>
+      <td>-0.820150</td>
+      <td>-1.29290</td>
+      <td>0.28219</td>
+      <td>0.480000</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th rowspan="5" valign="top">34970</th>
+      <th rowspan="5" valign="top">114</th>
+      <th rowspan="2" valign="top">13</th>
+      <th>0</th>
+      <th>10</th>
+      <td>-0.10870</td>
+      <td>-0.780970</td>
+      <td>-0.575230</td>
+      <td>0.006008</td>
+      <td>-0.27756</td>
+      <td>-0.305890</td>
+      <td>0.47459</td>
+      <td>0.17865</td>
+      <td>-0.006944</td>
+      <td>1.51110</td>
+      <td>...</td>
+      <td>-0.21233</td>
+      <td>0.273010</td>
+      <td>-0.41302</td>
+      <td>0.60088</td>
+      <td>0.146930</td>
+      <td>-0.140220</td>
+      <td>-0.091782</td>
+      <td>0.14428</td>
+      <td>0.28728</td>
+      <td>0.618360</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <th>8</th>
+      <td>0.53049</td>
+      <td>-0.636570</td>
+      <td>-0.533140</td>
+      <td>-0.375420</td>
+      <td>0.28821</td>
+      <td>1.237400</td>
+      <td>-0.47467</td>
+      <td>-1.20370</td>
+      <td>0.582090</td>
+      <td>-0.55149</td>
+      <td>...</td>
+      <td>0.32885</td>
+      <td>0.572850</td>
+      <td>-0.57111</td>
+      <td>0.10893</td>
+      <td>1.090200</td>
+      <td>-0.028394</td>
+      <td>0.784580</td>
+      <td>-0.97332</td>
+      <td>0.36124</td>
+      <td>-0.056677</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <th>0</th>
+      <th>28</th>
+      <td>0.37567</td>
+      <td>-1.520800</td>
+      <td>-0.039892</td>
+      <td>-0.432260</td>
+      <td>-0.20000</td>
+      <td>-0.151140</td>
+      <td>0.35699</td>
+      <td>0.75466</td>
+      <td>-0.088619</td>
+      <td>0.15833</td>
+      <td>...</td>
+      <td>-0.34531</td>
+      <td>-0.032317</td>
+      <td>-0.01209</td>
+      <td>1.44600</td>
+      <td>0.037374</td>
+      <td>-0.030873</td>
+      <td>-0.230760</td>
+      <td>-0.15306</td>
+      <td>0.76482</td>
+      <td>0.010832</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">18</th>
+      <th rowspan="2" valign="top">3</th>
+      <th>11</th>
+      <td>0.86343</td>
+      <td>0.004638</td>
+      <td>-0.851650</td>
+      <td>-0.316740</td>
+      <td>-0.35847</td>
+      <td>-0.539820</td>
+      <td>0.73907</td>
+      <td>0.66941</td>
+      <td>0.052928</td>
+      <td>0.24664</td>
+      <td>...</td>
+      <td>-1.24120</td>
+      <td>-0.210910</td>
+      <td>0.15890</td>
+      <td>0.47247</td>
+      <td>-0.268530</td>
+      <td>-0.297720</td>
+      <td>0.777120</td>
+      <td>-0.72784</td>
+      <td>0.24178</td>
+      <td>-0.306210</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.86343</td>
+      <td>0.004638</td>
+      <td>-0.851650</td>
+      <td>-0.316740</td>
+      <td>-0.35847</td>
+      <td>-0.539820</td>
+      <td>0.73907</td>
+      <td>0.66941</td>
+      <td>0.052928</td>
+      <td>0.24664</td>
+      <td>...</td>
+      <td>-1.24120</td>
+      <td>-0.210910</td>
+      <td>0.15890</td>
+      <td>0.47247</td>
+      <td>-0.268530</td>
+      <td>-0.297720</td>
+      <td>0.777120</td>
+      <td>-0.72784</td>
+      <td>0.24178</td>
+      <td>-0.306210</td>
+    </tr>
+  </tbody>
+</table>
+<p>2038058 rows × 50 columns</p>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>BOOKS <span class="op">=</span> CORPUS.groupby(<span class="st">'book_id'</span>).mean()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>BOOKS</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+      <th>9</th>
+      <th>10</th>
+      <th>...</th>
+      <th>41</th>
+      <th>42</th>
+      <th>43</th>
+      <th>44</th>
+      <th>45</th>
+      <th>46</th>
+      <th>47</th>
+      <th>48</th>
+      <th>49</th>
+      <th>50</th>
+    </tr>
+    <tr>
+      <th>book_id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>105</th>
+      <td>0.323545</td>
+      <td>0.130375</td>
+      <td>-0.138879</td>
+      <td>-0.245284</td>
+      <td>0.429670</td>
+      <td>0.207292</td>
+      <td>-0.423724</td>
+      <td>0.076339</td>
+      <td>-0.232307</td>
+      <td>-0.060521</td>
+      <td>...</td>
+      <td>-0.157819</td>
+      <td>0.088310</td>
+      <td>-0.029153</td>
+      <td>0.150974</td>
+      <td>-0.054749</td>
+      <td>0.006546</td>
+      <td>-0.230543</td>
+      <td>-0.195147</td>
+      <td>-0.052740</td>
+      <td>-0.030568</td>
+    </tr>
+    <tr>
+      <th>121</th>
+      <td>0.324524</td>
+      <td>0.146049</td>
+      <td>-0.132952</td>
+      <td>-0.247241</td>
+      <td>0.442528</td>
+      <td>0.181426</td>
+      <td>-0.386801</td>
+      <td>0.069392</td>
+      <td>-0.215634</td>
+      <td>-0.025070</td>
+      <td>...</td>
+      <td>-0.150170</td>
+      <td>0.074479</td>
+      <td>-0.036294</td>
+      <td>0.174485</td>
+      <td>-0.046944</td>
+      <td>0.002776</td>
+      <td>-0.192248</td>
+      <td>-0.197593</td>
+      <td>-0.055893</td>
+      <td>-0.032289</td>
+    </tr>
+    <tr>
+      <th>141</th>
+      <td>0.316918</td>
+      <td>0.137231</td>
+      <td>-0.128935</td>
+      <td>-0.254841</td>
+      <td>0.430273</td>
+      <td>0.203088</td>
+      <td>-0.401161</td>
+      <td>0.075366</td>
+      <td>-0.222743</td>
+      <td>-0.023045</td>
+      <td>...</td>
+      <td>-0.153490</td>
+      <td>0.084964</td>
+      <td>-0.035502</td>
+      <td>0.159466</td>
+      <td>-0.050061</td>
+      <td>-0.000043</td>
+      <td>-0.213604</td>
+      <td>-0.182040</td>
+      <td>-0.052641</td>
+      <td>-0.009841</td>
+    </tr>
+    <tr>
+      <th>158</th>
+      <td>0.316814</td>
+      <td>0.132361</td>
+      <td>-0.130478</td>
+      <td>-0.248837</td>
+      <td>0.447975</td>
+      <td>0.186106</td>
+      <td>-0.394266</td>
+      <td>0.076542</td>
+      <td>-0.231446</td>
+      <td>-0.010712</td>
+      <td>...</td>
+      <td>-0.154607</td>
+      <td>0.080837</td>
+      <td>-0.038184</td>
+      <td>0.178259</td>
+      <td>-0.035039</td>
+      <td>0.007859</td>
+      <td>-0.213723</td>
+      <td>-0.164035</td>
+      <td>-0.042073</td>
+      <td>0.039832</td>
+    </tr>
+    <tr>
+      <th>161</th>
+      <td>0.312367</td>
+      <td>0.141866</td>
+      <td>-0.126897</td>
+      <td>-0.262345</td>
+      <td>0.442250</td>
+      <td>0.207670</td>
+      <td>-0.389031</td>
+      <td>0.088340</td>
+      <td>-0.214907</td>
+      <td>-0.020283</td>
+      <td>...</td>
+      <td>-0.149661</td>
+      <td>0.076487</td>
+      <td>-0.036526</td>
+      <td>0.164505</td>
+      <td>-0.045916</td>
+      <td>-0.011587</td>
+      <td>-0.212383</td>
+      <td>-0.178812</td>
+      <td>-0.045700</td>
+      <td>-0.014388</td>
+    </tr>
+    <tr>
+      <th>946</th>
+      <td>0.318215</td>
+      <td>0.165525</td>
+      <td>-0.126256</td>
+      <td>-0.265697</td>
+      <td>0.451028</td>
+      <td>0.175482</td>
+      <td>-0.333226</td>
+      <td>0.116844</td>
+      <td>-0.228130</td>
+      <td>0.007189</td>
+      <td>...</td>
+      <td>-0.132155</td>
+      <td>0.062069</td>
+      <td>-0.036837</td>
+      <td>0.177433</td>
+      <td>-0.036822</td>
+      <td>0.001203</td>
+      <td>-0.206038</td>
+      <td>-0.179400</td>
+      <td>-0.037422</td>
+      <td>0.063258</td>
+    </tr>
+    <tr>
+      <th>1212</th>
+      <td>0.311875</td>
+      <td>0.162135</td>
+      <td>-0.131199</td>
+      <td>-0.258385</td>
+      <td>0.446084</td>
+      <td>0.172494</td>
+      <td>-0.361823</td>
+      <td>0.074600</td>
+      <td>-0.227629</td>
+      <td>-0.031131</td>
+      <td>...</td>
+      <td>-0.136514</td>
+      <td>0.059259</td>
+      <td>-0.042337</td>
+      <td>0.166035</td>
+      <td>-0.047415</td>
+      <td>0.021623</td>
+      <td>-0.208847</td>
+      <td>-0.205562</td>
+      <td>-0.044726</td>
+      <td>-0.004992</td>
+    </tr>
+    <tr>
+      <th>1342</th>
+      <td>0.317907</td>
+      <td>0.138468</td>
+      <td>-0.135627</td>
+      <td>-0.252612</td>
+      <td>0.449312</td>
+      <td>0.199988</td>
+      <td>-0.390621</td>
+      <td>0.096263</td>
+      <td>-0.232130</td>
+      <td>-0.034875</td>
+      <td>...</td>
+      <td>-0.145135</td>
+      <td>0.083121</td>
+      <td>-0.051874</td>
+      <td>0.154525</td>
+      <td>-0.044942</td>
+      <td>-0.004497</td>
+      <td>-0.220922</td>
+      <td>-0.185624</td>
+      <td>-0.043178</td>
+      <td>0.000160</td>
+    </tr>
+    <tr>
+      <th>1900</th>
+      <td>0.335349</td>
+      <td>0.109812</td>
+      <td>-0.138289</td>
+      <td>-0.201990</td>
+      <td>0.364711</td>
+      <td>0.169110</td>
+      <td>-0.349099</td>
+      <td>-0.012520</td>
+      <td>-0.167956</td>
+      <td>-0.082440</td>
+      <td>...</td>
+      <td>-0.181710</td>
+      <td>0.028737</td>
+      <td>-0.022690</td>
+      <td>0.163153</td>
+      <td>-0.061622</td>
+      <td>0.018126</td>
+      <td>-0.138243</td>
+      <td>-0.169704</td>
+      <td>-0.082815</td>
+      <td>-0.235801</td>
+    </tr>
+    <tr>
+      <th>2701</th>
+      <td>0.309045</td>
+      <td>0.097215</td>
+      <td>-0.111785</td>
+      <td>-0.201452</td>
+      <td>0.362351</td>
+      <td>0.162099</td>
+      <td>-0.346368</td>
+      <td>-0.011339</td>
+      <td>-0.125390</td>
+      <td>-0.074190</td>
+      <td>...</td>
+      <td>-0.166570</td>
+      <td>0.050467</td>
+      <td>-0.011518</td>
+      <td>0.168697</td>
+      <td>-0.039741</td>
+      <td>0.030372</td>
+      <td>-0.112005</td>
+      <td>-0.191944</td>
+      <td>-0.062654</td>
+      <td>-0.211388</td>
+    </tr>
+    <tr>
+      <th>4045</th>
+      <td>0.306716</td>
+      <td>0.095793</td>
+      <td>-0.139418</td>
+      <td>-0.195468</td>
+      <td>0.362659</td>
+      <td>0.154994</td>
+      <td>-0.410006</td>
+      <td>-0.002854</td>
+      <td>-0.172801</td>
+      <td>-0.111827</td>
+      <td>...</td>
+      <td>-0.169492</td>
+      <td>0.061049</td>
+      <td>-0.006736</td>
+      <td>0.147962</td>
+      <td>-0.043980</td>
+      <td>0.015729</td>
+      <td>-0.162320</td>
+      <td>-0.195744</td>
+      <td>-0.057727</td>
+      <td>-0.221459</td>
+    </tr>
+    <tr>
+      <th>8118</th>
+      <td>0.293717</td>
+      <td>0.115120</td>
+      <td>-0.119652</td>
+      <td>-0.225133</td>
+      <td>0.380321</td>
+      <td>0.139495</td>
+      <td>-0.422799</td>
+      <td>0.009417</td>
+      <td>-0.188256</td>
+      <td>-0.086536</td>
+      <td>...</td>
+      <td>-0.152497</td>
+      <td>0.072660</td>
+      <td>-0.017735</td>
+      <td>0.164949</td>
+      <td>-0.030472</td>
+      <td>0.032228</td>
+      <td>-0.159284</td>
+      <td>-0.221641</td>
+      <td>-0.057873</td>
+      <td>-0.175120</td>
+    </tr>
+    <tr>
+      <th>10712</th>
+      <td>0.283606</td>
+      <td>0.098257</td>
+      <td>-0.123281</td>
+      <td>-0.197707</td>
+      <td>0.366372</td>
+      <td>0.151738</td>
+      <td>-0.345851</td>
+      <td>-0.005370</td>
+      <td>-0.146538</td>
+      <td>-0.129115</td>
+      <td>...</td>
+      <td>-0.147836</td>
+      <td>0.054369</td>
+      <td>0.002465</td>
+      <td>0.162476</td>
+      <td>-0.059051</td>
+      <td>0.017283</td>
+      <td>-0.152163</td>
+      <td>-0.179221</td>
+      <td>-0.059132</td>
+      <td>-0.204963</td>
+    </tr>
+    <tr>
+      <th>13720</th>
+      <td>0.319063</td>
+      <td>0.106985</td>
+      <td>-0.134747</td>
+      <td>-0.190804</td>
+      <td>0.349920</td>
+      <td>0.149525</td>
+      <td>-0.343138</td>
+      <td>-0.002252</td>
+      <td>-0.144310</td>
+      <td>-0.075306</td>
+      <td>...</td>
+      <td>-0.171743</td>
+      <td>0.037245</td>
+      <td>-0.015910</td>
+      <td>0.160622</td>
+      <td>-0.054426</td>
+      <td>0.027244</td>
+      <td>-0.128231</td>
+      <td>-0.205901</td>
+      <td>-0.071515</td>
+      <td>-0.250862</td>
+    </tr>
+    <tr>
+      <th>13721</th>
+      <td>0.293587</td>
+      <td>0.127525</td>
+      <td>-0.124645</td>
+      <td>-0.206225</td>
+      <td>0.373548</td>
+      <td>0.111245</td>
+      <td>-0.304175</td>
+      <td>-0.015548</td>
+      <td>-0.161114</td>
+      <td>-0.018633</td>
+      <td>...</td>
+      <td>-0.166072</td>
+      <td>0.051955</td>
+      <td>-0.036225</td>
+      <td>0.189710</td>
+      <td>-0.018017</td>
+      <td>0.048836</td>
+      <td>-0.138517</td>
+      <td>-0.208207</td>
+      <td>-0.080305</td>
+      <td>-0.200010</td>
+    </tr>
+    <tr>
+      <th>15422</th>
+      <td>0.283807</td>
+      <td>0.111660</td>
+      <td>-0.110573</td>
+      <td>-0.223605</td>
+      <td>0.366810</td>
+      <td>0.134835</td>
+      <td>-0.382448</td>
+      <td>0.030381</td>
+      <td>-0.170981</td>
+      <td>-0.105452</td>
+      <td>...</td>
+      <td>-0.142183</td>
+      <td>0.063590</td>
+      <td>-0.038168</td>
+      <td>0.125249</td>
+      <td>-0.034063</td>
+      <td>0.009587</td>
+      <td>-0.140280</td>
+      <td>-0.196693</td>
+      <td>-0.056008</td>
+      <td>-0.196437</td>
+    </tr>
+    <tr>
+      <th>15859</th>
+      <td>0.311699</td>
+      <td>0.085635</td>
+      <td>-0.127175</td>
+      <td>-0.198729</td>
+      <td>0.363757</td>
+      <td>0.141646</td>
+      <td>-0.355428</td>
+      <td>0.021661</td>
+      <td>-0.181645</td>
+      <td>-0.073979</td>
+      <td>...</td>
+      <td>-0.165373</td>
+      <td>0.063418</td>
+      <td>-0.025045</td>
+      <td>0.167156</td>
+      <td>-0.067231</td>
+      <td>0.013878</td>
+      <td>-0.139937</td>
+      <td>-0.175500</td>
+      <td>-0.053438</td>
+      <td>-0.196067</td>
+    </tr>
+    <tr>
+      <th>21816</th>
+      <td>0.283421</td>
+      <td>0.117710</td>
+      <td>-0.123246</td>
+      <td>-0.226586</td>
+      <td>0.429733</td>
+      <td>0.150555</td>
+      <td>-0.332350</td>
+      <td>-0.005304</td>
+      <td>-0.189355</td>
+      <td>0.021749</td>
+      <td>...</td>
+      <td>-0.144161</td>
+      <td>0.071773</td>
+      <td>-0.045167</td>
+      <td>0.226195</td>
+      <td>-0.027005</td>
+      <td>0.032009</td>
+      <td>-0.153737</td>
+      <td>-0.114105</td>
+      <td>-0.038590</td>
+      <td>-0.054833</td>
+    </tr>
+    <tr>
+      <th>34970</th>
+      <td>0.296548</td>
+      <td>0.143517</td>
+      <td>-0.146223</td>
+      <td>-0.240363</td>
+      <td>0.411866</td>
+      <td>0.171806</td>
+      <td>-0.325516</td>
+      <td>0.015607</td>
+      <td>-0.192423</td>
+      <td>0.006447</td>
+      <td>...</td>
+      <td>-0.145577</td>
+      <td>0.066343</td>
+      <td>-0.036323</td>
+      <td>0.161659</td>
+      <td>-0.056362</td>
+      <td>0.045523</td>
+      <td>-0.162378</td>
+      <td>-0.208462</td>
+      <td>-0.056357</td>
+      <td>-0.154906</td>
+    </tr>
+  </tbody>
+</table>
+<p>19 rows × 50 columns</p>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>BOOKS.mean(<span class="dv">1</span>).sort_values().plot.barh()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="32">
+<pre><code>&lt;AxesSubplot: ylabel='book_id'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="M09_01_GloVe_files/figure-html/cell-34-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>sys.path.append(<span class="st">"../lib"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> hac2 <span class="im">import</span> HAC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>HAC(BOOKS, labels<span class="op">=</span>BOOKS.join(LIB, how<span class="op">=</span><span class="st">'left'</span>).label.to_list()).plot()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<pre><code>&lt;Figure size 640x480 with 0 Axes&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="M09_01_GloVe_files/figure-html/cell-37-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../lessons/M08a_Visualization/M08a_04_Mazo.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Metadata</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../lessons/M09_WordEmbedding/M09_02_PMI_SVD.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-title">Metadata</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

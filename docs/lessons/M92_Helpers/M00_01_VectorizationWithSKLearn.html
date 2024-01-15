@@ -1,0 +1,3186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.262">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Exploratory Text Analytics - 67&nbsp; Metadata</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../lessons/M92_Helpers/M00_02_SpaCy.html" rel="next">
+<link href="../../lessons/M91_Charrette/CharretteTokens.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Metadata</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Exploratory Text Analytics</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ontoligent/DS5001-2024-01-R" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">M01 Introduction</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_01_getting-started.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Setting Up Your Jupyter Environmnet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_02_hello.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: Hello, World!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_03_first-foray.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: First Foray</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_04_FurtherExploration.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: Further Exploration</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">M02 TextModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_01_Importing-Persuasion.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Text into Data: Importing a Text, or, Clip, Chunk, and Split</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_02_TokenizingWithSciKitLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Tokenizing with SciKit Learn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_03_Challenge.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Challenge: Convert Another Text</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">M03 LanguageModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_01_Babel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Baby Babel</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_01a_EntropyExamples.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy Examples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V1.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models v1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models (v2)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V3.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models (v3)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_SimpleLangModel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Demonstration of Simple Language Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_03_Entropy-and-Perplexity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy and Peplexity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_04-Entropy-and-Term-Length.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy and Term Length</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_EZ.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">How to Create an N-Gram Model from ScratchHow to Create an N-Gram Model from Scratch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">M04 NLP</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_00_NLTK_Intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">NLTK Parsers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_01_Pipeline.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">NLP and the Pipeline</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_02_HMM.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Predict POS with an HMM</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">M05 VectorSpaceModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_01_BOW_TFIDF.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Vector Spaces, BOW, and TFIDF</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_02_TimeTokenMatrices.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Time-Token Matrices</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_03_TFIDF_Exploration.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Variant TFIDFs and Document Significance</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false">M06 CusteringSimilarity</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M06_CusteringSimilarity/M06_01_SimilarityMeasures.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Similarity and Distance Measures</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false">M07 FeaturesAndComponents</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M07_FeaturesAndComponents/M07_01_PCA.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">PCA from Scratch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false">M08 TopicModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_01_GibbsSampler.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Gibbs Sampler</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_02_LDASciKitLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LDA with SciKit Learn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_03_TopicSimilarity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Topic Similarity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_04_TopicContiguity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Topic Contiguity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_05_PyLDAVis.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">PyLDAVis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Untitled.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">M08a Visualization</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_01_Gensim.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Other Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_02_GensimRunCompareLDA.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_03_MALLET.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_04_Mazo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">M09 WordEmbedding</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_01_GloVe.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_02_PMI_SVD.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_03_SkipgramRepresentation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_04_word2vec.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_05_FastText.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Untitled.html</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/run_fasttext.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">FastText Model</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="false">M10 SentimentAnalysis</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_01_GeneralInquirer.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_02_CombineLexicons.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_03_Novel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_04_AustenMelville.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_05_WordShiftGraphs.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_06_Doc2Vec.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" aria-expanded="false">M11 Narrative</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_01_ExportBooksWithSentiment.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_02_SyuzhetPlots.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_03_Syuzhet_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_04_Syuzhet_RGeneral.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" aria-expanded="false">M12 Classification</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_01_NaiveBayesWineReviews.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_01b_SKLearnMNB.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_02_PerceptronWine.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_03.ExpectedMutualInformation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_04_Viz.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" aria-expanded="false">M13 LLMs</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-14" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_01_ChatGPTDemo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_02_ChatGPTDemo2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_03_ChatGPT4Demo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_play.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">M13_play.html</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/tokenizer_training.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Loading the dataset</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" aria-expanded="false">M90 DispersionPlots</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-15" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M90_DispersionPlots/m01.04-austen-kde.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Synopsis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M90_DispersionPlots/onehot.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">onehot.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" aria-expanded="false">M91 Charrette</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-16" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M91_Charrette/CharretteFIguresAndCharacters.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Figures and Characters</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M91_Charrette/CharretteTokens.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Config</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-17" aria-expanded="true">M92 Helpers</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-17" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-17" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M92_Helpers/M00_01_VectorizationWithSKLearn.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M92_Helpers/M00_02_SpaCy.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#set-up" id="toc-set-up" class="nav-link active" data-scroll-target="#set-up">Set Up</a></li>
+  <li><a href="#import-corpus" id="toc-import-corpus" class="nav-link" data-scroll-target="#import-corpus">Import CORPUS</a></li>
+  <li><a href="#create-doc" id="toc-create-doc" class="nav-link" data-scroll-target="#create-doc">Create DOC</a></li>
+  <li><a href="#method-1-countvectorizer-tfidftransformer" id="toc-method-1-countvectorizer-tfidftransformer" class="nav-link" data-scroll-target="#method-1-countvectorizer-tfidftransformer">Method 1: CountVectorizer + TfidfTransformer</a>
+  <ul class="collapse">
+  <li><a href="#create-dtm" id="toc-create-dtm" class="nav-link" data-scroll-target="#create-dtm">Create DTM</a></li>
+  <li><a href="#get-vocab" id="toc-get-vocab" class="nav-link" data-scroll-target="#get-vocab">Get VOCAB</a></li>
+  <li><a href="#create-tfidf" id="toc-create-tfidf" class="nav-link" data-scroll-target="#create-tfidf">Create TFIDF</a></li>
+  <li><a href="#add-stats-to-vocab" id="toc-add-stats-to-vocab" class="nav-link" data-scroll-target="#add-stats-to-vocab">Add stats to VOCAB</a></li>
+  </ul></li>
+  <li><a href="#method-2-tfidfvectorizer" id="toc-method-2-tfidfvectorizer" class="nav-link" data-scroll-target="#method-2-tfidfvectorizer">Method 2: TfidfVectorizer</a>
+  <ul class="collapse">
+  <li><a href="#create-tfidf-1" id="toc-create-tfidf-1" class="nav-link" data-scroll-target="#create-tfidf-1">Create TFIDF</a></li>
+  <li><a href="#get-vocab-1" id="toc-get-vocab-1" class="nav-link" data-scroll-target="#get-vocab-1">Get VOCAB</a></li>
+  <li><a href="#add-stats-to-vocab-1" id="toc-add-stats-to-vocab-1" class="nav-link" data-scroll-target="#add-stats-to-vocab-1">Add stats to VOCAB</a></li>
+  </ul></li>
+  <li><a href="#create-bow" id="toc-create-bow" class="nav-link" data-scroll-target="#create-bow">Create BOW</a></li>
+  <li><a href="#play" id="toc-play" class="nav-link" data-scroll-target="#play">Play</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.dev/ontoligent/DS5001-2024-01-R/blob/main/lessons/M92_Helpers/M00_01_VectorizationWithSKLearn.ipynb" class="toc-action">Edit this page</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-title">Metadata</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Course</span><span class="kw">:</span><span class="at">   DS 5001</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Module</span><span class="kw">:</span><span class="at">   92 Helper Notebooks</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Topic</span><span class="kw">:</span><span class="at">    Using SciKit Learn to Vectorize your Corpus</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="set-up" class="level1">
+<h1>Set Up</h1>
+<div class="cell" data-execution_count="63">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data_home <span class="op">=</span> <span class="st">"../data"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>local_lib <span class="op">=</span> <span class="st">"../lib"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data_prefix <span class="op">=</span> <span class="st">'novels'</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>OHCO <span class="op">=</span> [<span class="st">'book_id'</span>,<span class="st">'chap_id'</span>,<span class="st">'para_num'</span>,<span class="st">'sent_num'</span>,<span class="st">'token_num'</span>]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>colors <span class="op">=</span> <span class="st">'YlGnBu'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ngram_range <span class="op">=</span> (<span class="dv">1</span>,<span class="dv">4</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>n_terms <span class="op">=</span> <span class="dv">4000</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> CountVectorizer, TfidfVectorizer, TfidfTransformer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="import-corpus" class="level1">
+<h1>Import CORPUS</h1>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>LIB <span class="op">=</span> pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>data_home<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>data_prefix<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>data_prefix<span class="sc">}</span><span class="ss">-LIB.csv"</span>).rename(columns<span class="op">=</span>{<span class="st">'book'</span>:<span class="st">'book_id'</span>}).set_index(OHCO[:<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>CORPUS <span class="op">=</span> pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>data_home<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>data_prefix<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>data_prefix<span class="sc">}</span><span class="ss">-CORPUS.csv"</span>).set_index(OHCO)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>CORPUS.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="7">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>pos</th>
+      <th>term_str</th>
+    </tr>
+    <tr>
+      <th>book_id</th>
+      <th>chap_id</th>
+      <th>para_num</th>
+      <th>sent_num</th>
+      <th>token_num</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">secretadversary</th>
+      <th rowspan="5" valign="top">1</th>
+      <th rowspan="4" valign="top">0</th>
+      <th rowspan="4" valign="top">1</th>
+      <th>0</th>
+      <td>DT</td>
+      <td>the</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>NNP</td>
+      <td>young</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>NNP</td>
+      <td>adventurers</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>NNP</td>
+      <td>ltd</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <th>0</th>
+      <th>0</th>
+      <td>JJ</td>
+      <td>tommy</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="create-doc" class="level1">
+<h1>Create DOC</h1>
+<div class="cell" data-tags="[]" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gather_docs(CORPUS, ohco_level, term_col<span class="op">=</span><span class="st">'term_str'</span>):</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    OHCO <span class="op">=</span> CORPUS.index.names</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    CORPUS[term_col] <span class="op">=</span> CORPUS[term_col].astype(<span class="st">'str'</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    DOC <span class="op">=</span> CORPUS.groupby(OHCO[:ohco_level])[term_col].<span class="bu">apply</span>(<span class="kw">lambda</span> x:<span class="st">' '</span>.join(x)).to_frame(<span class="st">'doc_str'</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> DOC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>DOC <span class="op">=</span> gather_docs(CORPUS, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>DOC[<span class="st">'n_tokens'</span>] <span class="op">=</span> DOC.doc_str.<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="bu">len</span>(x.split()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>DOC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>doc_str</th>
+      <th>n_tokens</th>
+    </tr>
+    <tr>
+      <th>book_id</th>
+      <th>chap_id</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">adventures</th>
+      <th>1</th>
+      <td>a scandal in bohemia i to sherlock holmes she ...</td>
+      <td>8608</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>the red headed league i had called upon my fri...</td>
+      <td>9197</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>a case of identity my dear fellow said sherloc...</td>
+      <td>7020</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>the boscombe valley mystery we were seated at ...</td>
+      <td>9685</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>the five orange pips when i glance over my not...</td>
+      <td>7365</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th rowspan="4" valign="top">udolpho</th>
+      <th>54</th>
+      <td>vi unnatural deeds do breed unnatural troubles...</td>
+      <td>5605</td>
+    </tr>
+    <tr>
+      <th>55</th>
+      <td>vii but in these cases we still have judgment ...</td>
+      <td>4164</td>
+    </tr>
+    <tr>
+      <th>56</th>
+      <td>viii then fresh tears stood on her cheek as do...</td>
+      <td>2522</td>
+    </tr>
+    <tr>
+      <th>57</th>
+      <td>ix now my task is smoothly done i can fly or i...</td>
+      <td>977</td>
+    </tr>
+    <tr>
+      <th>usher</th>
+      <th>1</th>
+      <td>fall of the house of usher son coeur est un lu...</td>
+      <td>7212</td>
+    </tr>
+  </tbody>
+</table>
+<p>320 rows × 2 columns</p>
+</div>
+</div>
+</div>
+</section>
+<section id="method-1-countvectorizer-tfidftransformer" class="level1">
+<h1>Method 1: CountVectorizer + TfidfTransformer</h1>
+<section id="create-dtm" class="level2">
+<h2 class="anchored" data-anchor-id="create-dtm">Create DTM</h2>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>count_engine <span class="op">=</span> CountVectorizer(</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    stop_words<span class="op">=</span><span class="st">'english'</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    ngram_range<span class="op">=</span>ngram_range,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    max_features<span class="op">=</span>n_terms)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> count_engine.fit_transform(DOC.doc_str)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>X.toarray()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>array([[0, 1, 0, ..., 0, 1, 0],
+       [0, 0, 0, ..., 0, 2, 0],
+       [0, 0, 0, ..., 0, 0, 1],
+       ...,
+       [0, 0, 0, ..., 0, 0, 0],
+       [0, 0, 0, ..., 0, 1, 0],
+       [2, 0, 0, ..., 0, 1, 0]])</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># count_engine.get_feature_names()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>DTM <span class="op">=</span> pd.DataFrame(X.toarray(), </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                   columns<span class="op">=</span>count_engine.get_feature_names_out(), </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                   index<span class="op">=</span>DOC.index)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>DTM</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>abandon</th>
+      <th>abandoned</th>
+      <th>abbess</th>
+      <th>abbey</th>
+      <th>abbot</th>
+      <th>able</th>
+      <th>ablewhite</th>
+      <th>ablewhites</th>
+      <th>abode</th>
+      <th>abroad</th>
+      <th>...</th>
+      <th>young</th>
+      <th>young ladies</th>
+      <th>young lady</th>
+      <th>young man</th>
+      <th>young men</th>
+      <th>young woman</th>
+      <th>younger</th>
+      <th>youre</th>
+      <th>youth</th>
+      <th>youve</th>
+    </tr>
+    <tr>
+      <th>book_id</th>
+      <th>chap_id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">adventures</th>
+      <th>1</th>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>...</td>
+      <td>6</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>...</td>
+      <td>24</td>
+      <td>0</td>
+      <td>1</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>6</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>10</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th rowspan="4" valign="top">udolpho</th>
+      <th>54</th>
+      <td>0</td>
+      <td>0</td>
+      <td>22</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>55</th>
+      <td>0</td>
+      <td>1</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>56</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>57</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>usher</th>
+      <th>1</th>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>...</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>320 rows × 4000 columns</p>
+</div>
+</div>
+</div>
+</section>
+<section id="get-vocab" class="level2">
+<h2 class="anchored" data-anchor-id="get-vocab">Get VOCAB</h2>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>VOCAB <span class="op">=</span> DTM.<span class="bu">sum</span>().to_frame(<span class="st">'n'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>VOCAB.sort_index()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>n</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>abandon</th>
+      <td>44</td>
+    </tr>
+    <tr>
+      <th>abandoned</th>
+      <td>68</td>
+    </tr>
+    <tr>
+      <th>abbess</th>
+      <td>69</td>
+    </tr>
+    <tr>
+      <th>abbey</th>
+      <td>114</td>
+    </tr>
+    <tr>
+      <th>abbot</th>
+      <td>66</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>young woman</th>
+      <td>34</td>
+    </tr>
+    <tr>
+      <th>younger</th>
+      <td>59</td>
+    </tr>
+    <tr>
+      <th>youre</th>
+      <td>127</td>
+    </tr>
+    <tr>
+      <th>youth</th>
+      <td>219</td>
+    </tr>
+    <tr>
+      <th>youve</th>
+      <td>61</td>
+    </tr>
+  </tbody>
+</table>
+<p>4000 rows × 1 columns</p>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>VOCAB[<span class="st">'n_chars'</span>] <span class="op">=</span> VOCAB.<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="bu">len</span>(x.name), <span class="dv">1</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>VOCAB[<span class="st">'n_tokens'</span>] <span class="op">=</span> VOCAB.<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="bu">len</span>(x.name.split()), <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>VOCAB.value_counts(<span class="st">'n_tokens'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>n_tokens
+1    3718
+2     267
+3      14
+4       1
+dtype: int64</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>VOCAB[VOCAB.n_tokens <span class="op">==</span> <span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>n</th>
+      <th>n_chars</th>
+      <th>n_tokens</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ah said</th>
+      <td>38</td>
+      <td>7</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>alfred inglethorp</th>
+      <td>52</td>
+      <td>17</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>annette said</th>
+      <td>29</td>
+      <td>12</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>baker street</th>
+      <td>59</td>
+      <td>12</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>baskerville hall</th>
+      <td>30</td>
+      <td>16</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>young ladies</th>
+      <td>36</td>
+      <td>12</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>young lady</th>
+      <td>156</td>
+      <td>10</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>young man</th>
+      <td>165</td>
+      <td>9</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>young men</th>
+      <td>51</td>
+      <td>9</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>young woman</th>
+      <td>34</td>
+      <td>11</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+<p>267 rows × 3 columns</p>
+</div>
+</div>
+</div>
+</section>
+<section id="create-tfidf" class="level2">
+<h2 class="anchored" data-anchor-id="create-tfidf">Create TFIDF</h2>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># TfidfTransformer?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>tfidf_engine <span class="op">=</span> TfidfTransformer(norm<span class="op">=</span><span class="st">'l2'</span>, use_idf<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>X1 <span class="op">=</span> tfidf_engine.fit_transform(DTM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>TFIDF <span class="op">=</span> pd.DataFrame(X1.toarray(), columns<span class="op">=</span>DTM.columns, index<span class="op">=</span>DTM.index)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>TFIDF</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="27">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>abandon</th>
+      <th>abandoned</th>
+      <th>abbess</th>
+      <th>abbey</th>
+      <th>abbot</th>
+      <th>able</th>
+      <th>ablewhite</th>
+      <th>ablewhites</th>
+      <th>abode</th>
+      <th>abroad</th>
+      <th>...</th>
+      <th>young</th>
+      <th>young ladies</th>
+      <th>young lady</th>
+      <th>young man</th>
+      <th>young men</th>
+      <th>young woman</th>
+      <th>younger</th>
+      <th>youre</th>
+      <th>youth</th>
+      <th>youve</th>
+    </tr>
+    <tr>
+      <th>book_id</th>
+      <th>chap_id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">adventures</th>
+      <th>1</th>
+      <td>0.000000</td>
+      <td>0.011175</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.018096</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.018946</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.012866</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.008457</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.025466</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.015998</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.007394</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.014282</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.012700</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.011422</td>
+      <td>...</td>
+      <td>0.029917</td>
+      <td>0.0</td>
+      <td>0.027653</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.011261</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.012239</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.013158</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.007889</td>
+      <td>...</td>
+      <td>0.082655</td>
+      <td>0.0</td>
+      <td>0.006367</td>
+      <td>0.031834</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.006149</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.049004</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.064134</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.047425</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th rowspan="4" valign="top">udolpho</th>
+      <th>54</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.287744</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.005013</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.015747</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.010694</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.021087</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>55</th>
+      <td>0.000000</td>
+      <td>0.014358</td>
+      <td>0.101089</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.007750</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.006085</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.010865</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>56</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>57</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.032976</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>usher</th>
+      <th>1</th>
+      <td>0.037485</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.015968</td>
+      <td>...</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.012446</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>320 rows × 4000 columns</p>
+</div>
+</div>
+</div>
+</section>
+<section id="add-stats-to-vocab" class="level2">
+<h2 class="anchored" data-anchor-id="add-stats-to-vocab">Add stats to VOCAB</h2>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>VOCAB[<span class="st">'tfidf_mean'</span>] <span class="op">=</span> TFIDF.mean()</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>VOCAB[<span class="st">'df'</span>] <span class="op">=</span> DTM[DTM <span class="op">&gt;</span> <span class="dv">0</span>].count()</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>VOCAB[<span class="st">'dfidf'</span>] <span class="op">=</span> VOCAB.df <span class="op">*</span> np.log2(<span class="bu">len</span>(TFIDF)<span class="op">/</span>VOCAB.df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>VOCAB.sort_values(<span class="st">'dfidf'</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>n</th>
+      <th>n_chars</th>
+      <th>n_tokens</th>
+      <th>tfidf_mean</th>
+      <th>df</th>
+      <th>dfidf</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>curiosity</th>
+      <td>208</td>
+      <td>9</td>
+      <td>1</td>
+      <td>0.005921</td>
+      <td>118</td>
+      <td>169.835635</td>
+    </tr>
+    <tr>
+      <th>written</th>
+      <td>214</td>
+      <td>7</td>
+      <td>1</td>
+      <td>0.006185</td>
+      <td>118</td>
+      <td>169.835635</td>
+    </tr>
+    <tr>
+      <th>order</th>
+      <td>227</td>
+      <td>5</td>
+      <td>1</td>
+      <td>0.005313</td>
+      <td>118</td>
+      <td>169.835635</td>
+    </tr>
+    <tr>
+      <th>reply</th>
+      <td>184</td>
+      <td>5</td>
+      <td>1</td>
+      <td>0.004606</td>
+      <td>118</td>
+      <td>169.835635</td>
+    </tr>
+    <tr>
+      <th>mentioned</th>
+      <td>180</td>
+      <td>9</td>
+      <td>1</td>
+      <td>0.004824</td>
+      <td>117</td>
+      <td>169.832915</td>
+    </tr>
+    <tr>
+      <th>perfectly</th>
+      <td>185</td>
+      <td>9</td>
+      <td>1</td>
+      <td>0.004981</td>
+      <td>117</td>
+      <td>169.832915</td>
+    </tr>
+    <tr>
+      <th>instantly</th>
+      <td>208</td>
+      <td>9</td>
+      <td>1</td>
+      <td>0.005652</td>
+      <td>117</td>
+      <td>169.832915</td>
+    </tr>
+    <tr>
+      <th>company</th>
+      <td>264</td>
+      <td>7</td>
+      <td>1</td>
+      <td>0.006699</td>
+      <td>119</td>
+      <td>169.826129</td>
+    </tr>
+    <tr>
+      <th>memory</th>
+      <td>208</td>
+      <td>6</td>
+      <td>1</td>
+      <td>0.006271</td>
+      <td>119</td>
+      <td>169.826129</td>
+    </tr>
+    <tr>
+      <th>feelings</th>
+      <td>238</td>
+      <td>8</td>
+      <td>1</td>
+      <td>0.009555</td>
+      <td>119</td>
+      <td>169.826129</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="method-2-tfidfvectorizer" class="level1">
+<h1>Method 2: TfidfVectorizer</h1>
+<p>This method combines the two.</p>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># TfidfVectorizer?</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="create-tfidf-1" class="level2">
+<h2 class="anchored" data-anchor-id="create-tfidf-1">Create TFIDF</h2>
+<div class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>tfidf_engine2 <span class="op">=</span> TfidfVectorizer(</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    stop_words<span class="op">=</span><span class="st">'english'</span>,</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    ngram_range<span class="op">=</span>ngram_range,</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    max_features<span class="op">=</span>n_terms,</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>    norm<span class="op">=</span><span class="st">'l2'</span>, </span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    use_idf<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>X2 <span class="op">=</span> tfidf_engine2.fit_transform(DOC.doc_str)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>TFIDF2 <span class="op">=</span> pd.DataFrame(X2.toarray(), columns<span class="op">=</span>tfidf_engine2.get_feature_names_out(), index<span class="op">=</span>DTM.index)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>TFIDF2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="53">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>abandon</th>
+      <th>abandoned</th>
+      <th>abbess</th>
+      <th>abbey</th>
+      <th>abbot</th>
+      <th>able</th>
+      <th>ablewhite</th>
+      <th>ablewhites</th>
+      <th>abode</th>
+      <th>abroad</th>
+      <th>...</th>
+      <th>young</th>
+      <th>young ladies</th>
+      <th>young lady</th>
+      <th>young man</th>
+      <th>young men</th>
+      <th>young woman</th>
+      <th>younger</th>
+      <th>youre</th>
+      <th>youth</th>
+      <th>youve</th>
+    </tr>
+    <tr>
+      <th>book_id</th>
+      <th>chap_id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">adventures</th>
+      <th>1</th>
+      <td>0.000000</td>
+      <td>0.011175</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.018096</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.018946</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.012866</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.008457</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.025466</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.015998</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.007394</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.014282</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.012700</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.011422</td>
+      <td>...</td>
+      <td>0.029917</td>
+      <td>0.0</td>
+      <td>0.027653</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.011261</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.012239</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.013158</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.007889</td>
+      <td>...</td>
+      <td>0.082655</td>
+      <td>0.0</td>
+      <td>0.006367</td>
+      <td>0.031834</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.006149</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.049004</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.064134</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.047425</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th rowspan="4" valign="top">udolpho</th>
+      <th>54</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.287744</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.005013</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.015747</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.010694</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.021087</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>55</th>
+      <td>0.000000</td>
+      <td>0.014358</td>
+      <td>0.101089</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.007750</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.006085</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.010865</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>56</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>57</th>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>...</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.032976</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>usher</th>
+      <th>1</th>
+      <td>0.037485</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.015968</td>
+      <td>...</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.000000</td>
+      <td>0.0</td>
+      <td>0.012446</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>320 rows × 4000 columns</p>
+</div>
+</div>
+</div>
+</section>
+<section id="get-vocab-1" class="level2">
+<h2 class="anchored" data-anchor-id="get-vocab-1">Get VOCAB</h2>
+<div class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>VOCAB2 <span class="op">=</span> TFIDF2.mean().to_frame(<span class="st">'tfidf_mean'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>VOCAB2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="36">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>tfidf_mean</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>abandon</th>
+      <td>0.001670</td>
+    </tr>
+    <tr>
+      <th>abandoned</th>
+      <td>0.002396</td>
+    </tr>
+    <tr>
+      <th>abbess</th>
+      <td>0.003529</td>
+    </tr>
+    <tr>
+      <th>abbey</th>
+      <td>0.006194</td>
+    </tr>
+    <tr>
+      <th>abbot</th>
+      <td>0.002089</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>young woman</th>
+      <td>0.001985</td>
+    </tr>
+    <tr>
+      <th>younger</th>
+      <td>0.002918</td>
+    </tr>
+    <tr>
+      <th>youre</th>
+      <td>0.005334</td>
+    </tr>
+    <tr>
+      <th>youth</th>
+      <td>0.005786</td>
+    </tr>
+    <tr>
+      <th>youve</th>
+      <td>0.002944</td>
+    </tr>
+  </tbody>
+</table>
+<p>4000 rows × 1 columns</p>
+</div>
+</div>
+</div>
+</section>
+<section id="add-stats-to-vocab-1" class="level2">
+<h2 class="anchored" data-anchor-id="add-stats-to-vocab-1">Add stats to VOCAB</h2>
+<div class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>VOCAB2[<span class="st">'df'</span>] <span class="op">=</span> TFIDF2[TFIDF2 <span class="op">&gt;</span> <span class="dv">0</span>].count()</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>VOCAB2[<span class="st">'dfidf'</span>] <span class="op">=</span> VOCAB2.df <span class="op">*</span> np.log2(<span class="bu">len</span>(TFIDF2)<span class="op">/</span>VOCAB2.df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>VOCAB2.sort_values(<span class="st">'dfidf'</span>, ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>tfidf_mean</th>
+      <th>df</th>
+      <th>dfidf</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>curiosity</th>
+      <td>0.005921</td>
+      <td>118</td>
+      <td>169.835635</td>
+    </tr>
+    <tr>
+      <th>written</th>
+      <td>0.006185</td>
+      <td>118</td>
+      <td>169.835635</td>
+    </tr>
+    <tr>
+      <th>order</th>
+      <td>0.005313</td>
+      <td>118</td>
+      <td>169.835635</td>
+    </tr>
+    <tr>
+      <th>reply</th>
+      <td>0.004606</td>
+      <td>118</td>
+      <td>169.835635</td>
+    </tr>
+    <tr>
+      <th>mentioned</th>
+      <td>0.004824</td>
+      <td>117</td>
+      <td>169.832915</td>
+    </tr>
+    <tr>
+      <th>perfectly</th>
+      <td>0.004981</td>
+      <td>117</td>
+      <td>169.832915</td>
+    </tr>
+    <tr>
+      <th>instantly</th>
+      <td>0.005652</td>
+      <td>117</td>
+      <td>169.832915</td>
+    </tr>
+    <tr>
+      <th>company</th>
+      <td>0.006699</td>
+      <td>119</td>
+      <td>169.826129</td>
+    </tr>
+    <tr>
+      <th>memory</th>
+      <td>0.006271</td>
+      <td>119</td>
+      <td>169.826129</td>
+    </tr>
+    <tr>
+      <th>feelings</th>
+      <td>0.009555</td>
+      <td>119</td>
+      <td>169.826129</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="create-bow" class="level1">
+<h1>Create BOW</h1>
+<div class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>BOW <span class="op">=</span> DTM[DTM <span class="op">&gt;</span> <span class="dv">0</span>].stack().to_frame(<span class="st">'n'</span>).join(TFIDF[TFIDF <span class="op">&gt;</span> <span class="dv">0</span>].stack().to_frame(<span class="st">'tfidf'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>BOW</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="40">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>n</th>
+      <th>tfidf</th>
+    </tr>
+    <tr>
+      <th>book_id</th>
+      <th>chap_id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">adventures</th>
+      <th rowspan="5" valign="top">1</th>
+      <th>abandoned</th>
+      <td>1.0</td>
+      <td>0.011175</td>
+    </tr>
+    <tr>
+      <th>able</th>
+      <td>3.0</td>
+      <td>0.018096</td>
+    </tr>
+    <tr>
+      <th>absolute</th>
+      <td>1.0</td>
+      <td>0.011175</td>
+    </tr>
+    <tr>
+      <th>absolutely</th>
+      <td>3.0</td>
+      <td>0.027844</td>
+    </tr>
+    <tr>
+      <th>accomplished</th>
+      <td>1.0</td>
+      <td>0.013143</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th rowspan="5" valign="top">usher</th>
+      <th rowspan="5" valign="top">1</th>
+      <th>year</th>
+      <td>1.0</td>
+      <td>0.012095</td>
+    </tr>
+    <tr>
+      <th>years</th>
+      <td>5.0</td>
+      <td>0.040830</td>
+    </tr>
+    <tr>
+      <th>yellow</th>
+      <td>1.0</td>
+      <td>0.014559</td>
+    </tr>
+    <tr>
+      <th>yes</th>
+      <td>1.0</td>
+      <td>0.007462</td>
+    </tr>
+    <tr>
+      <th>youth</th>
+      <td>1.0</td>
+      <td>0.012446</td>
+    </tr>
+  </tbody>
+</table>
+<p>229599 rows × 2 columns</p>
+</div>
+</div>
+</div>
+</section>
+<section id="play" class="level1">
+<h1>Play</h1>
+<p>Look at the feature <code>token_use_rate</code> $ R = $</p>
+<div class="cell" data-execution_count="56">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>DOC[<span class="st">'n_tokens_used'</span>] <span class="op">=</span> BOW.groupby(OHCO[:<span class="dv">2</span>]).n.<span class="bu">sum</span>().astype(<span class="st">'int'</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>DOC[<span class="st">'token_use_rate'</span>] <span class="op">=</span> DOC.n_tokens_used <span class="op">/</span> DOC.n_tokens</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="57">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>DOC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="57">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>doc_str</th>
+      <th>n_tokens</th>
+      <th>n_tokens_used</th>
+      <th>token_use_rate</th>
+    </tr>
+    <tr>
+      <th>book_id</th>
+      <th>chap_id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">adventures</th>
+      <th>1</th>
+      <td>a scandal in bohemia i to sherlock holmes she ...</td>
+      <td>8608</td>
+      <td>2571</td>
+      <td>0.298676</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>the red headed league i had called upon my fri...</td>
+      <td>9197</td>
+      <td>2807</td>
+      <td>0.305208</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>a case of identity my dear fellow said sherloc...</td>
+      <td>7020</td>
+      <td>2161</td>
+      <td>0.307835</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>the boscombe valley mystery we were seated at ...</td>
+      <td>9685</td>
+      <td>2989</td>
+      <td>0.308622</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>the five orange pips when i glance over my not...</td>
+      <td>7365</td>
+      <td>2082</td>
+      <td>0.282688</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th rowspan="4" valign="top">udolpho</th>
+      <th>54</th>
+      <td>vi unnatural deeds do breed unnatural troubles...</td>
+      <td>5605</td>
+      <td>2019</td>
+      <td>0.360214</td>
+    </tr>
+    <tr>
+      <th>55</th>
+      <td>vii but in these cases we still have judgment ...</td>
+      <td>4164</td>
+      <td>1355</td>
+      <td>0.325408</td>
+    </tr>
+    <tr>
+      <th>56</th>
+      <td>viii then fresh tears stood on her cheek as do...</td>
+      <td>2522</td>
+      <td>944</td>
+      <td>0.374306</td>
+    </tr>
+    <tr>
+      <th>57</th>
+      <td>ix now my task is smoothly done i can fly or i...</td>
+      <td>977</td>
+      <td>335</td>
+      <td>0.342886</td>
+    </tr>
+    <tr>
+      <th>usher</th>
+      <th>1</th>
+      <td>fall of the house of usher son coeur est un lu...</td>
+      <td>7212</td>
+      <td>2044</td>
+      <td>0.283417</td>
+    </tr>
+  </tbody>
+</table>
+<p>320 rows × 4 columns</p>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="58">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>DOC.sort_values(<span class="st">'token_use_rate'</span>).token_use_rate.plot(rot<span class="op">=</span><span class="dv">45</span>, figsize<span class="op">=</span>(<span class="dv">10</span>,<span class="dv">5</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="M00_01_VectorizationWithSKLearn_files/figure-html/cell-44-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>DOC.loc[<span class="st">'adventures'</span>].token_use_rate.plot(style<span class="op">=</span><span class="st">'o-'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="M00_01_VectorizationWithSKLearn_files/figure-html/cell-45-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>DOC.loc[<span class="st">'udolpho'</span>].token_use_rate.plot(style<span class="op">=</span><span class="st">'o-'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="M00_01_VectorizationWithSKLearn_files/figure-html/cell-46-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>DOC.loc[<span class="st">'northangerabbey'</span>].token_use_rate.plot(style<span class="op">=</span><span class="st">'o-'</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="M00_01_VectorizationWithSKLearn_files/figure-html/cell-47-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="59">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>LIB[<span class="st">'token_use_rate_mean'</span>] <span class="op">=</span> DOC.groupby(<span class="st">'book_id'</span>).token_use_rate.mean()</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>LIB[<span class="st">'n_tokens'</span>] <span class="op">=</span> DOC.groupby(<span class="st">'book_id'</span>).n_tokens.<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="60">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>LIB.sort_values(<span class="st">'token_use_rate_mean'</span>).token_use_rate_mean.plot.barh(figsize<span class="op">=</span>(<span class="dv">5</span>,<span class="dv">7</span>))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="M00_01_VectorizationWithSKLearn_files/figure-html/cell-49-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="64">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>LIB.sort_values(<span class="st">'token_use_rate_mean'</span>).style.background_gradient(colors)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="64">
+
+<style type="text/css">
+#T_51642_row0_col2, #T_51642_row0_col3 {
+  background-color: #ffffd9;
+  color: #000000;
+}
+#T_51642_row1_col2, #T_51642_row12_col3 {
+  background-color: #f2fabc;
+  color: #000000;
+}
+#T_51642_row1_col3 {
+  background-color: #fdfed5;
+  color: #000000;
+}
+#T_51642_row2_col2 {
+  background-color: #e9f7b1;
+  color: #000000;
+}
+#T_51642_row2_col3 {
+  background-color: #f7fcc6;
+  color: #000000;
+}
+#T_51642_row3_col2 {
+  background-color: #ddf2b2;
+  color: #000000;
+}
+#T_51642_row3_col3 {
+  background-color: #f9fdcc;
+  color: #000000;
+}
+#T_51642_row4_col2 {
+  background-color: #d4eeb3;
+  color: #000000;
+}
+#T_51642_row4_col3 {
+  background-color: #fdfed4;
+  color: #000000;
+}
+#T_51642_row5_col2 {
+  background-color: #7acbbc;
+  color: #000000;
+}
+#T_51642_row5_col3, #T_51642_row7_col3 {
+  background-color: #e8f6b1;
+  color: #000000;
+}
+#T_51642_row6_col2 {
+  background-color: #71c8bd;
+  color: #000000;
+}
+#T_51642_row6_col3 {
+  background-color: #8cd2ba;
+  color: #000000;
+}
+#T_51642_row7_col2 {
+  background-color: #65c3bf;
+  color: #000000;
+}
+#T_51642_row8_col2, #T_51642_row13_col3 {
+  background-color: #53bdc1;
+  color: #000000;
+}
+#T_51642_row8_col3, #T_51642_row19_col3 {
+  background-color: #c6e9b4;
+  color: #000000;
+}
+#T_51642_row9_col2 {
+  background-color: #44b7c4;
+  color: #f1f1f1;
+}
+#T_51642_row9_col3 {
+  background-color: #33a7c2;
+  color: #f1f1f1;
+}
+#T_51642_row10_col2 {
+  background-color: #40b5c4;
+  color: #f1f1f1;
+}
+#T_51642_row10_col3 {
+  background-color: #d7efb3;
+  color: #000000;
+}
+#T_51642_row11_col2 {
+  background-color: #2ea3c2;
+  color: #f1f1f1;
+}
+#T_51642_row11_col3 {
+  background-color: #c2e7b4;
+  color: #000000;
+}
+#T_51642_row12_col2 {
+  background-color: #2094c0;
+  color: #f1f1f1;
+}
+#T_51642_row13_col2, #T_51642_row14_col3 {
+  background-color: #1f7db6;
+  color: #f1f1f1;
+}
+#T_51642_row14_col2 {
+  background-color: #24449c;
+  color: #f1f1f1;
+}
+#T_51642_row15_col2 {
+  background-color: #243c98;
+  color: #f1f1f1;
+}
+#T_51642_row15_col3, #T_51642_row19_col2 {
+  background-color: #081d58;
+  color: #f1f1f1;
+}
+#T_51642_row16_col2 {
+  background-color: #253997;
+  color: #f1f1f1;
+}
+#T_51642_row16_col3 {
+  background-color: #daf0b3;
+  color: #000000;
+}
+#T_51642_row17_col2 {
+  background-color: #13266f;
+  color: #f1f1f1;
+}
+#T_51642_row17_col3 {
+  background-color: #edf8b2;
+  color: #000000;
+}
+#T_51642_row18_col2 {
+  background-color: #091e5a;
+  color: #f1f1f1;
+}
+#T_51642_row18_col3 {
+  background-color: #d9f0b3;
+  color: #000000;
+}
+</style>
+<table id="T_51642">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_51642_level0_col0" class="col_heading level0 col0">genre</th>
+      <th id="T_51642_level0_col1" class="col_heading level0 col1">author</th>
+      <th id="T_51642_level0_col2" class="col_heading level0 col2">token_use_rate_mean</th>
+      <th id="T_51642_level0_col3" class="col_heading level0 col3">n_tokens</th>
+    </tr>
+    <tr>
+      <th class="index_name level0">book_id</th>
+      <th class="blank col0">&nbsp;</th>
+      <th class="blank col1">&nbsp;</th>
+      <th class="blank col2">&nbsp;</th>
+      <th class="blank col3">&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_51642_level0_row0" class="row_heading level0 row0">reddeath</th>
+      <td id="T_51642_row0_col0" class="data row0 col0">g</td>
+      <td id="T_51642_row0_col1" class="data row0 col1">poe</td>
+      <td id="T_51642_row0_col2" class="data row0 col2">0.258012</td>
+      <td id="T_51642_row0_col3" class="data row0 col3">2434</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row1" class="row_heading level0 row1">pitandpendulum</th>
+      <td id="T_51642_row1_col0" class="data row1 col0">g</td>
+      <td id="T_51642_row1_col1" class="data row1 col1">poe</td>
+      <td id="T_51642_row1_col2" class="data row1 col2">0.269187</td>
+      <td id="T_51642_row1_col3" class="data row1 col3">6163</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row2" class="row_heading level0 row2">marieroget</th>
+      <td id="T_51642_row2_col0" class="data row2 col0">d</td>
+      <td id="T_51642_row2_col1" class="data row2 col1">poe</td>
+      <td id="T_51642_row2_col2" class="data row2 col2">0.274837</td>
+      <td id="T_51642_row2_col3" class="data row2 col3">20212</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row3" class="row_heading level0 row3">ruemorgue</th>
+      <td id="T_51642_row3_col0" class="data row3 col0">d</td>
+      <td id="T_51642_row3_col1" class="data row3 col1">poe</td>
+      <td id="T_51642_row3_col2" class="data row3 col2">0.279789</td>
+      <td id="T_51642_row3_col3" class="data row3 col3">13864</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row4" class="row_heading level0 row4">usher</th>
+      <td id="T_51642_row4_col0" class="data row4 col0">g</td>
+      <td id="T_51642_row4_col1" class="data row4 col1">poe</td>
+      <td id="T_51642_row4_col2" class="data row4 col2">0.283417</td>
+      <td id="T_51642_row4_col3" class="data row4 col3">7212</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row5" class="row_heading level0 row5">scarlet</th>
+      <td id="T_51642_row5_col0" class="data row5 col0">d</td>
+      <td id="T_51642_row5_col1" class="data row5 col1">doyle</td>
+      <td id="T_51642_row5_col2" class="data row5 col2">0.304970</td>
+      <td id="T_51642_row5_col3" class="data row5 col3">43927</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row6" class="row_heading level0 row6">adventures</th>
+      <td id="T_51642_row6_col0" class="data row6 col0">d</td>
+      <td id="T_51642_row6_col1" class="data row6 col1">doyle</td>
+      <td id="T_51642_row6_col2" class="data row6 col2">0.307304</td>
+      <td id="T_51642_row6_col3" class="data row6 col3">105205</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row7" class="row_heading level0 row7">signoffour</th>
+      <td id="T_51642_row7_col0" class="data row7 col0">d</td>
+      <td id="T_51642_row7_col1" class="data row7 col1">doyle</td>
+      <td id="T_51642_row7_col2" class="data row7 col2">0.310183</td>
+      <td id="T_51642_row7_col3" class="data row7 col3">43494</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row8" class="row_heading level0 row8">frankenstein</th>
+      <td id="T_51642_row8_col0" class="data row8 col0">g</td>
+      <td id="T_51642_row8_col1" class="data row8 col1">shelley</td>
+      <td id="T_51642_row8_col2" class="data row8 col2">0.314228</td>
+      <td id="T_51642_row8_col3" class="data row8 col3">75127</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row9" class="row_heading level0 row9">dracula</th>
+      <td id="T_51642_row9_col0" class="data row9 col0">g</td>
+      <td id="T_51642_row9_col1" class="data row9 col1">stoker</td>
+      <td id="T_51642_row9_col2" class="data row9 col2">0.318161</td>
+      <td id="T_51642_row9_col3" class="data row9 col3">162045</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row10" class="row_heading level0 row10">baskervilles</th>
+      <td id="T_51642_row10_col0" class="data row10 col0">d</td>
+      <td id="T_51642_row10_col1" class="data row10 col1">doyle</td>
+      <td id="T_51642_row10_col2" class="data row10 col2">0.319088</td>
+      <td id="T_51642_row10_col3" class="data row10 col3">59469</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row11" class="row_heading level0 row11">northangerabbey</th>
+      <td id="T_51642_row11_col0" class="data row11 col0">g</td>
+      <td id="T_51642_row11_col1" class="data row11 col1">austen</td>
+      <td id="T_51642_row11_col2" class="data row11 col2">0.326702</td>
+      <td id="T_51642_row11_col3" class="data row11 col3">77580</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row12" class="row_heading level0 row12">christmascarole</th>
+      <td id="T_51642_row12_col0" class="data row12 col0">g</td>
+      <td id="T_51642_row12_col1" class="data row12 col1">dickens</td>
+      <td id="T_51642_row12_col2" class="data row12 col2">0.333076</td>
+      <td id="T_51642_row12_col3" class="data row12 col3">28746</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row13" class="row_heading level0 row13">monk</th>
+      <td id="T_51642_row13_col0" class="data row13 col0">g</td>
+      <td id="T_51642_row13_col1" class="data row13 col1">lewis</td>
+      <td id="T_51642_row13_col2" class="data row13 col2">0.340131</td>
+      <td id="T_51642_row13_col3" class="data row13 col3">136785</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row14" class="row_heading level0 row14">moonstone</th>
+      <td id="T_51642_row14_col0" class="data row14 col0">d</td>
+      <td id="T_51642_row14_col1" class="data row14 col1">collins</td>
+      <td id="T_51642_row14_col2" class="data row14 col2">0.358697</td>
+      <td id="T_51642_row14_col3" class="data row14 col3">197323</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row15" class="row_heading level0 row15">udolpho</th>
+      <td id="T_51642_row15_col0" class="data row15 col0">g</td>
+      <td id="T_51642_row15_col1" class="data row15 col1">radcliffe</td>
+      <td id="T_51642_row15_col2" class="data row15 col2">0.361505</td>
+      <td id="T_51642_row15_col3" class="data row15 col3">292405</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row16" class="row_heading level0 row16">styles</th>
+      <td id="T_51642_row16_col0" class="data row16 col0">d</td>
+      <td id="T_51642_row16_col1" class="data row16 col1">christie</td>
+      <td id="T_51642_row16_col2" class="data row16 col2">0.362567</td>
+      <td id="T_51642_row16_col3" class="data row16 col3">57112</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row17" class="row_heading level0 row17">castleofotranto</th>
+      <td id="T_51642_row17_col0" class="data row17 col0">g</td>
+      <td id="T_51642_row17_col1" class="data row17 col1">walpole</td>
+      <td id="T_51642_row17_col2" class="data row17 col2">0.374114</td>
+      <td id="T_51642_row17_col3" class="data row17 col3">37754</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row18" class="row_heading level0 row18">oldenglishbaron</th>
+      <td id="T_51642_row18_col0" class="data row18 col0">g</td>
+      <td id="T_51642_row18_col1" class="data row18 col1">reeve</td>
+      <td id="T_51642_row18_col2" class="data row18 col2">0.379057</td>
+      <td id="T_51642_row18_col3" class="data row18 col3">58194</td>
+    </tr>
+    <tr>
+      <th id="T_51642_level0_row19" class="row_heading level0 row19">secretadversary</th>
+      <td id="T_51642_row19_col0" class="data row19 col0">d</td>
+      <td id="T_51642_row19_col1" class="data row19 col1">christie</td>
+      <td id="T_51642_row19_col2" class="data row19 col2">0.379947</td>
+      <td id="T_51642_row19_col3" class="data row19 col3">75366</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<div class="cell" data-execution_count="62">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>LIB.plot.scatter(<span class="st">'n_tokens'</span>, <span class="st">'token_use_rate_mean'</span>, logx<span class="op">=</span><span class="va">False</span>)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="M00_01_VectorizationWithSKLearn_files/figure-html/cell-51-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../lessons/M91_Charrette/CharretteTokens.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Config</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../lessons/M92_Helpers/M00_02_SpaCy.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-title">Metadata</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

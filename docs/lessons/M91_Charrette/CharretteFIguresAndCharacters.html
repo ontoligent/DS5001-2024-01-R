@@ -1,0 +1,2195 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.262">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Exploratory Text Analytics - 65&nbsp; Figures and Characters</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../lessons/M91_Charrette/CharretteTokens.html" rel="next">
+<link href="../../lessons/M90_DispersionPlots/onehot.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Figures and Characters</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Exploratory Text Analytics</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ontoligent/DS5001-2024-01-R" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">M01 Introduction</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_01_getting-started.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Setting Up Your Jupyter Environmnet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_02_hello.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: Hello, World!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_03_first-foray.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: First Foray</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_04_FurtherExploration.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: Further Exploration</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">M02 TextModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_01_Importing-Persuasion.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Text into Data: Importing a Text, or, Clip, Chunk, and Split</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_02_TokenizingWithSciKitLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Tokenizing with SciKit Learn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_03_Challenge.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Challenge: Convert Another Text</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">M03 LanguageModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_01_Babel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Baby Babel</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_01a_EntropyExamples.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy Examples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V1.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models v1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models (v2)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V3.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models (v3)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_SimpleLangModel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Demonstration of Simple Language Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_03_Entropy-and-Perplexity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy and Peplexity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_04-Entropy-and-Term-Length.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy and Term Length</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_EZ.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">How to Create an N-Gram Model from ScratchHow to Create an N-Gram Model from Scratch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">M04 NLP</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_00_NLTK_Intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">NLTK Parsers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_01_Pipeline.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">NLP and the Pipeline</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_02_HMM.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Predict POS with an HMM</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">M05 VectorSpaceModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_01_BOW_TFIDF.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Vector Spaces, BOW, and TFIDF</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_02_TimeTokenMatrices.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Time-Token Matrices</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_03_TFIDF_Exploration.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Variant TFIDFs and Document Significance</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false">M06 CusteringSimilarity</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M06_CusteringSimilarity/M06_01_SimilarityMeasures.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Similarity and Distance Measures</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false">M07 FeaturesAndComponents</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M07_FeaturesAndComponents/M07_01_PCA.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">PCA from Scratch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false">M08 TopicModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_01_GibbsSampler.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Gibbs Sampler</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_02_LDASciKitLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LDA with SciKit Learn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_03_TopicSimilarity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Topic Similarity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_04_TopicContiguity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Topic Contiguity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_05_PyLDAVis.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">PyLDAVis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Untitled.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">M08a Visualization</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_01_Gensim.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Other Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_02_GensimRunCompareLDA.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_03_MALLET.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_04_Mazo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">M09 WordEmbedding</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_01_GloVe.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_02_PMI_SVD.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_03_SkipgramRepresentation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_04_word2vec.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_05_FastText.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Untitled.html</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/run_fasttext.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">FastText Model</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="false">M10 SentimentAnalysis</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_01_GeneralInquirer.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_02_CombineLexicons.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_03_Novel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_04_AustenMelville.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_05_WordShiftGraphs.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_06_Doc2Vec.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" aria-expanded="false">M11 Narrative</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_01_ExportBooksWithSentiment.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_02_SyuzhetPlots.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_03_Syuzhet_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_04_Syuzhet_RGeneral.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" aria-expanded="false">M12 Classification</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_01_NaiveBayesWineReviews.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_01b_SKLearnMNB.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_02_PerceptronWine.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_03.ExpectedMutualInformation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_04_Viz.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" aria-expanded="false">M13 LLMs</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-14" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_01_ChatGPTDemo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_02_ChatGPTDemo2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_03_ChatGPT4Demo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_play.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">M13_play.html</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/tokenizer_training.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Loading the dataset</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" aria-expanded="false">M90 DispersionPlots</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-15" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M90_DispersionPlots/m01.04-austen-kde.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Synopsis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M90_DispersionPlots/onehot.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">onehot.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" aria-expanded="true">M91 Charrette</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-16" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M91_Charrette/CharretteFIguresAndCharacters.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Figures and Characters</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M91_Charrette/CharretteTokens.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Config</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-17" aria-expanded="false">M92 Helpers</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-17" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-17" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M92_Helpers/M00_01_VectorizationWithSKLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M92_Helpers/M00_02_SpaCy.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-title">Figures and Characters</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="220">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>TOKENS <span class="op">=</span> pd.read_csv(<span class="st">'WORDS.csv'</span>, sep<span class="op">=</span><span class="st">'</span><span class="ch">\t</span><span class="st">'</span>).set_index([<span class="st">'line_num'</span>,<span class="st">'token_num'</span>])</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>TOKENS.columns <span class="op">=</span> [<span class="st">'term_id'</span>,<span class="st">'term_str'</span>,<span class="st">'punc'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="221">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>TOKENS.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="221">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>term_id</th>
+      <th>term_str</th>
+      <th>punc</th>
+    </tr>
+    <tr>
+      <th>line_num</th>
+      <th>token_num</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">1</th>
+      <th>1</th>
+      <td>89769</td>
+      <td>Des</td>
+      <td>&amp;#160;</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>89770</td>
+      <td>que</td>
+      <td>&amp;#160;</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>89771</td>
+      <td>ma</td>
+      <td>&amp;#160;</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>89772</td>
+      <td>dame</td>
+      <td>&amp;#160;</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>89773</td>
+      <td>de</td>
+      <td>&amp;#160;</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="234">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>TOKENS.term_str.unstack(fill_value<span class="op">=</span><span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="234">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th>token_num</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+      <th>9</th>
+      <th>10</th>
+      <th>11</th>
+    </tr>
+    <tr>
+      <th>line_num</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>Des</td>
+      <td>que</td>
+      <td>ma</td>
+      <td>dame</td>
+      <td>de</td>
+      <td>Chanpaigne</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Vialt</td>
+      <td>que</td>
+      <td>romans</td>
+      <td>a</td>
+      <td>feire</td>
+      <td>anpraigne</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Je</td>
+      <td>l</td>
+      <td>anprendrai</td>
+      <td>mout</td>
+      <td>volentiers</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Come</td>
+      <td>cil</td>
+      <td>qui</td>
+      <td>est</td>
+      <td>suens</td>
+      <td>antiers</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>De</td>
+      <td>quanqu</td>
+      <td>il</td>
+      <td>puet</td>
+      <td>el</td>
+      <td>monde</td>
+      <td>feire</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>7133</th>
+      <td>Tant</td>
+      <td>en</td>
+      <td>a</td>
+      <td>fet</td>
+      <td>n</td>
+      <td>i</td>
+      <td>vialt</td>
+      <td>plus</td>
+      <td>metre</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>7134</th>
+      <td>Ne</td>
+      <td>moins</td>
+      <td>por</td>
+      <td>le</td>
+      <td>conte</td>
+      <td>malmetre</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>7135</th>
+      <td>Ci</td>
+      <td>faut</td>
+      <td>li</td>
+      <td>ROMANS</td>
+      <td>DE</td>
+      <td>LANCELOT</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>7136</th>
+      <td>DE</td>
+      <td>LA</td>
+      <td>CHARRETE</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <th>7137</th>
+      <td>LE</td>
+      <td>CHEVALIER</td>
+      <td>DE</td>
+      <td>LA</td>
+      <td>CHARRETTE</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+<p>7137 rows × 11 columns</p>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="203">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>FIGURES <span class="op">=</span> pd.read_csv(<span class="st">'FIGURES.csv'</span>, sep<span class="op">=</span><span class="st">'</span><span class="ch">\t</span><span class="st">'</span>, </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                      skiprows<span class="op">=</span><span class="dv">1</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                      names<span class="op">=</span>[<span class="st">'fig_genus'</span>,<span class="st">'fig_species'</span>,<span class="st">'fig_id'</span>,<span class="st">'fig_part'</span>,<span class="st">'term_id'</span>])<span class="op">\</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    .set_index([<span class="st">'fig_genus'</span>,<span class="st">'fig_species'</span>,<span class="st">'fig_part'</span>,<span class="st">'fig_id'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-scrolled="true" data-execution_count="204">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>FIGURES.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="204">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>term_id</th>
+    </tr>
+    <tr>
+      <th>fig_genus</th>
+      <th>fig_species</th>
+      <th>fig_part</th>
+      <th>fig_id</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">AD</th>
+      <th rowspan="5" valign="top">0</th>
+      <th>A</th>
+      <th>3781</th>
+      <td>89780</td>
+    </tr>
+    <tr>
+      <th>B</th>
+      <th>3781</th>
+      <td>89783</td>
+    </tr>
+    <tr>
+      <th>A</th>
+      <th>3782</th>
+      <td>89856</td>
+    </tr>
+    <tr>
+      <th>B</th>
+      <th>3782</th>
+      <td>89802</td>
+    </tr>
+    <tr>
+      <th>C</th>
+      <th>3782</th>
+      <td>89814</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="243">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>FIGURES.term_id.<span class="bu">map</span>(TOKENS.reset_index().set_index(<span class="st">'term_id'</span>).term_str).to_frame(<span class="st">'term_str'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="243">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>term_str</th>
+    </tr>
+    <tr>
+      <th>fig_genus</th>
+      <th>fig_species</th>
+      <th>fig_part</th>
+      <th>fig_id</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">AD</th>
+      <th rowspan="5" valign="top">0</th>
+      <th>A</th>
+      <th>3781</th>
+      <td>anpraigne</td>
+    </tr>
+    <tr>
+      <th>B</th>
+      <th>3781</th>
+      <td>anprendrai</td>
+    </tr>
+    <tr>
+      <th>A</th>
+      <th>3782</th>
+      <td>losangier</td>
+    </tr>
+    <tr>
+      <th>B</th>
+      <th>3782</th>
+      <td>losange</td>
+    </tr>
+    <tr>
+      <th>C</th>
+      <th>3782</th>
+      <td>losenge</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th rowspan="5" valign="top">RR</th>
+      <th rowspan="5" valign="top">9</th>
+      <th rowspan="2" valign="top">C</th>
+      <th>5366</th>
+      <td>l</td>
+    </tr>
+    <tr>
+      <th>5366</th>
+      <td>ait</td>
+    </tr>
+    <tr>
+      <th>D</th>
+      <th>5366</th>
+      <td>delait</td>
+    </tr>
+    <tr>
+      <th>C</th>
+      <th>6311</th>
+      <td>lot</td>
+    </tr>
+    <tr>
+      <th>D</th>
+      <th>6311</th>
+      <td>Lancelot</td>
+    </tr>
+  </tbody>
+</table>
+<p>41833 rows × 1 columns</p>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="169">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>FTP <span class="op">=</span> pd.read_csv(<span class="st">'figuretype-and-person.csv'</span>, header<span class="op">=</span><span class="va">None</span>, names<span class="op">=</span>[<span class="st">'figure'</span>,<span class="st">'person'</span>,<span class="st">'n'</span>]).set_index([<span class="st">'figure'</span>,<span class="st">'person'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="170">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>FTP</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="170">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>n</th>
+    </tr>
+    <tr>
+      <th>figure</th>
+      <th>person</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">AD</th>
+      <th>DEU</th>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>IRLANDE</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>MELEAGANT</th>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>PERE</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>SARRAZIN</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th rowspan="5" valign="top">RR</th>
+      <th>SELVESTRE</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>TAULAS DE LA DESERTE</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>TOLOSE</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>YSORE</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>YVAIN</th>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>86 rows × 1 columns</p>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="122">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>FTPM <span class="op">=</span> FTP.unstack(fill_value<span class="op">=</span><span class="dv">0</span>).T</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>FIG_PRIORS <span class="op">=</span> (FTPM.<span class="bu">sum</span>() <span class="op">/</span> FTPM.<span class="bu">sum</span>().<span class="bu">sum</span>())</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># FIG_PRIORS.index = FIG_PRIORS.index.droplevel(0)</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>CHAR_PRIORS <span class="op">=</span> (FTPM.<span class="bu">sum</span>(<span class="dv">1</span>) <span class="op">/</span> FTPM.<span class="bu">sum</span>(<span class="dv">1</span>).<span class="bu">sum</span>())</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>CHAR_PRIORS.index <span class="op">=</span> CHAR_PRIORS.index.droplevel(<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="96">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>FIG_PRIORS.sort_values().plot.barh()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="96">
+<pre><code>&lt;AxesSubplot:ylabel='figure'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="CharretteFIguresAndCharacters_files/figure-html/cell-12-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="95">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>CHAR_PRIORS.sort_values(ascending<span class="op">=</span><span class="va">False</span>).plot.bar(figsize<span class="op">=</span>(<span class="dv">15</span>,<span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="95">
+<pre><code>&lt;AxesSubplot:xlabel='None,person'&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="CharretteFIguresAndCharacters_files/figure-html/cell-13-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<div class="cell" data-execution_count="130">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>FTPM.index <span class="op">=</span> FTPM.index.droplevel(<span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="131">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>FTP_JD <span class="op">=</span> FTPM <span class="op">/</span> FTPM.<span class="bu">sum</span>().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="137">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>FTP_JD.stack().sort_values(ascending<span class="op">=</span><span class="va">False</span>).head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="137">
+<pre><code>person     figure
+LANCELOT   CH        0.170455
+           RR        0.060606
+           EN        0.060606
+MELEAGANT  EN        0.056818
+GAUVAIN    CH        0.049242
+MELEAGANT  AD        0.041667
+KEU        CH        0.041667
+MELEAGANT  CH        0.037879
+DEU        RR        0.037879
+           EN        0.022727
+dtype: float64</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="138">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>FTPM.style.background_gradient()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="138">
+
+<style type="text/css">
+#T_ca632e70_64eb_11eb_8c3c_acde48001122row0_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row0_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row1_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row1_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row1_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row2_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row2_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row2_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row3_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row3_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row3_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row4_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row4_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row5_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row5_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row5_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row6_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row7_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row7_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row7_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row8_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row8_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row8_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row9_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row9_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row9_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row10_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row10_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row10_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row11_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row11_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row12_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row12_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row12_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row14_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row14_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row15_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row15_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row16_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row16_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row16_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row17_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row17_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row18_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row18_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row19_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row19_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row19_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row20_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row21_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row21_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row21_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row22_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row22_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row22_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row23_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row23_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row24_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row25_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row25_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row26_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row26_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row27_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row27_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row27_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row28_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row28_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row28_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row29_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row30_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row30_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row30_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row31_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row31_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row31_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row32_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row32_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row32_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row33_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row33_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row34_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row34_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row34_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row35_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row35_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row35_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row36_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row36_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row36_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row37_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row37_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row39_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row39_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row39_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row40_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row40_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row40_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row41_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row41_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row41_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row42_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row42_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row42_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row43_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row43_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row43_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row44_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row44_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row45_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row45_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row45_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row46_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row46_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row46_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row47_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row47_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row47_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row48_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row48_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row48_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row49_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row49_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row49_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row50_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row50_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row51_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row51_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row52_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row52_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row52_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row53_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row53_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row53_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row54_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row54_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row54_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row55_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row55_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row55_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row56_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row56_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row56_col2{
+            background-color:  #fff7fb;
+            color:  #000000;
+        }#T_ca632e70_64eb_11eb_8c3c_acde48001122row0_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row8_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row14_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row15_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row17_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row21_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row23_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row25_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row28_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row31_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row37_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row40_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row41_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row42_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row46_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row50_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row53_col1{
+            background-color:  #fcf4fa;
+            color:  #000000;
+        }#T_ca632e70_64eb_11eb_8c3c_acde48001122row0_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row1_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row2_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row3_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row5_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row6_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row7_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row9_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row10_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row11_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row12_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row14_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row15_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row16_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row18_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row19_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row22_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row23_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row24_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row25_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row27_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row30_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row32_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row34_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row35_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row36_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row37_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row43_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row45_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row48_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row49_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row51_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row51_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row52_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row54_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row55_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row56_col3{
+            background-color:  #f5eff6;
+            color:  #000000;
+        }#T_ca632e70_64eb_11eb_8c3c_acde48001122row4_col1{
+            background-color:  #f5eef6;
+            color:  #000000;
+        }#T_ca632e70_64eb_11eb_8c3c_acde48001122row4_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row6_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row24_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row39_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row44_col3{
+            background-color:  #ece7f2;
+            color:  #000000;
+        }#T_ca632e70_64eb_11eb_8c3c_acde48001122row6_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row13_col1{
+            background-color:  #f2ecf5;
+            color:  #000000;
+        }#T_ca632e70_64eb_11eb_8c3c_acde48001122row11_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row18_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row33_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row47_col1{
+            background-color:  #f8f1f8;
+            color:  #000000;
+        }#T_ca632e70_64eb_11eb_8c3c_acde48001122row13_col0{
+            background-color:  #a9bfdc;
+            color:  #000000;
+        }#T_ca632e70_64eb_11eb_8c3c_acde48001122row13_col2{
+            background-color:  #a5bddb;
+            color:  #000000;
+        }#T_ca632e70_64eb_11eb_8c3c_acde48001122row13_col3{
+            background-color:  #358fc0;
+            color:  #000000;
+        }#T_ca632e70_64eb_11eb_8c3c_acde48001122row17_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row33_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row38_col3{
+            background-color:  #dedcec;
+            color:  #000000;
+        }#T_ca632e70_64eb_11eb_8c3c_acde48001122row20_col1{
+            background-color:  #c4cbe3;
+            color:  #000000;
+        }#T_ca632e70_64eb_11eb_8c3c_acde48001122row20_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row20_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row26_col2{
+            background-color:  #d0d1e6;
+            color:  #000000;
+        }#T_ca632e70_64eb_11eb_8c3c_acde48001122row24_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row44_col0,#T_ca632e70_64eb_11eb_8c3c_acde48001122row50_col0{
+            background-color:  #f1ebf5;
+            color:  #000000;
+        }#T_ca632e70_64eb_11eb_8c3c_acde48001122row26_col1{
+            background-color:  #d2d2e7;
+            color:  #000000;
+        }#T_ca632e70_64eb_11eb_8c3c_acde48001122row29_col1,#T_ca632e70_64eb_11eb_8c3c_acde48001122row29_col2,#T_ca632e70_64eb_11eb_8c3c_acde48001122row29_col3,#T_ca632e70_64eb_11eb_8c3c_acde48001122row38_col0{
+            background-color:  #023858;
+            color:  #f1f1f1;
+        }#T_ca632e70_64eb_11eb_8c3c_acde48001122row38_col1{
+            background-color:  #d7d6e9;
+            color:  #000000;
+        }#T_ca632e70_64eb_11eb_8c3c_acde48001122row38_col2{
+            background-color:  #034871;
+            color:  #f1f1f1;
+        }</style><table id="T_ca632e70_64eb_11eb_8c3c_acde48001122"><thead>    <tr>        <th class="index_name level0">figure</th>        <th class="col_heading level0 col0">AD</th>        <th class="col_heading level0 col1">CH</th>        <th class="col_heading level0 col2">EN</th>        <th class="col_heading level0 col3">RR</th>    </tr>    <tr>        <th class="index_name level0">person</th>        <th class="blank"></th>        <th class="blank"></th>        <th class="blank"></th>        <th class="blank"></th>    </tr></thead><tbody>
+                <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row0" class="row_heading level0 row0">ABEL</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row0_col0" class="data row0 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row0_col1" class="data row0 col1">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row0_col2" class="data row0 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row0_col3" class="data row0 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row1" class="row_heading level0 row1">AMIENS</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row1_col0" class="data row1 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row1_col1" class="data row1 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row1_col2" class="data row1 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row1_col3" class="data row1 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row2" class="row_heading level0 row2">ANGLETERRE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row2_col0" class="data row2 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row2_col1" class="data row2 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row2_col2" class="data row2 col2">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row2_col3" class="data row2 col3">0</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row3" class="row_heading level0 row3">ARRAGON</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row3_col0" class="data row3 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row3_col1" class="data row3 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row3_col2" class="data row3 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row3_col3" class="data row3 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row4" class="row_heading level0 row4">ARTU</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row4_col0" class="data row4 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row4_col1" class="data row4 col1">3</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row4_col2" class="data row4 col2">2</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row4_col3" class="data row4 col3">0</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row5" class="row_heading level0 row5">ASCANSION</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row5_col0" class="data row5 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row5_col1" class="data row5 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row5_col2" class="data row5 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row5_col3" class="data row5 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row6" class="row_heading level0 row6">BADEMAGU</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row6_col0" class="data row6 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row6_col1" class="data row6 col1">4</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row6_col2" class="data row6 col2">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row6_col3" class="data row6 col3">2</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row7" class="row_heading level0 row7">BREIBANÃ‡ON</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row7_col0" class="data row7 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row7_col1" class="data row7 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row7_col2" class="data row7 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row7_col3" class="data row7 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row8" class="row_heading level0 row8">BUCIFAL</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row8_col0" class="data row8 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row8_col1" class="data row8 col1">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row8_col2" class="data row8 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row8_col3" class="data row8 col3">0</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row9" class="row_heading level0 row9">CARLION</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row9_col0" class="data row9 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row9_col1" class="data row9 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row9_col2" class="data row9 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row9_col3" class="data row9 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row10" class="row_heading level0 row10">CHANPAIGNE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row10_col0" class="data row10 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row10_col1" class="data row10 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row10_col2" class="data row10 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row10_col3" class="data row10 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row11" class="row_heading level0 row11">CRESTIIEN</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row11_col0" class="data row11 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row11_col1" class="data row11 col1">2</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row11_col2" class="data row11 col2">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row11_col3" class="data row11 col3">0</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row12" class="row_heading level0 row12">CRIATOR</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row12_col0" class="data row12 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row12_col1" class="data row12 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row12_col2" class="data row12 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row12_col3" class="data row12 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row13" class="row_heading level0 row13">DEU</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row13_col0" class="data row13 col0">4</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row13_col1" class="data row13 col1">4</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row13_col2" class="data row13 col2">6</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row13_col3" class="data row13 col3">10</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row14" class="row_heading level0 row14">DONBES</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row14_col0" class="data row14 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row14_col1" class="data row14 col1">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row14_col2" class="data row14 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row14_col3" class="data row14 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row15" class="row_heading level0 row15">ESPAINGNE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row15_col0" class="data row15 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row15_col1" class="data row15 col1">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row15_col2" class="data row15 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row15_col3" class="data row15 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row16" class="row_heading level0 row16">ESPERIT</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row16_col0" class="data row16 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row16_col1" class="data row16 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row16_col2" class="data row16 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row16_col3" class="data row16 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row17" class="row_heading level0 row17">EVE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row17_col0" class="data row17 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row17_col1" class="data row17 col1">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row17_col2" class="data row17 col2">3</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row17_col3" class="data row17 col3">0</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row18" class="row_heading level0 row18">FORTUNE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row18_col0" class="data row18 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row18_col1" class="data row18 col1">2</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row18_col2" class="data row18 col2">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row18_col3" class="data row18 col3">0</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row19" class="row_heading level0 row19">GANT</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row19_col0" class="data row19 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row19_col1" class="data row19 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row19_col2" class="data row19 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row19_col3" class="data row19 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row20" class="row_heading level0 row20">GAUVAIN</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row20_col0" class="data row20 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row20_col1" class="data row20 col1">13</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row20_col2" class="data row20 col2">4</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row20_col3" class="data row20 col3">4</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row21" class="row_heading level0 row21">GODEFROI</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row21_col0" class="data row21 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row21_col1" class="data row21 col1">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row21_col2" class="data row21 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row21_col3" class="data row21 col3">0</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row22" class="row_heading level0 row22">GORRE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row22_col0" class="data row22 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row22_col1" class="data row22 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row22_col2" class="data row22 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row22_col3" class="data row22 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row23" class="row_heading level0 row23">GUENIEVRE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row23_col0" class="data row23 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row23_col1" class="data row23 col1">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row23_col2" class="data row23 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row23_col3" class="data row23 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row24" class="row_heading level0 row24">IRLANDE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row24_col0" class="data row24 col0">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row24_col1" class="data row24 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row24_col2" class="data row24 col2">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row24_col3" class="data row24 col3">2</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row25" class="row_heading level0 row25">JAQUE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row25_col0" class="data row25 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row25_col1" class="data row25 col1">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row25_col2" class="data row25 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row25_col3" class="data row25 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row26" class="row_heading level0 row26">KEU</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row26_col0" class="data row26 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row26_col1" class="data row26 col1">11</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row26_col2" class="data row26 col2">4</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row26_col3" class="data row26 col3">0</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row27" class="row_heading level0 row27">KEU D'ESTRAUS</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row27_col0" class="data row27 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row27_col1" class="data row27 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row27_col2" class="data row27 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row27_col3" class="data row27 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row28" class="row_heading level0 row28">LAC</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row28_col0" class="data row28 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row28_col1" class="data row28 col1">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row28_col2" class="data row28 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row28_col3" class="data row28 col3">0</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row29" class="row_heading level0 row29">LANCELOT</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row29_col0" class="data row29 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row29_col1" class="data row29 col1">45</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row29_col2" class="data row29 col2">16</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row29_col3" class="data row29 col3">16</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row30" class="row_heading level0 row30">LANDI</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row30_col0" class="data row30 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row30_col1" class="data row30 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row30_col2" class="data row30 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row30_col3" class="data row30 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row31" class="row_heading level0 row31">LEIGNI</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row31_col0" class="data row31 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row31_col1" class="data row31 col1">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row31_col2" class="data row31 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row31_col3" class="data row31 col3">0</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row32" class="row_heading level0 row32">LIMOGES</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row32_col0" class="data row32 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row32_col1" class="data row32 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row32_col2" class="data row32 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row32_col3" class="data row32 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row33" class="row_heading level0 row33">LOGRES</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row33_col0" class="data row33 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row33_col1" class="data row33 col1">2</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row33_col2" class="data row33 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row33_col3" class="data row33 col3">3</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row34" class="row_heading level0 row34">LONDRES</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row34_col0" class="data row34 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row34_col1" class="data row34 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row34_col2" class="data row34 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row34_col3" class="data row34 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row35" class="row_heading level0 row35">LOOYS</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row35_col0" class="data row35 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row35_col1" class="data row35 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row35_col2" class="data row35 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row35_col3" class="data row35 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row36" class="row_heading level0 row36">MARIES</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row36_col0" class="data row36 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row36_col1" class="data row36 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row36_col2" class="data row36 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row36_col3" class="data row36 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row37" class="row_heading level0 row37">MARTIN</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row37_col0" class="data row37 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row37_col1" class="data row37 col1">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row37_col2" class="data row37 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row37_col3" class="data row37 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row38" class="row_heading level0 row38">MELEAGANT</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row38_col0" class="data row38 col0">11</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row38_col1" class="data row38 col1">10</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row38_col2" class="data row38 col2">15</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row38_col3" class="data row38 col3">3</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row39" class="row_heading level0 row39">NOAUZ</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row39_col0" class="data row39 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row39_col1" class="data row39 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row39_col2" class="data row39 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row39_col3" class="data row39 col3">2</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row40" class="row_heading level0 row40">NOEL</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row40_col0" class="data row40 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row40_col1" class="data row40 col1">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row40_col2" class="data row40 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row40_col3" class="data row40 col3">0</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row41" class="row_heading level0 row41">PANPELUNE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row41_col0" class="data row41 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row41_col1" class="data row41 col1">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row41_col2" class="data row41 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row41_col3" class="data row41 col3">0</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row42" class="row_heading level0 row42">PANTECOSTE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row42_col0" class="data row42 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row42_col1" class="data row42 col1">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row42_col2" class="data row42 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row42_col3" class="data row42 col3">0</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row43" class="row_heading level0 row43">PEITIERS</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row43_col0" class="data row43 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row43_col1" class="data row43 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row43_col2" class="data row43 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row43_col3" class="data row43 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row44" class="row_heading level0 row44">PERE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row44_col0" class="data row44 col0">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row44_col1" class="data row44 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row44_col2" class="data row44 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row44_col3" class="data row44 col3">2</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row45" class="row_heading level0 row45">PILADES</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row45_col0" class="data row45 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row45_col1" class="data row45 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row45_col2" class="data row45 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row45_col3" class="data row45 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row46" class="row_heading level0 row46">PIRAMUS</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row46_col0" class="data row46 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row46_col1" class="data row46 col1">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row46_col2" class="data row46 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row46_col3" class="data row46 col3">0</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row47" class="row_heading level0 row47">REISON</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row47_col0" class="data row47 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row47_col1" class="data row47 col1">2</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row47_col2" class="data row47 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row47_col3" class="data row47 col3">0</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row48" class="row_heading level0 row48">ROBERDIC</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row48_col0" class="data row48 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row48_col1" class="data row48 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row48_col2" class="data row48 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row48_col3" class="data row48 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row49" class="row_heading level0 row49">ROSNE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row49_col0" class="data row49 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row49_col1" class="data row49 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row49_col2" class="data row49 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row49_col3" class="data row49 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row50" class="row_heading level0 row50">SARRAZIN</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row50_col0" class="data row50 col0">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row50_col1" class="data row50 col1">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row50_col2" class="data row50 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row50_col3" class="data row50 col3">0</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row51" class="row_heading level0 row51">SELVESTRE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row51_col0" class="data row51 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row51_col1" class="data row51 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row51_col2" class="data row51 col2">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row51_col3" class="data row51 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row52" class="row_heading level0 row52">TAULAS DE LA DESERTE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row52_col0" class="data row52 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row52_col1" class="data row52 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row52_col2" class="data row52 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row52_col3" class="data row52 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row53" class="row_heading level0 row53">TESSAILE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row53_col0" class="data row53 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row53_col1" class="data row53 col1">1</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row53_col2" class="data row53 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row53_col3" class="data row53 col3">0</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row54" class="row_heading level0 row54">TOLOSE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row54_col0" class="data row54 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row54_col1" class="data row54 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row54_col2" class="data row54 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row54_col3" class="data row54 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row55" class="row_heading level0 row55">YSORE</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row55_col0" class="data row55 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row55_col1" class="data row55 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row55_col2" class="data row55 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row55_col3" class="data row55 col3">1</td>
+            </tr>
+            <tr>
+                        <th id="T_ca632e70_64eb_11eb_8c3c_acde48001122level0_row56" class="row_heading level0 row56">YVAIN</th>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row56_col0" class="data row56 col0">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row56_col1" class="data row56 col1">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row56_col2" class="data row56 col2">0</td>
+                        <td id="T_ca632e70_64eb_11eb_8c3c_acde48001122row56_col3" class="data row56 col3">1</td>
+            </tr>
+    </tbody></table>
+</div>
+</div>
+<div class="cell" data-execution_count="108">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> (FTPM <span class="op">/</span> FTPM.<span class="bu">sum</span>())</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>B <span class="op">=</span> (FTPM.T <span class="op">/</span> FTPM.T.<span class="bu">sum</span>())</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> A <span class="op">*</span> B</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="127">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHAR_PRIORS</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="124">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>P_LANCELOT_CH <span class="op">=</span> (B.loc[<span class="st">'CH'</span>,<span class="st">'LANCELOT'</span>] <span class="op">*</span> FIG_PRIORS[<span class="st">'CH'</span>]) <span class="op">/</span> CHAR_PRIORS[<span class="st">'LANCELOT'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="125">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>P_LANCELOT_CH</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="125">
+<pre><code>0.8728284702310675</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="109">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>A.loc[<span class="st">'LANCELOT'</span>, <span class="st">'AD'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="109">
+<pre><code>0.0</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="110">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>A.loc[<span class="st">'LANCELOT'</span>, <span class="st">'CH'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="110">
+<pre><code>0.391304347826087</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="112">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>B.loc[<span class="st">'CH'</span>,<span class="st">'LANCELOT'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="112">
+<pre><code>0.5844155844155844</code></pre>
+</div>
+</div>
+<p><span class="math inline">\(P(F_{CH}|C_{LANCELOT})\)</span></p>
+<div class="cell" data-execution_count="59">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> FTP.xs(<span class="st">'LANCELOT'</span>, level<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>(X <span class="op">/</span> X.<span class="bu">sum</span>()).style.background_gradient()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="59">
+
+<style type="text/css">
+#T_be496b66_64e8_11eb_8c3c_acde48001122row0_col0{
+            background-color:  #023858;
+            color:  #f1f1f1;
+        }#T_be496b66_64e8_11eb_8c3c_acde48001122row1_col0,#T_be496b66_64e8_11eb_8c3c_acde48001122row2_col0{
+            background-color:  #fff7fb;
+            color:  #000000;
+        }</style><table id="T_be496b66_64e8_11eb_8c3c_acde48001122"><thead>    <tr>        <th class="blank level0"></th>        <th class="col_heading level0 col0">n</th>    </tr>    <tr>        <th class="index_name level0">figure</th>        <th class="blank"></th>    </tr></thead><tbody>
+                <tr>
+                        <th id="T_be496b66_64e8_11eb_8c3c_acde48001122level0_row0" class="row_heading level0 row0">CH</th>
+                        <td id="T_be496b66_64e8_11eb_8c3c_acde48001122row0_col0" class="data row0 col0">0.584416</td>
+            </tr>
+            <tr>
+                        <th id="T_be496b66_64e8_11eb_8c3c_acde48001122level0_row1" class="row_heading level0 row1">EN</th>
+                        <td id="T_be496b66_64e8_11eb_8c3c_acde48001122row1_col0" class="data row1 col0">0.207792</td>
+            </tr>
+            <tr>
+                        <th id="T_be496b66_64e8_11eb_8c3c_acde48001122level0_row2" class="row_heading level0 row2">RR</th>
+                        <td id="T_be496b66_64e8_11eb_8c3c_acde48001122row2_col0" class="data row2 col0">0.207792</td>
+            </tr>
+    </tbody></table>
+</div>
+</div>
+<div class="cell" data-execution_count="59">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> FTP.xs(<span class="st">'LANCELOT'</span>, level<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>(X <span class="op">/</span> X.<span class="bu">sum</span>()).style.background_gradient()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="59">
+
+<style type="text/css">
+#T_be496b66_64e8_11eb_8c3c_acde48001122row0_col0{
+            background-color:  #023858;
+            color:  #f1f1f1;
+        }#T_be496b66_64e8_11eb_8c3c_acde48001122row1_col0,#T_be496b66_64e8_11eb_8c3c_acde48001122row2_col0{
+            background-color:  #fff7fb;
+            color:  #000000;
+        }</style><table id="T_be496b66_64e8_11eb_8c3c_acde48001122"><thead>    <tr>        <th class="blank level0"></th>        <th class="col_heading level0 col0">n</th>    </tr>    <tr>        <th class="index_name level0">figure</th>        <th class="blank"></th>    </tr></thead><tbody>
+                <tr>
+                        <th id="T_be496b66_64e8_11eb_8c3c_acde48001122level0_row0" class="row_heading level0 row0">CH</th>
+                        <td id="T_be496b66_64e8_11eb_8c3c_acde48001122row0_col0" class="data row0 col0">0.584416</td>
+            </tr>
+            <tr>
+                        <th id="T_be496b66_64e8_11eb_8c3c_acde48001122level0_row1" class="row_heading level0 row1">EN</th>
+                        <td id="T_be496b66_64e8_11eb_8c3c_acde48001122row1_col0" class="data row1 col0">0.207792</td>
+            </tr>
+            <tr>
+                        <th id="T_be496b66_64e8_11eb_8c3c_acde48001122level0_row2" class="row_heading level0 row2">RR</th>
+                        <td id="T_be496b66_64e8_11eb_8c3c_acde48001122row2_col0" class="data row2 col0">0.207792</td>
+            </tr>
+    </tbody></table>
+</div>
+</div>
+<div class="cell" data-execution_count="65">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_p_fig_for_char(char_id):</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> FTP.xs(char_id, level<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (X <span class="op">/</span> X.<span class="bu">sum</span>()).sort_values(<span class="st">'n'</span>, ascending<span class="op">=</span><span class="va">False</span>).style.background_gradient()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="74">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_p_char_for_fig(fig_id):</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    X <span class="op">=</span> FTP.loc[fig_id]</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (X <span class="op">/</span> X.<span class="bu">sum</span>()).sort_values(<span class="st">'n'</span>, ascending<span class="op">=</span><span class="va">False</span>).style.background_gradient()    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="66">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>get_p_fig_for_char(<span class="st">'LANCELOT'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="66">
+
+<style type="text/css">
+#T_1fbebbe4_64e9_11eb_8c3c_acde48001122row0_col0{
+            background-color:  #023858;
+            color:  #f1f1f1;
+        }#T_1fbebbe4_64e9_11eb_8c3c_acde48001122row1_col0,#T_1fbebbe4_64e9_11eb_8c3c_acde48001122row2_col0{
+            background-color:  #fff7fb;
+            color:  #000000;
+        }</style><table id="T_1fbebbe4_64e9_11eb_8c3c_acde48001122"><thead>    <tr>        <th class="blank level0"></th>        <th class="col_heading level0 col0">n</th>    </tr>    <tr>        <th class="index_name level0">figure</th>        <th class="blank"></th>    </tr></thead><tbody>
+                <tr>
+                        <th id="T_1fbebbe4_64e9_11eb_8c3c_acde48001122level0_row0" class="row_heading level0 row0">CH</th>
+                        <td id="T_1fbebbe4_64e9_11eb_8c3c_acde48001122row0_col0" class="data row0 col0">0.584416</td>
+            </tr>
+            <tr>
+                        <th id="T_1fbebbe4_64e9_11eb_8c3c_acde48001122level0_row1" class="row_heading level0 row1">EN</th>
+                        <td id="T_1fbebbe4_64e9_11eb_8c3c_acde48001122row1_col0" class="data row1 col0">0.207792</td>
+            </tr>
+            <tr>
+                        <th id="T_1fbebbe4_64e9_11eb_8c3c_acde48001122level0_row2" class="row_heading level0 row2">RR</th>
+                        <td id="T_1fbebbe4_64e9_11eb_8c3c_acde48001122row2_col0" class="data row2 col0">0.207792</td>
+            </tr>
+    </tbody></table>
+</div>
+</div>
+<div class="cell" data-execution_count="67">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>get_p_fig_for_char(<span class="st">'MELEAGANT'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="67">
+
+<style type="text/css">
+#T_20576a60_64e9_11eb_8c3c_acde48001122row0_col0{
+            background-color:  #023858;
+            color:  #f1f1f1;
+        }#T_20576a60_64e9_11eb_8c3c_acde48001122row1_col0{
+            background-color:  #2685bb;
+            color:  #000000;
+        }#T_20576a60_64e9_11eb_8c3c_acde48001122row2_col0{
+            background-color:  #4a98c5;
+            color:  #000000;
+        }#T_20576a60_64e9_11eb_8c3c_acde48001122row3_col0{
+            background-color:  #fff7fb;
+            color:  #000000;
+        }</style><table id="T_20576a60_64e9_11eb_8c3c_acde48001122"><thead>    <tr>        <th class="blank level0"></th>        <th class="col_heading level0 col0">n</th>    </tr>    <tr>        <th class="index_name level0">figure</th>        <th class="blank"></th>    </tr></thead><tbody>
+                <tr>
+                        <th id="T_20576a60_64e9_11eb_8c3c_acde48001122level0_row0" class="row_heading level0 row0">EN</th>
+                        <td id="T_20576a60_64e9_11eb_8c3c_acde48001122row0_col0" class="data row0 col0">0.384615</td>
+            </tr>
+            <tr>
+                        <th id="T_20576a60_64e9_11eb_8c3c_acde48001122level0_row1" class="row_heading level0 row1">AD</th>
+                        <td id="T_20576a60_64e9_11eb_8c3c_acde48001122row1_col0" class="data row1 col0">0.282051</td>
+            </tr>
+            <tr>
+                        <th id="T_20576a60_64e9_11eb_8c3c_acde48001122level0_row2" class="row_heading level0 row2">CH</th>
+                        <td id="T_20576a60_64e9_11eb_8c3c_acde48001122row2_col0" class="data row2 col0">0.256410</td>
+            </tr>
+            <tr>
+                        <th id="T_20576a60_64e9_11eb_8c3c_acde48001122level0_row3" class="row_heading level0 row3">RR</th>
+                        <td id="T_20576a60_64e9_11eb_8c3c_acde48001122row3_col0" class="data row3 col0">0.076923</td>
+            </tr>
+    </tbody></table>
+</div>
+</div>
+<div class="cell" data-execution_count="75">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>get_p_char_for_fig(<span class="st">'CH'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="75">
+
+<style type="text/css">
+#T_6e72db76_64e9_11eb_8c3c_acde48001122row0_col0{
+            background-color:  #023858;
+            color:  #f1f1f1;
+        }#T_6e72db76_64e9_11eb_8c3c_acde48001122row1_col0{
+            background-color:  #c9cee4;
+            color:  #000000;
+        }#T_6e72db76_64e9_11eb_8c3c_acde48001122row2_col0{
+            background-color:  #d5d5e8;
+            color:  #000000;
+        }#T_6e72db76_64e9_11eb_8c3c_acde48001122row3_col0{
+            background-color:  #dad9ea;
+            color:  #000000;
+        }#T_6e72db76_64e9_11eb_8c3c_acde48001122row4_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row5_col0{
+            background-color:  #f5eef6;
+            color:  #000000;
+        }#T_6e72db76_64e9_11eb_8c3c_acde48001122row6_col0{
+            background-color:  #f8f1f8;
+            color:  #000000;
+        }#T_6e72db76_64e9_11eb_8c3c_acde48001122row7_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row8_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row9_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row10_col0{
+            background-color:  #fcf4fa;
+            color:  #000000;
+        }#T_6e72db76_64e9_11eb_8c3c_acde48001122row11_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row12_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row13_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row14_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row15_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row16_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row17_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row18_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row19_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row20_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row21_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row22_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row23_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row24_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row25_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row26_col0,#T_6e72db76_64e9_11eb_8c3c_acde48001122row27_col0{
+            background-color:  #fff7fb;
+            color:  #000000;
+        }</style><table id="T_6e72db76_64e9_11eb_8c3c_acde48001122"><thead>    <tr>        <th class="blank level0"></th>        <th class="col_heading level0 col0">n</th>    </tr>    <tr>        <th class="index_name level0">person</th>        <th class="blank"></th>    </tr></thead><tbody>
+                <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row0" class="row_heading level0 row0">LANCELOT</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row0_col0" class="data row0 col0">0.391304</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row1" class="row_heading level0 row1">GAUVAIN</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row1_col0" class="data row1 col0">0.113043</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row2" class="row_heading level0 row2">KEU</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row2_col0" class="data row2 col0">0.095652</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row3" class="row_heading level0 row3">MELEAGANT</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row3_col0" class="data row3 col0">0.086957</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row4" class="row_heading level0 row4">DEU</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row4_col0" class="data row4 col0">0.034783</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row5" class="row_heading level0 row5">BADEMAGU</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row5_col0" class="data row5 col0">0.034783</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row6" class="row_heading level0 row6">ARTU</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row6_col0" class="data row6 col0">0.026087</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row7" class="row_heading level0 row7">CRESTIIEN</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row7_col0" class="data row7 col0">0.017391</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row8" class="row_heading level0 row8">REISON</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row8_col0" class="data row8 col0">0.017391</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row9" class="row_heading level0 row9">LOGRES</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row9_col0" class="data row9 col0">0.017391</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row10" class="row_heading level0 row10">FORTUNE</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row10_col0" class="data row10 col0">0.017391</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row11" class="row_heading level0 row11">SARRAZIN</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row11_col0" class="data row11 col0">0.008696</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row12" class="row_heading level0 row12">PIRAMUS</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row12_col0" class="data row12 col0">0.008696</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row13" class="row_heading level0 row13">PANPELUNE</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row13_col0" class="data row13 col0">0.008696</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row14" class="row_heading level0 row14">NOEL</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row14_col0" class="data row14 col0">0.008696</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row15" class="row_heading level0 row15">MARTIN</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row15_col0" class="data row15 col0">0.008696</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row16" class="row_heading level0 row16">PANTECOSTE</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row16_col0" class="data row16 col0">0.008696</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row17" class="row_heading level0 row17">ABEL</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row17_col0" class="data row17 col0">0.008696</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row18" class="row_heading level0 row18">LEIGNI</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row18_col0" class="data row18 col0">0.008696</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row19" class="row_heading level0 row19">LAC</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row19_col0" class="data row19 col0">0.008696</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row20" class="row_heading level0 row20">JAQUE</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row20_col0" class="data row20 col0">0.008696</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row21" class="row_heading level0 row21">GUENIEVRE</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row21_col0" class="data row21 col0">0.008696</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row22" class="row_heading level0 row22">GODEFROI</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row22_col0" class="data row22 col0">0.008696</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row23" class="row_heading level0 row23">EVE</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row23_col0" class="data row23 col0">0.008696</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row24" class="row_heading level0 row24">ESPAINGNE</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row24_col0" class="data row24 col0">0.008696</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row25" class="row_heading level0 row25">DONBES</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row25_col0" class="data row25 col0">0.008696</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row26" class="row_heading level0 row26">BUCIFAL</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row26_col0" class="data row26 col0">0.008696</td>
+            </tr>
+            <tr>
+                        <th id="T_6e72db76_64e9_11eb_8c3c_acde48001122level0_row27" class="row_heading level0 row27">TESSAILE</th>
+                        <td id="T_6e72db76_64e9_11eb_8c3c_acde48001122row27_col0" class="data row27 col0">0.008696</td>
+            </tr>
+    </tbody></table>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>dd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../lessons/M90_DispersionPlots/onehot.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">onehot.html</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../lessons/M91_Charrette/CharretteTokens.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-title">Config</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

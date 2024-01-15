@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.262">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Exploratory Text Analytics - 33&nbsp; Metadata</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../lessons/M08a_Visualization/M08a_04_Mazo.html" rel="next">
+<link href="../../lessons/M08a_Visualization/M08a_02_GensimRunCompareLDA.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Metadata</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Exploratory Text Analytics</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ontoligent/DS5001-2024-01-R" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">M01 Introduction</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_01_getting-started.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Setting Up Your Jupyter Environmnet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_02_hello.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: Hello, World!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_03_first-foray.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: First Foray</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_04_FurtherExploration.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: Further Exploration</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">M02 TextModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_01_Importing-Persuasion.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Text into Data: Importing a Text, or, Clip, Chunk, and Split</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_02_TokenizingWithSciKitLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Tokenizing with SciKit Learn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_03_Challenge.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Challenge: Convert Another Text</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">M03 LanguageModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_01_Babel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Baby Babel</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_01a_EntropyExamples.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy Examples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V1.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models v1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models (v2)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V3.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models (v3)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_SimpleLangModel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Demonstration of Simple Language Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_03_Entropy-and-Perplexity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy and Peplexity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_04-Entropy-and-Term-Length.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy and Term Length</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_EZ.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">How to Create an N-Gram Model from ScratchHow to Create an N-Gram Model from Scratch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">M04 NLP</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_00_NLTK_Intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">NLTK Parsers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_01_Pipeline.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">NLP and the Pipeline</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_02_HMM.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Predict POS with an HMM</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">M05 VectorSpaceModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_01_BOW_TFIDF.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Vector Spaces, BOW, and TFIDF</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_02_TimeTokenMatrices.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Time-Token Matrices</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_03_TFIDF_Exploration.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Variant TFIDFs and Document Significance</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false">M06 CusteringSimilarity</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M06_CusteringSimilarity/M06_01_SimilarityMeasures.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Similarity and Distance Measures</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false">M07 FeaturesAndComponents</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M07_FeaturesAndComponents/M07_01_PCA.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">PCA from Scratch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false">M08 TopicModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_01_GibbsSampler.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Gibbs Sampler</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_02_LDASciKitLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LDA with SciKit Learn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_03_TopicSimilarity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Topic Similarity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_04_TopicContiguity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Topic Contiguity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_05_PyLDAVis.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">PyLDAVis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Untitled.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="true">M08a Visualization</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_01_Gensim.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Other Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_02_GensimRunCompareLDA.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_03_MALLET.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_04_Mazo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">M09 WordEmbedding</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_01_GloVe.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_02_PMI_SVD.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_03_SkipgramRepresentation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_04_word2vec.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_05_FastText.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Untitled.html</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/run_fasttext.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">FastText Model</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="false">M10 SentimentAnalysis</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_01_GeneralInquirer.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_02_CombineLexicons.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_03_Novel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_04_AustenMelville.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_05_WordShiftGraphs.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_06_Doc2Vec.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" aria-expanded="false">M11 Narrative</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_01_ExportBooksWithSentiment.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_02_SyuzhetPlots.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_03_Syuzhet_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_04_Syuzhet_RGeneral.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" aria-expanded="false">M12 Classification</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_01_NaiveBayesWineReviews.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_01b_SKLearnMNB.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_02_PerceptronWine.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_03.ExpectedMutualInformation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_04_Viz.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" aria-expanded="false">M13 LLMs</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-14" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_01_ChatGPTDemo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_02_ChatGPTDemo2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_03_ChatGPT4Demo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_play.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">M13_play.html</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/tokenizer_training.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Loading the dataset</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" aria-expanded="false">M90 DispersionPlots</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-15" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M90_DispersionPlots/m01.04-austen-kde.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Synopsis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M90_DispersionPlots/onehot.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">onehot.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" aria-expanded="false">M91 Charrette</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-16" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M91_Charrette/CharretteFIguresAndCharacters.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Figures and Characters</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M91_Charrette/CharretteTokens.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Config</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-17" aria-expanded="false">M92 Helpers</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-17" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-17" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M92_Helpers/M00_01_VectorizationWithSKLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M92_Helpers/M00_02_SpaCy.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#notes" id="toc-notes" class="nav-link active" data-scroll-target="#notes">Notes</a></li>
+  <li><a href="#set-up" id="toc-set-up" class="nav-link" data-scroll-target="#set-up">Set Up</a></li>
+  <li><a href="#import-corpus" id="toc-import-corpus" class="nav-link" data-scroll-target="#import-corpus">Import CORPUS</a></li>
+  <li><a href="#create-doc" id="toc-create-doc" class="nav-link" data-scroll-target="#create-doc">Create DOC</a>
+  <ul class="collapse">
+  <li><a href="#dump-corpus-to-csv-file" id="toc-dump-corpus-to-csv-file" class="nav-link" data-scroll-target="#dump-corpus-to-csv-file">Dump corpus to CSV file</a></li>
+  <li><a href="#mallet-time" id="toc-mallet-time" class="nav-link" data-scroll-target="#mallet-time">MALLET Time</a>
+  <ul class="collapse">
+  <li><a href="#show-mallet-options" id="toc-show-mallet-options" class="nav-link" data-scroll-target="#show-mallet-options">Show MALLET options</a></li>
+  <li><a href="#import-corpus-1" id="toc-import-corpus-1" class="nav-link" data-scroll-target="#import-corpus-1">Import corpus</a></li>
+  <li><a href="#train-topics" id="toc-train-topics" class="nav-link" data-scroll-target="#train-topics">Train topics</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#appendix-readme" id="toc-appendix-readme" class="nav-link" data-scroll-target="#appendix-readme">Appendix: README</a></li>
+  <li><a href="#mallet" id="toc-mallet" class="nav-link" data-scroll-target="#mallet">Mallet</a>
+  <ul class="collapse">
+  <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation">Installation</a></li>
+  <li><a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a></li>
+  <li><a href="#list-of-algorithms" id="toc-list-of-algorithms" class="nav-link" data-scroll-target="#list-of-algorithms">List of Algorithms</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.dev/ontoligent/DS5001-2024-01-R/blob/main/lessons/M08a_Visualization/M08a_03_MALLET.ipynb" class="toc-action">Edit this page</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-title">Metadata</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Course</span><span class="kw">:</span><span class="at">   DS 5001</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Module</span><span class="kw">:</span><span class="at">   08a Lab</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Topic</span><span class="kw">:</span><span class="at">    Using MALLET</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Author</span><span class="kw">:</span><span class="at">   R.C. Alvarado</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">Date</span><span class="kw">:</span><span class="at">     23 March 2023</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="notes" class="level1">
+<h1>Notes</h1>
+<p>See Appendix below information on how download and install <a href="https://mimno.github.io/Mallet/topics">MALLET</a>.</p>
+</section>
+<section id="set-up" class="level1">
+<h1>Set Up</h1>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data_home <span class="op">=</span> <span class="st">"../data"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>local_lib <span class="op">=</span> <span class="st">"../lib"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data_prefix <span class="op">=</span> <span class="st">'novels'</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>mallet_data <span class="op">=</span> <span class="st">"./mallet"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>OHCO <span class="op">=</span> [<span class="st">'book_id'</span>,<span class="st">'chap_id'</span>,<span class="st">'para_num'</span>,<span class="st">'sent_num'</span>,<span class="st">'token_num'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>max_words <span class="op">=</span> <span class="dv">10000</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># For MALLET</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>num_topics <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>num_iters <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>show_interval <span class="op">=</span> <span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="import-corpus" class="level1">
+<h1>Import CORPUS</h1>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>LIB <span class="op">=</span> pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>data_home<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>data_prefix<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>data_prefix<span class="sc">}</span><span class="ss">-LIB.csv"</span>).set_index(OHCO[:<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>CORPUS <span class="op">=</span> pd.read_csv(<span class="ss">f"</span><span class="sc">{</span>data_home<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>data_prefix<span class="sc">}</span><span class="ss">/</span><span class="sc">{</span>data_prefix<span class="sc">}</span><span class="ss">-CORPUS.csv"</span>).set_index(OHCO)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>CORPUS.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>pos</th>
+      <th>term_str</th>
+    </tr>
+    <tr>
+      <th>book_id</th>
+      <th>chap_id</th>
+      <th>para_num</th>
+      <th>sent_num</th>
+      <th>token_num</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">secretadversary</th>
+      <th rowspan="5" valign="top">1</th>
+      <th rowspan="4" valign="top">0</th>
+      <th rowspan="4" valign="top">1</th>
+      <th>0</th>
+      <td>DT</td>
+      <td>the</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>NNP</td>
+      <td>young</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>NNP</td>
+      <td>adventurers</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>NNP</td>
+      <td>ltd</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <th>0</th>
+      <th>0</th>
+      <td>JJ</td>
+      <td>tommy</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="create-doc" class="level1">
+<h1>Create DOC</h1>
+<div class="cell" data-tags="[]" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gather_docs(CORPUS, ohco_level, term_col<span class="op">=</span><span class="st">'term_str'</span>):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    OHCO <span class="op">=</span> CORPUS.index.names</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    CORPUS[term_col] <span class="op">=</span> CORPUS[term_col].astype(<span class="st">'str'</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    DOC <span class="op">=</span> CORPUS.groupby(OHCO[:ohco_level])[term_col].<span class="bu">apply</span>(<span class="kw">lambda</span> x:<span class="st">' '</span>.join(x)).to_frame(<span class="st">'doc_str'</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> DOC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>DOC <span class="op">=</span> gather_docs(CORPUS, <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>DOC[<span class="st">'n_tokens'</span>] <span class="op">=</span> DOC.doc_str.<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="bu">len</span>(x.split()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>DOC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>doc_str</th>
+      <th>n_tokens</th>
+    </tr>
+    <tr>
+      <th>book_id</th>
+      <th>chap_id</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">adventures</th>
+      <th>1</th>
+      <td>a scandal in bohemia i to sherlock holmes she ...</td>
+      <td>8608</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>the red headed league i had called upon my fri...</td>
+      <td>9197</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>a case of identity my dear fellow said sherloc...</td>
+      <td>7020</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>the boscombe valley mystery we were seated at ...</td>
+      <td>9685</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>the five orange pips when i glance over my not...</td>
+      <td>7365</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th rowspan="4" valign="top">udolpho</th>
+      <th>54</th>
+      <td>vi unnatural deeds do breed unnatural troubles...</td>
+      <td>5605</td>
+    </tr>
+    <tr>
+      <th>55</th>
+      <td>vii but in these cases we still have judgment ...</td>
+      <td>4164</td>
+    </tr>
+    <tr>
+      <th>56</th>
+      <td>viii then fresh tears stood on her cheek as do...</td>
+      <td>2522</td>
+    </tr>
+    <tr>
+      <th>57</th>
+      <td>ix now my task is smoothly done i can fly or i...</td>
+      <td>977</td>
+    </tr>
+    <tr>
+      <th>usher</th>
+      <th>1</th>
+      <td>fall of the house of usher son coeur est un lu...</td>
+      <td>7212</td>
+    </tr>
+  </tbody>
+</table>
+<p>320 rows × 2 columns</p>
+</div>
+</div>
+</div>
+<section id="dump-corpus-to-csv-file" class="level2">
+<h2 class="anchored" data-anchor-id="dump-corpus-to-csv-file">Dump corpus to CSV file</h2>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mallet_corpus <span class="op">=</span> DOC.join(LIB)[[<span class="st">'doc_str'</span>,<span class="st">'author_id'</span>]]</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>mallet_corpus.columns <span class="op">=</span> <span class="st">'doc_content doc_label'</span>.split()</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>mallet_corpus[[<span class="st">'doc_label'</span>,<span class="st">'doc_content'</span>]].to_csv(<span class="st">'corpus/novels-corpus.csv'</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="mallet-time" class="level2">
+<h2 class="anchored" data-anchor-id="mallet-time">MALLET Time</h2>
+<section id="show-mallet-options" class="level3">
+<h3 class="anchored" data-anchor-id="show-mallet-options">Show MALLET options</h3>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mallet_home <span class="op">=</span> <span class="st">"/Users/rca2t1/opt/mallet/bin"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span> {mallet_home}<span class="op">/</span>mallet </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Unrecognized command: 
+Mallet 2.0 commands: 
+
+  import-dir         load the contents of a directory into mallet instances (one per file)
+  import-file        load a single file into mallet instances (one per line)
+  import-svmlight    load SVMLight format data files into Mallet instances
+  info               get information about Mallet instances
+  train-classifier   train a classifier from Mallet data files
+  classify-dir       classify data from a single file with a saved classifier
+  classify-file      classify the contents of a directory with a saved classifier
+  classify-svmlight  classify data from a single file in SVMLight format
+  train-topics       train a topic model from Mallet data files
+  infer-topics       use a trained topic model to infer topics for new documents
+  evaluate-topics    estimate the probability of new documents under a trained model
+  prune              remove features based on frequency or information gain
+  split              divide data into testing, training, and validation portions
+  bulk-load          for big input files, efficiently prune vocabulary and import docs
+
+Include --help with any option for more information</code></pre>
+</div>
+</div>
+</section>
+<section id="import-corpus-1" class="level3">
+<h3 class="anchored" data-anchor-id="import-corpus-1">Import corpus</h3>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>{mallet_home}<span class="op">/</span>mallet <span class="im">import</span><span class="op">-</span><span class="bu">file</span> <span class="op">--</span><span class="bu">input</span> corpus<span class="op">/</span>novels<span class="op">-</span>corpus.csv <span class="op">--</span>output mallet<span class="op">/</span>novels<span class="op">-</span>corpus.mallet <span class="op">--</span>keep<span class="op">-</span>sequence TRUE</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="train-topics" class="level3">
+<h3 class="anchored" data-anchor-id="train-topics">Train topics</h3>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>{mallet_home}<span class="op">/</span>mallet train<span class="op">-</span>topics <span class="op">--</span><span class="bu">input</span> mallet<span class="op">/</span>novels<span class="op">-</span>corpus.mallet <span class="op">--</span>num<span class="op">-</span>topics {num_topics} <span class="op">--</span>num<span class="op">-</span>iterations {num_iters} <span class="op">\</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="op">--</span>output<span class="op">-</span>doc<span class="op">-</span>topics mallet<span class="op">/</span>novels<span class="op">-</span>doc<span class="op">-</span>topics.txt <span class="op">\</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="op">--</span>output<span class="op">-</span>topic<span class="op">-</span>keys mallet<span class="op">/</span>novels<span class="op">-</span>topic<span class="op">-</span>keys.txt <span class="op">\</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="op">--</span>word<span class="op">-</span>topic<span class="op">-</span>counts<span class="op">-</span><span class="bu">file</span> mallet<span class="op">/</span>novels<span class="op">-</span>word<span class="op">-</span>topic<span class="op">-</span>counts<span class="op">-</span><span class="bu">file</span>.txt <span class="op">\</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="op">--</span>topic<span class="op">-</span>word<span class="op">-</span>weights<span class="op">-</span><span class="bu">file</span> mallet<span class="op">/</span>novels<span class="op">-</span>topic<span class="op">-</span>word<span class="op">-</span>weights<span class="op">-</span><span class="bu">file</span>.txt <span class="op">\</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="op">--</span>xml<span class="op">-</span>topic<span class="op">-</span>report mallet<span class="op">/</span>novels<span class="op">-</span>topic<span class="op">-</span>report.xml <span class="op">\</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="op">--</span>xml<span class="op">-</span>topic<span class="op">-</span>phrase<span class="op">-</span>report mallet<span class="op">/</span>novels<span class="op">-</span>topic<span class="op">-</span>phrase<span class="op">-</span>report.xml <span class="op">\</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="op">--</span>show<span class="op">-</span>topics<span class="op">-</span>interval {show_interval} <span class="op">\</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="op">--</span>use<span class="op">-</span>symmetric<span class="op">-</span>alpha false  <span class="op">\</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="op">--</span>optimize<span class="op">-</span>interval <span class="dv">100</span> <span class="op">\</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="op">--</span>diagnostics<span class="op">-</span><span class="bu">file</span> mallet<span class="op">/</span>novels<span class="op">-</span>diagnostics.xml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mallet LDA: 20 topics, 5 topic bits, 11111 topic mask
+Data loaded.
+max tokens: 15717
+total tokens: 1164070
+&lt;10&gt; LL/token: -9.08018
+&lt;20&gt; LL/token: -8.59597
+&lt;30&gt; LL/token: -8.41396
+&lt;40&gt; LL/token: -8.31237
+&lt;50&gt; LL/token: -8.24817
+&lt;60&gt; LL/token: -8.20836
+&lt;70&gt; LL/token: -8.17174
+&lt;80&gt; LL/token: -8.15141
+&lt;90&gt; LL/token: -8.12778
+
+0   0.25    the manfred said thou not this project isabella gutenberg and his matilda thy with lord for work theodore thee any 
+1   0.25    the and was had been from which with that some into his have where even part years doubt possible house 
+2   0.25    the and his him said sir they lord that their with them all scrooge was were for baron philip father 
+3   0.25    that and you the was his holmes had not but have very for would are him yes said all there 
+4   0.25    and that was but not had she could her might father for when should own day before did after only 
+5   0.25    the you and tuppence tommy was that said but dont she for her with sir they know julius well what 
+6   0.25    the and that they with was which where them count now aubert this their had after over for upon often 
+7   0.25    and that for all not the his him when with her but have was there shall see are them van 
+8   0.25    the was she her had door and room out then with were not into could but night hand there one 
+9   0.25    you that the have his said him your which was and what when time man one can had sir has 
+10  0.25    the and was they were with its from their but which when again had yet that towards there saw who 
+11  0.25    her she and the emily that had was said not for but this you montoni have would valancourt with who 
+12  0.25    the and had for miss her that with was out sergeant franklin all this she rachel diamond house from betteredge 
+13  0.25    the and his which had that him with for when from while was those mind never since much once how 
+14  0.25    the her was she with and his for upon him had which their them who that himself without mother were 
+15  0.25    the and upon his was with which for had there our man out could that were down one all over 
+16  0.25    her and not she very for the they was you with all but would their are catherine were could much 
+17  0.25    his her and from the that this not with all now upon would every more still heart death him which 
+18  0.25    you your will and have that but the not shall are for this what him should said may then with 
+19  0.25    the that have this not been but for any and from are all will has would one very death its 
+
+&lt;100&gt; LL/token: -8.10698
+&lt;110&gt; LL/token: -8.09333
+&lt;120&gt; LL/token: -8.07761
+&lt;130&gt; LL/token: -8.06214
+&lt;140&gt; LL/token: -8.05182
+&lt;150&gt; LL/token: -8.04228
+&lt;160&gt; LL/token: -8.03262
+&lt;170&gt; LL/token: -8.02137
+&lt;180&gt; LL/token: -8.01462
+&lt;190&gt; LL/token: -8.00618
+
+0   0.25    the said manfred thou his not project isabella gutenberg this and thy lord matilda with for theodore work thee hippolita 
+1   0.25    the and was with that been had which have from very other some own who his were into such house 
+2   0.25    and the his him said lord they sir edmund all scrooge their that them baron for with philip father oswald 
+3   0.25    the that you and holmes was not his have but had for very all yes sir poirot she would are 
+4   0.25    and was but had that not father for might when could did should more life all with most friend were 
+5   0.25    the you she tuppence her tommy and but that said julius dont was they all out know sir thats for 
+6   0.25    the and they with that now upon aubert their where was them some count while over woods often whose chateau 
+7   0.25    and the that all for her not his she him when with are there have but van see helsing our 
+8   0.25    the was and had not but door out room were could his then into there hand with night back them 
+9   0.25    you that his have him said the what and this your one time which when any there more would are 
+10  0.25    the and they its which from this were their with that but was who one these saw when more like 
+11  0.25    her she and the emily that was had for not but said this montoni would valancourt who annette madame with 
+12  0.25    the and her had she for all sergeant franklin miss with out rachel diamond betteredge house was lady that see 
+13  0.25    the his and which had with from him for that when than much was while these time too mind those 
+14  0.25    her the she was and this with for had their them herself upon himself antonia which were till ambrosio being 
+15  0.25    the and his upon which with for there had man was our all out down that could see were two 
+16  0.25    her she and not the for very they all catherine was but could miss their would mrs them such with 
+17  0.25    his and that the him upon with from not every all your more now death still agnes would lorenzo myself 
+18  0.25    you have your and will that not the but this for shall are what said should him then must can 
+19  0.25    the that have this not but been all for are its would will upon one now has from there any 
+
+&lt;200&gt; LL/token: -7.99409
+&lt;210&gt; LL/token: -7.98469
+&lt;220&gt; LL/token: -7.9812
+&lt;230&gt; LL/token: -7.97392
+&lt;240&gt; LL/token: -7.96722
+&lt;250&gt; LL/token: -7.95937
+&lt;260&gt; LL/token: -7.95474
+&lt;270&gt; LL/token: -7.95046
+&lt;280&gt; LL/token: -7.94653
+&lt;290&gt; LL/token: -7.94138
+
+0   0.25    the said manfred thou not his project isabella gutenberg and lord for thy matilda this theodore hippolita princess work thee 
+1   0.25    the and was that had been with which from have very who some were other found own first house more 
+2   0.25    and the his him said lord they sir edmund scrooge baron them their all upon with for philip that oswald 
+3   0.25    the that you holmes not had his have she but sir was and poirot yes will all been very mrs 
+4   0.25    and was but not that for when had might all did could life before should father myself only every felt 
+5   0.25    the you tuppence she her tommy but all julius said dont they know thats and sir like out got well 
+6   0.25    the and they now that with upon their aubert was them some where while woods often seemed chateau count scene 
+7   0.25    and the that all her for his not she when him with have are there our see van shall helsing 
+8   0.25    the was and had but not door out could for there room were into hand with what then night them 
+9   0.25    you that and his him have said for the this when what one about your any little they from can 
+10  0.25    the and which with they that from this were their its but had was through these who when more place 
+11  0.25    her she the emily and that had was not montoni said for but valancourt this who now would when annette 
+12  0.25    the her had and she miss all sergeant franklin out with rachel diamond betteredge for house lady was see blake 
+13  0.25    the his and had which with him was from for that than while could when those much whom time these 
+14  0.25    her she the and was this their with herself which for himself mother without than till most had being found 
+15  0.25    the and his upon there which all that man with our for had down out was very could over would 
+16  0.25    her she and not for very was catherine they could all but had miss their such mrs would the were 
+17  0.25    his the upon him that with from your not now more and agnes antonia every all still ambrosio lorenzo matilda 
+18  0.25    you have that your and not will but this the are what shall for with said may should then can 
+19  0.25    the not have that this upon been for but all are its which one there would has any will body 
+
+[beta: 0.01804] 
+&lt;300&gt; LL/token: -7.93727
+&lt;310&gt; LL/token: -7.93499
+&lt;320&gt; LL/token: -7.93118
+&lt;330&gt; LL/token: -7.92181
+&lt;340&gt; LL/token: -7.91845
+&lt;350&gt; LL/token: -7.91199
+&lt;360&gt; LL/token: -7.91109
+&lt;370&gt; LL/token: -7.90398
+&lt;380&gt; LL/token: -7.90158
+&lt;390&gt; LL/token: -7.90034
+
+0   0.11209 the manfred said thou not isabella project gutenberg his thy matilda lord theodore hippolita with thee princess prince castle this 
+1   0.37623 the and that was with had been from this have which some were who very other only more much found 
+2   0.15902 and his the said lord him they sir edmund scrooge upon baron their all them for philip with will oswald 
+3   0.16959 that you not the sir but was poirot she mrs yes all inglethorp will very his had have did john 
+4   0.33021 and but that not was when had for myself did life before all could man eyes our death father might 
+5   0.17589 you the tuppence tommy she her but all julius sir dont said out thats they know got get well girl 
+6   0.23325 the and with they aubert that now woods their often them where among mountains upon into for count scene blanche 
+7   0.19155 and all that for his the her not she when him there van with our helsing see are but shall 
+8   0.3668  the was and had not with but could out door for room were into hand him then there eyes down 
+9   0.35383 and you that his have him said for when what one there about they was man any now little this 
+10  0.3288  the and which they from that with were this was but their its had one when these who through more 
+11  0.18207 her she the emily and that had not montoni said but was this valancourt now for who all annette madame 
+12  0.16892 the had her all she miss sergeant franklin out which rachel diamond betteredge and house lady blake see them for 
+13  0.34336 the his and which had was with for him from would that when than could upon were while made time 
+14  0.27176 her she and the was herself this for mother been till their who soon most woman young found might having 
+15  0.27995 his and the upon which holmes all there our man had for out down very see that one could with 
+16  0.23579 her she and not catherine very was for all they could but miss had mrs their them tilney were with 
+17  0.19201 the his upon with from him that and not agnes antonia your all now ambrosio lorenzo still every matilda them 
+18  0.35723 you that and have your not but will this the are what shall said for with should him can may 
+19  0.23089 the not upon have this all that but been its for now has one will which body than any are 
+
+[beta: 0.02116] 
+&lt;400&gt; LL/token: -7.89281
+&lt;410&gt; LL/token: -7.88954
+&lt;420&gt; LL/token: -7.88054
+&lt;430&gt; LL/token: -7.8763
+&lt;440&gt; LL/token: -7.87617
+&lt;450&gt; LL/token: -7.87206
+&lt;460&gt; LL/token: -7.86841
+&lt;470&gt; LL/token: -7.86475
+&lt;480&gt; LL/token: -7.86125
+&lt;490&gt; LL/token: -7.86299
+
+0   0.05627 the manfred said thou his isabella gutenberg project not lord thy matilda theodore for hippolita thee this princess any prince 
+1   0.49077 the that was and had this been with from have which were some who other not such only their found 
+2   0.10597 and his the said lord him sir they edmund scrooge upon baron them their all philip for will oswald lovel 
+3   0.12051 that sir not poirot was mrs you but inglethorp yes she all had john moor very will henry did cavendish 
+4   0.35184 and but not when was for that had myself could now life upon did even father before eyes yet our 
+5   0.12123 tuppence tommy you but she julius the all her sir dont they thats james mrs his get girl know jane 
+6   0.20404 the and aubert with they them now woods where their among upon mountains blanche whose along scene after while road 
+7   0.14527 and all that for not his her she when him our the van are helsing there but may them came 
+8   0.46493 the was and had with not could for out but his there room door were into down been night then 
+9   0.43171 and you that his said for him have was what one about now they with there when has any see 
+10  0.38694 the and which that they from with was were but their this its who one through had more these some 
+11  0.13968 her she the emily and that had not but montoni said was now for valancourt this who when annette madame 
+12  0.11579 the had miss sergeant all franklin which rachel diamond betteredge and them own lady house time blake cuff when your 
+13  0.41403 and the his which had was with for him that from would than could when time made were one whom 
+14  0.28212 her she and was herself mother daughter for lady woman young being only father take first having idea been their 
+15  0.2684  his upon and which holmes all there our that have the man very would are could came but two then 
+16  0.18482 her and not she catherine for very they all but could was miss their mrs tilney them would such had 
+17  0.12366 the his upon with not him your agnes antonia every them ambrosio lorenzo still now matilda moment from more for 
+18  0.45444 you that have not but your the and will this are what shall said for with then can should all 
+19  0.17833 the upon have not but all for its one been there would which will now has are this any body 
+
+[beta: 0.02253] 
+&lt;500&gt; LL/token: -7.85965
+&lt;510&gt; LL/token: -7.8541
+&lt;520&gt; LL/token: -7.8527
+&lt;530&gt; LL/token: -7.84896
+&lt;540&gt; LL/token: -7.84638
+&lt;550&gt; LL/token: -7.84432
+&lt;560&gt; LL/token: -7.84488
+&lt;570&gt; LL/token: -7.84635
+&lt;580&gt; LL/token: -7.84587
+&lt;590&gt; LL/token: -7.84478
+
+0   0.03777 the manfred said thou not his isabella gutenberg project thy for matilda lord theodore hippolita thee princess work any prince 
+1   0.58962 the that and was had this been from with which have some were who not only other most found such 
+2   0.07804 and his the him said lord sir they edmund scrooge upon them baron their for philip all oswald will lovel 
+3   0.08505 poirot not sir that inglethorp mrs but you yes had was john she did all moor cavendish very henry been 
+4   0.32186 and but was when not for had myself that life upon our every before yet man feelings could being father 
+5   0.08916 tuppence tommy julius but you all sir she dont they james mrs thats jane know get girl her well its 
+6   0.18003 the and aubert with they their woods them where now blanche upon mountains whose scene among road over along till 
+7   0.10786 and all that for not his when him our she her van there helsing may shall must are lucy which 
+8   0.54486 the was and had with his not but could for room then door out there them were into back hand 
+9   0.49153 and you that for his him have said was with one out when what there about now they any very 
+10  0.42004 the and that they which from with were this was but their its one more who have through light some 
+11  0.11231 her she the emily and that had not said montoni but was for valancourt now this annette madame count who 
+12  0.08802 the had miss all sergeant franklin which rachel diamond betteredge your house own lady blake two cuff godfrey and rosanna 
+13  0.46724 and the his was had which with for him from that would when could more than were time too while 
+14  0.29674 her she and was herself but been mother before lady daughter woman father young words same only made found mothers 
+15  0.21326 his upon which and holmes all our there had very have man two would that could down watson one has 
+16  0.13872 not her and she catherine very they for all but could miss had mrs tilney their such them would being 
+17  0.08332 the his upon not your him agnes antonia with ambrosio lorenzo every still for them matilda till bosom moment himself 
+18  0.53795 you the that and have not but your will this what are said shall with should then can all must 
+19  0.13396 the upon have not for its all but which been one would there this are will has any body about 
+
+[beta: 0.02316] 
+&lt;600&gt; LL/token: -7.84277
+&lt;610&gt; LL/token: -7.84203
+&lt;620&gt; LL/token: -7.84648
+&lt;630&gt; LL/token: -7.84271
+&lt;640&gt; LL/token: -7.84515
+&lt;650&gt; LL/token: -7.84346
+&lt;660&gt; LL/token: -7.84458
+&lt;670&gt; LL/token: -7.84603
+&lt;680&gt; LL/token: -7.84372
+&lt;690&gt; LL/token: -7.84266
+
+0   0.02892 the said manfred thou his isabella gutenberg project not thy matilda lord theodore thee this hippolita with princess prince for 
+1   0.66825 the that and was this had been with from which who some have not were them only most their found 
+2   0.06176 and his the lord him said sir they edmund scrooge them upon baron philip their all will for with oswald 
+3   0.06022 that poirot sir not mrs inglethorp was but yes had you john moor she did cavendish been all henry there 
+4   0.27603 and but not had when life was myself eyes one father yet our feelings their might did for now elizabeth 
+5   0.06839 tuppence tommy julius you all but she sir they said mrs james dont jane thats her know girl its vandemeyer 
+6   0.16123 the and aubert they their now with woods where them mountains over among blanche little along road till then sun 
+7   0.08574 and all that for not his when she her him our van there are helsing which shall may but lucy 
+8   0.60405 the was and had his with not for but door could room then out were there been into down them 
+9   0.53556 and you that his for him said have was with out one about now there what they little any would 
+10  0.44628 the and which that they with from were this was but their its upon all who some these one more 
+11  0.09074 she her the emily and had that but montoni said not was now valancourt this annette madame who count when 
+12  0.07214 the had which miss sergeant franklin all rachel diamond betteredge your time when two blake own cuff house what sir 
+13  0.51134 and the his was with had which for him that from would more when could than were one time upon 
+14  0.32139 her she and but herself was mother woman lady before young daughter father only again should been found words dear 
+15  0.16702 his upon which holmes and all our there that have very you man has had two would one are watson 
+16  0.10336 not and her catherine she very for was they but could miss all mrs had such their tilney them being 
+17  0.06338 his the upon not your him antonia agnes ambrosio lorenzo every was with matilda them till now still bosom himself 
+18  0.60662 you the that not and have but your will this what are said shall for all him with should then 
+19  0.10424 the have upon not for but all its been one there any would are will body this about which thus 
+
+[beta: 0.02348] 
+&lt;700&gt; LL/token: -7.84077
+&lt;710&gt; LL/token: -7.83675
+&lt;720&gt; LL/token: -7.83602
+&lt;730&gt; LL/token: -7.83592
+&lt;740&gt; LL/token: -7.83498
+&lt;750&gt; LL/token: -7.83508
+&lt;760&gt; LL/token: -7.83264
+&lt;770&gt; LL/token: -7.83079
+&lt;780&gt; LL/token: -7.83292
+&lt;790&gt; LL/token: -7.83617
+
+0   0.02438 the manfred said thou not isabella project gutenberg his lord thy matilda this theodore hippolita thee princess prince work for 
+1   0.72848 the that and was this been had from have with which not were who some his found them their house 
+2   0.053   and his the said lord sir him they edmund scrooge baron philip them upon their all for oswald will lovel 
+3   0.04773 that poirot sir not was inglethorp mrs but yes john she did moor all had cavendish henry there you his 
+4   0.24035 and but not when myself life yet one our did feelings these every miserable elizabeth before death even their human 
+5   0.05627 tuppence tommy but julius you all sir dont they james mrs jane thats then well vandemeyer young know girl said 
+6   0.1458  the and aubert with they their where woods now them over mountains along among blanche little whose road into air 
+7   0.0735  and all that for not his when our van but her may him she helsing shall which have are lucy 
+8   0.63574 the was and had his with not there could room door out then for but them were been into down 
+9   0.56895 and that you for was his him said with have one out about what had there when they any now 
+10  0.46925 the and that which they with from was were this but their upon its for had who some all through 
+11  0.07946 her she the emily that not but had and montoni said now valancourt was this annette madame count then who 
+12  0.06546 the had miss sergeant franklin all which rachel diamond betteredge house time own lady room blake cuff two godfrey again 
+13  0.54898 and the his was had with which for that him from would when could more than were upon time one 
+14  0.34198 her she herself was and mother but lady woman daughter before should young father our again being dear girl child 
+15  0.13221 his upon which holmes our all that there and have very has had you but man would two watson case 
+16  0.08579 not catherine and very her but they she all for could miss mrs tilney their such had them general isabella 
+17  0.05197 the his upon not your him agnes antonia every ambrosio with lorenzo them matilda till bosom himself but now convent 
+18  0.66548 you the that have and but your not will this what for are said shall all with him who must 
+19  0.0819  the upon have not for but its one all been which this there would any will are now body corpse 
+
+[beta: 0.02363] 
+&lt;800&gt; LL/token: -7.83773
+&lt;810&gt; LL/token: -7.84024
+&lt;820&gt; LL/token: -7.83549
+&lt;830&gt; LL/token: -7.83586
+&lt;840&gt; LL/token: -7.83614
+&lt;850&gt; LL/token: -7.83538
+&lt;860&gt; LL/token: -7.8357
+&lt;870&gt; LL/token: -7.83683
+&lt;880&gt; LL/token: -7.83582
+&lt;890&gt; LL/token: -7.83568
+
+0   0.02137 the manfred said thou not isabella gutenberg project his matilda thy lord theodore this hippolita thee princess prince with work 
+1   0.77249 the and that was this had with been from have which his who some were not them found their house 
+2   0.04679 and his the lord said him sir they edmund scrooge baron them philip upon their all with oswald lovel your 
+3   0.03831 poirot sir that not inglethorp mrs was yes but john had moor all did cavendish you been his henry one 
+4   0.21148 and but not when myself life did one our eyes yet even saw elizabeth being before now only man feelings 
+5   0.05278 tuppence tommy but julius you all sir they dont james his mrs thats jane know girl well vandemeyer said got 
+6   0.1376  the and aubert with they now woods their where among over them road blanche little air scene mountains after distance 
+7   0.06791 and all that his not for when him our but van helsing may shall are there she lucy must have 
+8   0.65316 the was and had his not door with could room but then for there been were them hand into back 
+9   0.59707 and that you for was him said out with have about one there what had his little any now would 
+10  0.4822  the and that which with from they was were this but upon their had all who for its some into 
+11  0.07298 she her the emily and had but not that montoni said was now valancourt annette madame count when this who 
+12  0.06405 the had which miss sergeant franklin all rachel diamond his betteredge time when your own blake house room cuff godfrey 
+13  0.58627 and the his was had with which for that him from would could more when were upon than one heart 
+14  0.35952 her she was herself and mother woman before lady but first again out daughter wife father eyes dear child part 
+15  0.11438 his which upon holmes and that our all have there man very has would you one are watson sherlock case 
+16  0.07561 not and catherine very but they could miss all mrs her tilney for such being them their were she general 
+17  0.04397 his the upon your not him antonia agnes ambrosio lorenzo them matilda till every bosom now convent moment being though 
+18  0.71708 you the that have not but will and your this what for said are him shall with who all then 
+19  0.07067 the have upon not but for all one which would this are its been there will any about body now 
+
+[beta: 0.02363] 
+&lt;900&gt; LL/token: -7.83509
+&lt;910&gt; LL/token: -7.83524
+&lt;920&gt; LL/token: -7.83645
+&lt;930&gt; LL/token: -7.83813
+&lt;940&gt; LL/token: -7.83812
+&lt;950&gt; LL/token: -7.8392
+&lt;960&gt; LL/token: -7.84014
+&lt;970&gt; LL/token: -7.83786
+&lt;980&gt; LL/token: -7.83861
+&lt;990&gt; LL/token: -7.83869
+
+0   0.0195  the manfred said thou not isabella project gutenberg matilda thy lord his theodore hippolita princess thee prince work this any 
+1   0.81121 the and that was with this been have from which his had were some who found not these their they 
+2   0.04306 and his the lord said him sir they edmund scrooge baron upon philip them their your will all oswald lovel 
+3   0.03456 that poirot sir not mrs inglethorp had but his john all was moor yes did cavendish been henry she you 
+4   0.19247 and but not when myself one life did our before eyes miserable elizabeth now father should yet feelings being man 
+5   0.04741 tuppence tommy you julius but all sir dont his james thats mrs jane they girl know well vandemeyer young right 
+6   0.13556 the and aubert with they their woods where now blanche among little over mountains sun road air along his till 
+7   0.06105 and all his that not for when van our him her helsing she which shall may are lucy must there 
+8   0.65916 the was and had his not with there door room then been but could out into hand back away seemed 
+9   0.62091 and that was for you him said with have one out had about what there now little when time his 
+10  0.49278 the and that was which they from were with but this their for had upon who its all one them 
+11  0.07077 she her the emily not and that had montoni but said was now valancourt annette madame count who when then 
+12  0.06079 the had miss sergeant franklin which all rachel diamond betteredge his own time house blake when lady cuff room godfrey 
+13  0.61775 and the his was had with which for that him from would when could more than were upon all heart 
+14  0.37329 her she was and herself but out before woman mother again lady young should father daughter dear friends about only 
+15  0.10324 his which upon holmes all that and our had you man very there has have would watson well sherlock one 
+16  0.06924 not catherine very and they could but all miss mrs tilney for their being been such were general isabella would 
+17  0.03931 the his upon not your him with agnes antonia ambrosio lorenzo matilda now them every bosom being till convent though 
+18  0.76189 you the that have but not and your will this what for are said shall him all who can has 
+19  0.06219 the not upon have but all been for one its which this are would now will body about thus there 
+
+[beta: 0.02376] 
+&lt;1000&gt; LL/token: -7.83938
+
+Total time: 3 minutes 6 seconds</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="appendix-readme" class="level1">
+<h1>Appendix: README</h1>
+<p><a href="https://mimno.github.io/Mallet/topics">Download MALLET here</a> | <a href="https://github.com/ontoligent/mazo">Mazo, a wrapper around MALLET to organize its output.</a></p>
+<p><a href="https://travis-ci.com/MNCC/Mallet"><img src="https://travis-ci.com/MNCC/Mallet.svg?branch=master" class="img-fluid" alt="Build Status"></a> <a href="https://codecov.io/gh/MNCC/Mallet"><img src="https://codecov.io/gh/MNCC/Mallet/branch/master/graph/badge.svg" class="img-fluid" alt="codecov"></a></p>
+</section>
+<section id="mallet" class="level1">
+<h1>Mallet</h1>
+<p>Website: https://mimno.github.io/Mallet/</p>
+<p>MALLET is a Java-based package for statistical natural language processing, document classification, clustering, topic modeling, information extraction, and other machine learning applications to text.</p>
+<p>MALLET includes sophisticated tools for document classification: efficient routines for converting text to “features”, a wide variety of algorithms (including Naïve Bayes, Maximum Entropy, and Decision Trees), and code for evaluating classifier performance using several commonly used metrics.</p>
+<p>In addition to classification, MALLET includes tools for sequence tagging for applications such as named-entity extraction from text. Algorithms include Hidden Markov Models, Maximum Entropy Markov Models, and Conditional Random Fields. These methods are implemented in an extensible system for finite state transducers.</p>
+<p>Topic models are useful for analyzing large collections of unlabeled text. The MALLET topic modeling toolkit contains efficient, sampling-based implementations of Latent Dirichlet Allocation, Pachinko Allocation, and Hierarchical LDA.</p>
+<p>Many of the algorithms in MALLET depend on numerical optimization. MALLET includes an efficient implementation of Limited Memory BFGS, among many other optimization methods.</p>
+<p>In addition to sophisticated Machine Learning applications, MALLET includes routines for transforming text documents into numerical representations that can then be processed efficiently. This process is implemented through a flexible system of “pipes”, which handle distinct tasks such as tokenizing strings, removing stopwords, and converting sequences into count vectors.</p>
+<p>An add-on package to MALLET, called GRMM, contains support for inference in general graphical models, and training of CRFs with arbitrary graphical structure.</p>
+<section id="installation" class="level2">
+<h2 class="anchored" data-anchor-id="installation">Installation</h2>
+<p>To build a Mallet 2.0 development release, you must have the Apache ant build tool installed. From the command prompt, first change to the mallet directory, and then type <code>ant</code></p>
+<p>If <code>ant</code> finishes with <code>"BUILD SUCCESSFUL"</code>, Mallet is now ready to use.</p>
+<p>If you would like to deploy Mallet as part of a larger application, it is helpful to create a single “.jar” file that contains all of the compiled code. Once you have compiled the individual Mallet class files, use the command: <code>ant jar</code></p>
+<p>This process will create a file “mallet.jar” in the “dist” directory within Mallet.</p>
+</section>
+<section id="usage" class="level2">
+<h2 class="anchored" data-anchor-id="usage">Usage</h2>
+<p>Once you have installed Mallet you can use it using the following command:</p>
+<pre><code>bin/mallet [command] --option value --option value ...</code></pre>
+<p>Type <code>bin/mallet</code> to get a list of commands, and use the option <code>--help</code> with any command to get a description of valid options.</p>
+<p>For details about the commands please visit the API documentation and website at: https://mimno.github.io/Mallet/</p>
+</section>
+<section id="list-of-algorithms" class="level2">
+<h2 class="anchored" data-anchor-id="list-of-algorithms">List of Algorithms</h2>
+<ul>
+<li>Topic Modelling
+<ul>
+<li>LDA</li>
+<li>Parallel LDA</li>
+<li>DMR LDA</li>
+<li>Hierarchical LDA</li>
+<li>Labeled LDA</li>
+<li>Polylingual Topic Model</li>
+<li>Hierarchical Pachinko Allocation Model (PAM)</li>
+<li>Weighted Topic Model</li>
+<li>LDA with integrated phrase discovery</li>
+<li>Word Embeddings (word2vec) using skip-gram with negative sampling</li>
+</ul></li>
+<li>Classification
+<ul>
+<li>AdaBoost</li>
+<li>Bagging</li>
+<li>Winnow</li>
+<li>C45 Decision Tree</li>
+<li>Ensemble Trainer</li>
+<li>Maximum Entropy Classifier (Multinomial Logistic Regression)</li>
+<li>Naive Bayes</li>
+<li>Rank Maximum Entropy Classifier</li>
+<li>Posterior Regularization Auxiliary Model</li>
+</ul></li>
+<li>Clustering
+<ul>
+<li>Greedy Agglomerative</li>
+<li>Hill Climbing</li>
+<li>K-Means</li>
+<li>K-Best</li>
+</ul></li>
+<li>Sequence Prediction Models
+<ul>
+<li>Conditional Random Fields</li>
+<li>Maximum Entropy Markov Models</li>
+<li>Hidden Markov Models</li>
+<li>Semi-Supervised Sequence Prediction Models</li>
+</ul></li>
+<li>Linear Regression</li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../lessons/M08a_Visualization/M08a_02_GensimRunCompareLDA.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Metadata</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../lessons/M08a_Visualization/M08a_04_Mazo.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-title">Metadata</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

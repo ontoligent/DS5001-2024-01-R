@@ -1,0 +1,14 @@
+version: 1
+course_num: "DS 5001"
+course_title: "Exploratory Text Analytics"
+academic_term: "Spring 2024"
+cohort_type: "Residential"
+course_code: "DS5001-2024-01-R"
+course_allocation: "msds_ds5001"
+instructor: "Rafael C. Alvarado"
+
+# canvas_url: "https://canvas.its.virginia.edu/courses/75059"
+# github_url: "https://github.com/ontoligent/DS5100-2023-08-O"
+# website_url: "https://ontoligent.github.io/DS5100-2023-08-O"
+# survey_form_url: "https://forms.office.com/r/YWaFPXPKz8"
+# request_form_url: "https://forms.office.com/r/7G65N5eppk" 

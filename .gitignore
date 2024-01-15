@@ -1,5 +1,4 @@
 # SYSTEM
-notebooks/env.ini
 .Rhistory
 .Rproj.user
 repo.Rproj
@@ -23,9 +22,10 @@ repo.Rproj
 **/mallet
 **/*.mallet
 **/M08a*/output
+lessons/env.ini
 
 # CONTENT
-**/cookiecutter.png 
+**/cookiecutter.png
 !lessons/M01*
 lessons/M02*
 lessons/M03*
@@ -42,3 +42,4 @@ lessons/M13*
 lessons/M90*
 lessons/M91*
 lessons/M92*
+/.quarto/

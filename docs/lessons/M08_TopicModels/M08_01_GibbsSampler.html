@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.262">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Exploratory Text Analytics - 25&nbsp; Gibbs Sampler</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../lessons/M08_TopicModels/M08_02_LDASciKitLearn.html" rel="next">
+<link href="../../lessons/M07_FeaturesAndComponents/M07_01_PCA.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Gibbs Sampler</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Exploratory Text Analytics</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ontoligent/DS5001-2024-01-R" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">M01 Introduction</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_01_getting-started.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Setting Up Your Jupyter Environmnet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_02_hello.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: Hello, World!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_03_first-foray.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: First Foray</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_04_FurtherExploration.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: Further Exploration</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">M02 TextModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_01_Importing-Persuasion.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Text into Data: Importing a Text, or, Clip, Chunk, and Split</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_02_TokenizingWithSciKitLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Tokenizing with SciKit Learn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_03_Challenge.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Challenge: Convert Another Text</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">M03 LanguageModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_01_Babel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Baby Babel</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_01a_EntropyExamples.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy Examples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V1.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models v1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models (v2)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V3.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models (v3)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_SimpleLangModel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Demonstration of Simple Language Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_03_Entropy-and-Perplexity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy and Peplexity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_04-Entropy-and-Term-Length.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy and Term Length</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_EZ.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">How to Create an N-Gram Model from ScratchHow to Create an N-Gram Model from Scratch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">M04 NLP</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_00_NLTK_Intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">NLTK Parsers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_01_Pipeline.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">NLP and the Pipeline</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_02_HMM.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Predict POS with an HMM</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">M05 VectorSpaceModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_01_BOW_TFIDF.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Vector Spaces, BOW, and TFIDF</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_02_TimeTokenMatrices.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Time-Token Matrices</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_03_TFIDF_Exploration.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Variant TFIDFs and Document Significance</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false">M06 CusteringSimilarity</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M06_CusteringSimilarity/M06_01_SimilarityMeasures.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Similarity and Distance Measures</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false">M07 FeaturesAndComponents</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M07_FeaturesAndComponents/M07_01_PCA.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">PCA from Scratch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true">M08 TopicModels</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_01_GibbsSampler.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Gibbs Sampler</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_02_LDASciKitLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LDA with SciKit Learn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_03_TopicSimilarity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Topic Similarity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_04_TopicContiguity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Topic Contiguity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_05_PyLDAVis.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">PyLDAVis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Untitled.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">M08a Visualization</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_01_Gensim.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Other Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_02_GensimRunCompareLDA.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_03_MALLET.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_04_Mazo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">M09 WordEmbedding</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_01_GloVe.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_02_PMI_SVD.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_03_SkipgramRepresentation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_04_word2vec.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_05_FastText.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Untitled.html</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/run_fasttext.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">FastText Model</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="false">M10 SentimentAnalysis</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_01_GeneralInquirer.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_02_CombineLexicons.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_03_Novel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_04_AustenMelville.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_05_WordShiftGraphs.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_06_Doc2Vec.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" aria-expanded="false">M11 Narrative</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_01_ExportBooksWithSentiment.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_02_SyuzhetPlots.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_03_Syuzhet_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_04_Syuzhet_RGeneral.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" aria-expanded="false">M12 Classification</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_01_NaiveBayesWineReviews.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_01b_SKLearnMNB.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_02_PerceptronWine.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_03.ExpectedMutualInformation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_04_Viz.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" aria-expanded="false">M13 LLMs</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-14" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_01_ChatGPTDemo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_02_ChatGPTDemo2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_03_ChatGPT4Demo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_play.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">M13_play.html</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/tokenizer_training.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Loading the dataset</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" aria-expanded="false">M90 DispersionPlots</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-15" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M90_DispersionPlots/m01.04-austen-kde.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Synopsis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M90_DispersionPlots/onehot.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">onehot.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" aria-expanded="false">M91 Charrette</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-16" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M91_Charrette/CharretteFIguresAndCharacters.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Figures and Characters</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M91_Charrette/CharretteTokens.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Config</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-17" aria-expanded="false">M92 Helpers</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-17" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-17" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M92_Helpers/M00_01_VectorizationWithSKLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M92_Helpers/M00_02_SpaCy.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#convert-f1-corpus" id="toc-convert-f1-corpus" class="nav-link" data-scroll-target="#convert-f1-corpus">Convert F1 Corpus</a></li>
+  <li><a href="#gibbs-sampler" id="toc-gibbs-sampler" class="nav-link" data-scroll-target="#gibbs-sampler">Gibbs Sampler</a></li>
+  <li><a href="#demo-1" id="toc-demo-1" class="nav-link" data-scroll-target="#demo-1">Demo 1</a>
+  <ul class="collapse">
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
+  <li><a href="#process" id="toc-process" class="nav-link" data-scroll-target="#process">Process</a></li>
+  </ul></li>
+  <li><a href="#demo-2" id="toc-demo-2" class="nav-link" data-scroll-target="#demo-2">Demo 2</a>
+  <ul class="collapse">
+  <li><a href="#data-1" id="toc-data-1" class="nav-link" data-scroll-target="#data-1">Data</a></li>
+  <li><a href="#process-1" id="toc-process-1" class="nav-link" data-scroll-target="#process-1">Process</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.dev/ontoligent/DS5001-2024-01-R/blob/main/lessons/M08_TopicModels/M08_01_GibbsSampler.ipynb" class="toc-action">Edit this page</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-title">Gibbs Sampler</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Course</span><span class="kw">:</span><span class="at">    DS 5001 </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Module</span><span class="kw">:</span><span class="at">    08 Lab</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Topic</span><span class="kw">:</span><span class="at">     Gibbs Sampler</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Author</span><span class="kw">:</span><span class="at">    R.C. Alvarado</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">Date</span><span class="kw">:</span><span class="at">      03 March 2023 (revised)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Purpose:</strong> We develop a simple topic modeler using collapsed Gibbs sampling as described by <a href="https://collab.its.virginia.edu/access/content/group/b9e58ce7-0f44-48fe-9861-b7a7657f551a/Articles/sciencetopics.pdf">Griffiths and Steyvers (2004)</a>.</p>
+<section id="setup" class="level1">
+<h1>Setup</h1>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> tqdm <span class="im">import</span> tqdm</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> stopwords </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="convert-f1-corpus" class="level1">
+<h1>Convert F1 Corpus</h1>
+<p>We want to convert any given F1 corpus (DOC) into unannotated TOKEN and VOCAB tables.</p>
+<p>This is so we can work with ad hoc training data.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Corpus:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, doc_list:<span class="bu">list</span>, doc_col<span class="op">=</span><span class="st">'doc_str'</span>):</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="co">"Create DOC table from F1 list"</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.DOC <span class="op">=</span> pd.DataFrame(doc_list, columns<span class="op">=</span>[doc_col])</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.DOC.index.name <span class="op">=</span> <span class="st">'doc_id'</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.stop_words <span class="op">=</span> <span class="bu">set</span>(stopwords.words(<span class="st">'english'</span>)) </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> convert_corpus(<span class="va">self</span>):        </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="co">"Convert raw docs into TOKEN and BOW tables"</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        tokens <span class="op">=</span> []</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i, row <span class="kw">in</span> <span class="va">self</span>.DOC.iterrows():</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> j, token <span class="kw">in</span> <span class="bu">enumerate</span>(row.doc_str.split()):</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>                term_str <span class="op">=</span> re.sub(<span class="vs">r'[\W_]+'</span>, <span class="st">''</span>, token).lower()</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> term_str <span class="kw">not</span> <span class="kw">in</span> <span class="va">self</span>.stop_words:</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                    tokens.append((i, j, term_str))</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.TOKEN <span class="op">=</span> pd.DataFrame(tokens, columns<span class="op">=</span>[<span class="st">'doc_id'</span>,<span class="st">'token_num'</span>,<span class="st">'term_str'</span>])<span class="op">\</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>            .set_index([<span class="st">'doc_id'</span>,<span class="st">'token_num'</span>])</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.BOW <span class="op">=</span> <span class="va">self</span>.TOKEN.groupby([<span class="st">'doc_id'</span>,<span class="st">'term_str'</span>]).term_str.count().to_frame(<span class="st">'n'</span>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> extract_vocab(<span class="va">self</span>):</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        <span class="co">"Extract vocabulary"</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.VOCAB <span class="op">=</span> <span class="va">self</span>.TOKEN.term_str.value_counts().to_frame(<span class="st">'n'</span>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.VOCAB.index.name <span class="op">=</span> <span class="st">'term_str'</span>   </span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span> </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>raw_docs <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">I ate a banana and a spinach smoothie for breakfast.</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">I like to eat broccoli and bananas.</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">Chinchillas and kittens are cute.</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">My sister adopted a kitten yesterday.</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">Look at this cute hamster munching on a piece of broccoli.</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>.split(<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)[<span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>corpus1 <span class="op">=</span> Corpus(raw_docs).convert_corpus().extract_vocab()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>corpus1.BOW</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>n</th>
+    </tr>
+    <tr>
+      <th>doc_id</th>
+      <th>term_str</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">0</th>
+      <th>ate</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>banana</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>breakfast</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>smoothie</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>spinach</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th rowspan="4" valign="top">1</th>
+      <th>bananas</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>broccoli</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>eat</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>like</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">2</th>
+      <th>chinchillas</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>cute</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>kittens</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th rowspan="4" valign="top">3</th>
+      <th>adopted</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>kitten</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>sister</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>yesterday</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th rowspan="6" valign="top">4</th>
+      <th>broccoli</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>cute</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>hamster</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>look</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>munching</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>piece</th>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="gibbs-sampler" class="level1">
+<h1>Gibbs Sampler</h1>
+<p>We sample each document and word combination in the BOW table. In each case, we are looking for two values:</p>
+<ul>
+<li>the topic with which a word has been most frequently labeled</li>
+<li>the topic with which the document has the most labeled words</li>
+</ul>
+<p>We combine these values in order to align the label of the current word with the rest of the data.<br>
+If a the topic is highly associated with both the word and the document, then that topic will get a high value.</p>
+<p>Note that all that is going on here is a sorting operation – the random assignment does not predict anything.<br>
+Instead, we are just gathering words under topics and topics under documents.</p>
+<strong>From Darling 2011:</strong>
+<hr>
+<div style="float:left;">
+<p><img src="images/gibbs-algo-text.png" width="650px"> <img src="images/gibbs-algo.png" width="650px"></p>
+</div>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> GibbsSampler:</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, n_topics<span class="op">=</span><span class="dv">10</span>, iters<span class="op">=</span><span class="dv">100</span>, a <span class="op">=</span> <span class="dv">1</span>, b <span class="op">=</span> <span class="fl">.1</span>):</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Map arguments</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.n_topics <span class="op">=</span> n_topics</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.iters <span class="op">=</span> iters</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.a <span class="op">=</span> a</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.b <span class="op">=</span> b </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Define topic table</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        topic_names <span class="op">=</span> [<span class="ss">f"T</span><span class="sc">{</span><span class="bu">str</span>(t)<span class="sc">.</span>zfill(<span class="bu">len</span>(<span class="bu">str</span>(<span class="va">self</span>.n_topics)))<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> t <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.n_topics)]</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.TOPIC <span class="op">=</span> pd.DataFrame({<span class="st">'top_terms'</span>:<span class="st">'TBD'</span>}, index<span class="op">=</span>topic_names)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.TOPIC.index.name <span class="op">=</span> <span class="st">'topic_id'</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> add_corpus(<span class="va">self</span>, corpus:Corpus):</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Copy BOW and assign random topics        </span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.BOW <span class="op">=</span> corpus.BOW.copy()</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.BOW[<span class="st">'topic_id'</span>] <span class="op">=</span> <span class="va">self</span>.TOPIC.sample(<span class="bu">len</span>(<span class="va">self</span>.BOW), replace<span class="op">=</span><span class="va">True</span>).index</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get vocab length</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.VOCAB <span class="op">=</span> corpus.VOCAB</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.W <span class="op">=</span> <span class="va">self</span>.VOCAB.shape[<span class="dv">0</span>]       </span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> compute_topics(<span class="va">self</span>):</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Create count tables</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.THETA <span class="op">=</span> <span class="va">self</span>.BOW.value_counts([<span class="st">'doc_id'</span>, <span class="st">'topic_id'</span>]).unstack().fillna(<span class="dv">0</span>)</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.PHI <span class="op">=</span> <span class="va">self</span>.BOW.value_counts([<span class="st">'topic_id'</span>, <span class="st">'term_str'</span>]).unstack().fillna(<span class="dv">0</span>)</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.TOPIC[<span class="st">'n'</span>] <span class="op">=</span> <span class="va">self</span>.BOW.value_counts(<span class="st">'topic_id'</span>).fillna(<span class="dv">0</span>)</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Iterate </span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> tqdm(<span class="bu">range</span>(<span class="va">self</span>.iters)):  </span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Estimage topic per word</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> doc_id, term_str <span class="kw">in</span> <span class="va">self</span>.BOW.index:</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>                <span class="co"># Get the currenttly assigned topic</span></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>                z <span class="op">=</span> <span class="va">self</span>.BOW.loc[(doc_id, term_str)].topic_id</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>                <span class="co"># ... and remove from counts</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>                <span class="va">self</span>.THETA.loc[doc_id, z] <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>                <span class="va">self</span>.PHI.loc[z, term_str] <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>                <span class="va">self</span>.TOPIC.loc[z, <span class="st">'n'</span>]    <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>                                </span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>                <span class="co"># Estimate probability of new topic for this word</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>                <span class="co"># A, B, and C are each topic vectors with counts in a given context</span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>                A <span class="op">=</span> <span class="va">self</span>.THETA.loc[doc_id] <span class="op">+</span> <span class="va">self</span>.a <span class="co"># Context = document</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>                B <span class="op">=</span> <span class="va">self</span>.PHI[term_str] <span class="op">+</span> <span class="va">self</span>.b <span class="co"># Context = vocab</span></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>                AP <span class="op">=</span> A.T <span class="op">/</span> A.T.<span class="bu">sum</span>()</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>                BP <span class="op">=</span> B.T <span class="op">/</span> B.T.<span class="bu">sum</span>()</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>                PZ <span class="op">=</span> AP <span class="op">*</span> BP</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>                <span class="co"># Darling 2011</span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>                <span class="co"># C = self.TOPIC['n'] + (self.b * self.W) # Context = corpus</span></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>                <span class="co"># PZ = A * (B/C)</span></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>                <span class="co"># Sample from new distribution and reassign</span></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>                z2 <span class="op">=</span> PZ.sample(weights<span class="op">=</span>PZ).index[<span class="dv">0</span>]</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>                <span class="va">self</span>.THETA.loc[doc_id, z2] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>                <span class="va">self</span>.PHI.loc[z2, term_str] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>                <span class="va">self</span>.TOPIC.loc[z2, <span class="st">'n'</span>]    <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>                <span class="va">self</span>.BOW.loc[(doc_id, term_str), <span class="st">'topic_id'</span>] <span class="op">=</span> z2</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Compute perplexity of each iteration</span></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_top_terms(<span class="va">self</span>):</span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Get top words for each topic</span></span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> topic_id <span class="kw">in</span> <span class="va">self</span>.TOPIC.index:</span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.TOPIC.loc[topic_id, <span class="st">'top_terms'</span>] <span class="op">=</span> <span class="st">' '</span>.join(<span class="va">self</span>.PHI.loc[topic_id, <span class="va">self</span>.PHI.loc[topic_id] <span class="op">&gt;</span> <span class="dv">0</span>].index.values)</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> do_all(f1_list:[], k<span class="op">=</span><span class="dv">4</span>, iters<span class="op">=</span><span class="dv">100</span>):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    corpus <span class="op">=</span> Corpus(f1_list).convert_corpus().extract_vocab()</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    model <span class="op">=</span> GibbsSampler(n_topics<span class="op">=</span>k, iters<span class="op">=</span>iters, a<span class="op">=</span><span class="dv">1</span>, b<span class="op">=</span><span class="dv">1</span>).add_corpus(corpus).compute_topics().get_top_terms()</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> corpus, model</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="demo-1" class="level1">
+<h1>Demo 1</h1>
+<p>We use a toy example to see if the method works.<br>
+Because our codd is not vert efficient, we just</p>
+<section id="data" class="level2">
+<h2 class="anchored" data-anchor-id="data">Data</h2>
+<p>A small F1 corpus.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>raw_docs <span class="op">=</span> <span class="st">"""</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="st">I ate a banana and a spinach smoothie for breakfast.</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="st">I like to eat broccoli and bananas.</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="st">Chinchillas and kittens are cute.</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="st">My sister adopted a kitten yesterday.</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="st">Look at this cute hamster munching on a piece of broccoli.</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="st">"""</span>.split(<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)[<span class="dv">1</span>:<span class="op">-</span><span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="process" class="level2">
+<h2 class="anchored" data-anchor-id="process">Process</h2>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>cp1, tm1 <span class="op">=</span> do_all(raw_docs, k<span class="op">=</span><span class="dv">5</span>, iters<span class="op">=</span><span class="dv">500</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>100%|████████████████████████████████████████████████████████████████████████████████| 500/500 [00:19&lt;00:00, 25.32it/s]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tm1.TOPIC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>top_terms</th>
+      <th>n</th>
+    </tr>
+    <tr>
+      <th>topic_id</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>T0</th>
+      <td>breakfast broccoli cute yesterday</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>T1</th>
+      <td>ate cute kittens piece smoothie</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>T2</th>
+      <td>adopted broccoli eat kitten sister spinach</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>T3</th>
+      <td>bananas chinchillas like munching</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <th>T4</th>
+      <td>banana hamster look</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>cp1.DOC.join(tm1.THETA.astype(<span class="st">'int'</span>)).style.background_gradient(axis<span class="op">=</span><span class="va">None</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
+
+<style type="text/css">
+#T_56e05_row0_col1, #T_56e05_row0_col3, #T_56e05_row0_col5, #T_56e05_row1_col1, #T_56e05_row1_col3, #T_56e05_row2_col1, #T_56e05_row2_col2, #T_56e05_row2_col4, #T_56e05_row3_col1, #T_56e05_row4_col3, #T_56e05_row4_col4 {
+  background-color: #b4c4df;
+  color: #000000;
+}
+#T_56e05_row0_col2, #T_56e05_row1_col4, #T_56e05_row4_col2, #T_56e05_row4_col5 {
+  background-color: #2685bb;
+  color: #f1f1f1;
+}
+#T_56e05_row0_col4, #T_56e05_row1_col2, #T_56e05_row1_col5, #T_56e05_row2_col3, #T_56e05_row2_col5, #T_56e05_row3_col2, #T_56e05_row3_col4, #T_56e05_row3_col5, #T_56e05_row4_col1 {
+  background-color: #fff7fb;
+  color: #000000;
+}
+#T_56e05_row3_col3 {
+  background-color: #023858;
+  color: #f1f1f1;
+}
+</style>
+<table id="T_56e05">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_56e05_level0_col0" class="col_heading level0 col0">doc_str</th>
+      <th id="T_56e05_level0_col1" class="col_heading level0 col1">T0</th>
+      <th id="T_56e05_level0_col2" class="col_heading level0 col2">T1</th>
+      <th id="T_56e05_level0_col3" class="col_heading level0 col3">T2</th>
+      <th id="T_56e05_level0_col4" class="col_heading level0 col4">T3</th>
+      <th id="T_56e05_level0_col5" class="col_heading level0 col5">T4</th>
+    </tr>
+    <tr>
+      <th class="index_name level0">doc_id</th>
+      <th class="blank col0">&nbsp;</th>
+      <th class="blank col1">&nbsp;</th>
+      <th class="blank col2">&nbsp;</th>
+      <th class="blank col3">&nbsp;</th>
+      <th class="blank col4">&nbsp;</th>
+      <th class="blank col5">&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_56e05_level0_row0" class="row_heading level0 row0">0</th>
+      <td id="T_56e05_row0_col0" class="data row0 col0">I ate a banana and a spinach smoothie for breakfast.</td>
+      <td id="T_56e05_row0_col1" class="data row0 col1">1</td>
+      <td id="T_56e05_row0_col2" class="data row0 col2">2</td>
+      <td id="T_56e05_row0_col3" class="data row0 col3">1</td>
+      <td id="T_56e05_row0_col4" class="data row0 col4">0</td>
+      <td id="T_56e05_row0_col5" class="data row0 col5">1</td>
+    </tr>
+    <tr>
+      <th id="T_56e05_level0_row1" class="row_heading level0 row1">1</th>
+      <td id="T_56e05_row1_col0" class="data row1 col0">I like to eat broccoli and bananas.</td>
+      <td id="T_56e05_row1_col1" class="data row1 col1">1</td>
+      <td id="T_56e05_row1_col2" class="data row1 col2">0</td>
+      <td id="T_56e05_row1_col3" class="data row1 col3">1</td>
+      <td id="T_56e05_row1_col4" class="data row1 col4">2</td>
+      <td id="T_56e05_row1_col5" class="data row1 col5">0</td>
+    </tr>
+    <tr>
+      <th id="T_56e05_level0_row2" class="row_heading level0 row2">2</th>
+      <td id="T_56e05_row2_col0" class="data row2 col0">Chinchillas and kittens are cute.</td>
+      <td id="T_56e05_row2_col1" class="data row2 col1">1</td>
+      <td id="T_56e05_row2_col2" class="data row2 col2">1</td>
+      <td id="T_56e05_row2_col3" class="data row2 col3">0</td>
+      <td id="T_56e05_row2_col4" class="data row2 col4">1</td>
+      <td id="T_56e05_row2_col5" class="data row2 col5">0</td>
+    </tr>
+    <tr>
+      <th id="T_56e05_level0_row3" class="row_heading level0 row3">3</th>
+      <td id="T_56e05_row3_col0" class="data row3 col0">My sister adopted a kitten yesterday.</td>
+      <td id="T_56e05_row3_col1" class="data row3 col1">1</td>
+      <td id="T_56e05_row3_col2" class="data row3 col2">0</td>
+      <td id="T_56e05_row3_col3" class="data row3 col3">3</td>
+      <td id="T_56e05_row3_col4" class="data row3 col4">0</td>
+      <td id="T_56e05_row3_col5" class="data row3 col5">0</td>
+    </tr>
+    <tr>
+      <th id="T_56e05_level0_row4" class="row_heading level0 row4">4</th>
+      <td id="T_56e05_row4_col0" class="data row4 col0">Look at this cute hamster munching on a piece of broccoli.</td>
+      <td id="T_56e05_row4_col1" class="data row4 col1">0</td>
+      <td id="T_56e05_row4_col2" class="data row4 col2">2</td>
+      <td id="T_56e05_row4_col3" class="data row4 col3">1</td>
+      <td id="T_56e05_row4_col4" class="data row4 col4">1</td>
+      <td id="T_56e05_row4_col5" class="data row4 col5">2</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</section>
+</section>
+<section id="demo-2" class="level1">
+<h1>Demo 2</h1>
+<section id="data-1" class="level2">
+<h2 class="anchored" data-anchor-id="data-1">Data</h2>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>some_documents <span class="op">=</span> [</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"Hadoop"</span>, <span class="st">"Big Data"</span>, <span class="st">"HBase"</span>, <span class="st">"Java"</span>, <span class="st">"Spark"</span>, <span class="st">"Storm"</span>, <span class="st">"Cassandra"</span>],</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"NoSQL"</span>, <span class="st">"MongoDB"</span>, <span class="st">"Cassandra"</span>, <span class="st">"HBase"</span>, <span class="st">"Postgres"</span>],</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"Python"</span>, <span class="st">"scikit-learn"</span>, <span class="st">"scipy"</span>, <span class="st">"numpy"</span>, <span class="st">"statsmodels"</span>, <span class="st">"pandas"</span>],</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"R"</span>, <span class="st">"Python"</span>, <span class="st">"statistics"</span>, <span class="st">"regression"</span>, <span class="st">"probability"</span>],</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"machine learning"</span>, <span class="st">"regression"</span>, <span class="st">"decision trees"</span>, <span class="st">"libsvm"</span>],</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"Python"</span>, <span class="st">"R"</span>, <span class="st">"Java"</span>, <span class="st">"C++"</span>, <span class="st">"Haskell"</span>, <span class="st">"programming languages"</span>],</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"statistics"</span>, <span class="st">"probability"</span>, <span class="st">"mathematics"</span>, <span class="st">"theory"</span>],</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"machine learning"</span>, <span class="st">"scikit-learn"</span>, <span class="st">"Mahout"</span>, <span class="st">"neural networks"</span>],</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"neural networks"</span>, <span class="st">"deep learning"</span>, <span class="st">"Big Data"</span>, <span class="st">"artificial intelligence"</span>],</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"Hadoop"</span>, <span class="st">"Java"</span>, <span class="st">"MapReduce"</span>, <span class="st">"Big Data"</span>],</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"statistics"</span>, <span class="st">"R"</span>, <span class="st">"statsmodels"</span>],</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"C++"</span>, <span class="st">"deep learning"</span>, <span class="st">"artificial intelligence"</span>, <span class="st">"probability"</span>],</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"pandas"</span>, <span class="st">"R"</span>, <span class="st">"Python"</span>],</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"databases"</span>, <span class="st">"HBase"</span>, <span class="st">"Postgres"</span>, <span class="st">"MySQL"</span>, <span class="st">"MongoDB"</span>],</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    [<span class="st">"libsvm"</span>, <span class="st">"regression"</span>, <span class="st">"support vector machines"</span>]</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>raw_docs2  <span class="op">=</span> [<span class="st">' '</span>.join(item) <span class="cf">for</span> item <span class="kw">in</span> some_documents]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="process-1" class="level2">
+<h2 class="anchored" data-anchor-id="process-1">Process</h2>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>cp2, tm2 <span class="op">=</span> do_all(raw_docs2, k<span class="op">=</span><span class="dv">10</span>, iters<span class="op">=</span><span class="dv">500</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>100%|████████████████████████████████████████████████████████████████████████████████| 500/500 [01:13&lt;00:00,  6.76it/s]</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>tm2.TOPIC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>top_terms</th>
+      <th>n</th>
+    </tr>
+    <tr>
+      <th>topic_id</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>T00</th>
+      <td>big data hbase java languages learning postgre...</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>T01</th>
+      <td>data databases libsvm neural python support</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>T02</th>
+      <td>c decision deep mysql statsmodels storm vector</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>T03</th>
+      <td>artificial haskell neural probability python s...</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>T04</th>
+      <td>deep learning machine networks pandas postgres r</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>T05</th>
+      <td>hadoop machines mapreduce nosql probability sc...</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>T06</th>
+      <td>data hbase java learning mathematics networks ...</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>T07</th>
+      <td>big cassandra hbase learning machine mongodb s...</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>T08</th>
+      <td>artificial cassandra hadoop libsvm mongodb spa...</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <th>T09</th>
+      <td>intelligence java mahout numpy python r regres...</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>cp2.DOC.join(tm2.THETA.astype(<span class="st">'int'</span>)).style.background_gradient(axis<span class="op">=</span><span class="va">None</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+
+<style type="text/css">
+#T_b1d6a_row0_col1, #T_b1d6a_row0_col2, #T_b1d6a_row0_col3, #T_b1d6a_row0_col7, #T_b1d6a_row1_col1, #T_b1d6a_row1_col6, #T_b1d6a_row1_col7, #T_b1d6a_row1_col8, #T_b1d6a_row1_col9, #T_b1d6a_row2_col3, #T_b1d6a_row2_col4, #T_b1d6a_row2_col5, #T_b1d6a_row3_col2, #T_b1d6a_row3_col5, #T_b1d6a_row3_col7, #T_b1d6a_row3_col8, #T_b1d6a_row3_col10, #T_b1d6a_row4_col3, #T_b1d6a_row4_col7, #T_b1d6a_row5_col1, #T_b1d6a_row5_col3, #T_b1d6a_row5_col4, #T_b1d6a_row5_col7, #T_b1d6a_row6_col4, #T_b1d6a_row6_col7, #T_b1d6a_row7_col4, #T_b1d6a_row7_col6, #T_b1d6a_row7_col10, #T_b1d6a_row8_col1, #T_b1d6a_row8_col2, #T_b1d6a_row8_col3, #T_b1d6a_row8_col4, #T_b1d6a_row8_col10, #T_b1d6a_row9_col8, #T_b1d6a_row10_col3, #T_b1d6a_row10_col7, #T_b1d6a_row10_col8, #T_b1d6a_row11_col1, #T_b1d6a_row11_col3, #T_b1d6a_row11_col5, #T_b1d6a_row11_col6, #T_b1d6a_row11_col9, #T_b1d6a_row11_col10, #T_b1d6a_row12_col4, #T_b1d6a_row13_col1, #T_b1d6a_row13_col2, #T_b1d6a_row13_col3, #T_b1d6a_row13_col5, #T_b1d6a_row13_col9, #T_b1d6a_row14_col1, #T_b1d6a_row14_col3, #T_b1d6a_row14_col6 {
+  background-color: #b4c4df;
+  color: #000000;
+}
+#T_b1d6a_row0_col4, #T_b1d6a_row0_col5, #T_b1d6a_row0_col6, #T_b1d6a_row0_col10, #T_b1d6a_row1_col2, #T_b1d6a_row1_col3, #T_b1d6a_row1_col4, #T_b1d6a_row1_col5, #T_b1d6a_row1_col10, #T_b1d6a_row2_col1, #T_b1d6a_row2_col2, #T_b1d6a_row2_col6, #T_b1d6a_row2_col7, #T_b1d6a_row2_col8, #T_b1d6a_row2_col9, #T_b1d6a_row3_col1, #T_b1d6a_row3_col3, #T_b1d6a_row3_col4, #T_b1d6a_row3_col6, #T_b1d6a_row3_col9, #T_b1d6a_row4_col1, #T_b1d6a_row4_col2, #T_b1d6a_row4_col4, #T_b1d6a_row4_col5, #T_b1d6a_row4_col6, #T_b1d6a_row4_col10, #T_b1d6a_row5_col2, #T_b1d6a_row5_col5, #T_b1d6a_row5_col6, #T_b1d6a_row5_col8, #T_b1d6a_row5_col9, #T_b1d6a_row6_col2, #T_b1d6a_row6_col3, #T_b1d6a_row6_col5, #T_b1d6a_row6_col6, #T_b1d6a_row6_col8, #T_b1d6a_row6_col9, #T_b1d6a_row6_col10, #T_b1d6a_row7_col1, #T_b1d6a_row7_col2, #T_b1d6a_row7_col3, #T_b1d6a_row7_col7, #T_b1d6a_row7_col8, #T_b1d6a_row7_col9, #T_b1d6a_row8_col5, #T_b1d6a_row8_col6, #T_b1d6a_row8_col8, #T_b1d6a_row8_col9, #T_b1d6a_row9_col2, #T_b1d6a_row9_col3, #T_b1d6a_row9_col4, #T_b1d6a_row9_col5, #T_b1d6a_row9_col7, #T_b1d6a_row9_col9, #T_b1d6a_row9_col10, #T_b1d6a_row10_col1, #T_b1d6a_row10_col2, #T_b1d6a_row10_col4, #T_b1d6a_row10_col5, #T_b1d6a_row10_col6, #T_b1d6a_row10_col9, #T_b1d6a_row10_col10, #T_b1d6a_row11_col2, #T_b1d6a_row11_col4, #T_b1d6a_row11_col7, #T_b1d6a_row11_col8, #T_b1d6a_row12_col1, #T_b1d6a_row12_col2, #T_b1d6a_row12_col3, #T_b1d6a_row12_col5, #T_b1d6a_row12_col6, #T_b1d6a_row12_col8, #T_b1d6a_row12_col9, #T_b1d6a_row12_col10, #T_b1d6a_row13_col4, #T_b1d6a_row13_col6, #T_b1d6a_row13_col7, #T_b1d6a_row13_col8, #T_b1d6a_row13_col10, #T_b1d6a_row14_col4, #T_b1d6a_row14_col5, #T_b1d6a_row14_col7, #T_b1d6a_row14_col8, #T_b1d6a_row14_col9, #T_b1d6a_row14_col10 {
+  background-color: #fff7fb;
+  color: #000000;
+}
+#T_b1d6a_row0_col8, #T_b1d6a_row0_col9, #T_b1d6a_row4_col8, #T_b1d6a_row4_col9, #T_b1d6a_row6_col1, #T_b1d6a_row9_col1, #T_b1d6a_row9_col6, #T_b1d6a_row12_col7, #T_b1d6a_row14_col2 {
+  background-color: #2685bb;
+  color: #f1f1f1;
+}
+#T_b1d6a_row2_col10, #T_b1d6a_row5_col10, #T_b1d6a_row7_col5, #T_b1d6a_row8_col7 {
+  background-color: #023858;
+  color: #f1f1f1;
+}
+</style>
+<table id="T_b1d6a">
+  <thead>
+    <tr>
+      <th class="blank level0">&nbsp;</th>
+      <th id="T_b1d6a_level0_col0" class="col_heading level0 col0">doc_str</th>
+      <th id="T_b1d6a_level0_col1" class="col_heading level0 col1">T00</th>
+      <th id="T_b1d6a_level0_col2" class="col_heading level0 col2">T01</th>
+      <th id="T_b1d6a_level0_col3" class="col_heading level0 col3">T02</th>
+      <th id="T_b1d6a_level0_col4" class="col_heading level0 col4">T03</th>
+      <th id="T_b1d6a_level0_col5" class="col_heading level0 col5">T04</th>
+      <th id="T_b1d6a_level0_col6" class="col_heading level0 col6">T05</th>
+      <th id="T_b1d6a_level0_col7" class="col_heading level0 col7">T06</th>
+      <th id="T_b1d6a_level0_col8" class="col_heading level0 col8">T07</th>
+      <th id="T_b1d6a_level0_col9" class="col_heading level0 col9">T08</th>
+      <th id="T_b1d6a_level0_col10" class="col_heading level0 col10">T09</th>
+    </tr>
+    <tr>
+      <th class="index_name level0">doc_id</th>
+      <th class="blank col0">&nbsp;</th>
+      <th class="blank col1">&nbsp;</th>
+      <th class="blank col2">&nbsp;</th>
+      <th class="blank col3">&nbsp;</th>
+      <th class="blank col4">&nbsp;</th>
+      <th class="blank col5">&nbsp;</th>
+      <th class="blank col6">&nbsp;</th>
+      <th class="blank col7">&nbsp;</th>
+      <th class="blank col8">&nbsp;</th>
+      <th class="blank col9">&nbsp;</th>
+      <th class="blank col10">&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_b1d6a_level0_row0" class="row_heading level0 row0">0</th>
+      <td id="T_b1d6a_row0_col0" class="data row0 col0">Hadoop Big Data HBase Java Spark Storm Cassandra</td>
+      <td id="T_b1d6a_row0_col1" class="data row0 col1">1</td>
+      <td id="T_b1d6a_row0_col2" class="data row0 col2">1</td>
+      <td id="T_b1d6a_row0_col3" class="data row0 col3">1</td>
+      <td id="T_b1d6a_row0_col4" class="data row0 col4">0</td>
+      <td id="T_b1d6a_row0_col5" class="data row0 col5">0</td>
+      <td id="T_b1d6a_row0_col6" class="data row0 col6">0</td>
+      <td id="T_b1d6a_row0_col7" class="data row0 col7">1</td>
+      <td id="T_b1d6a_row0_col8" class="data row0 col8">2</td>
+      <td id="T_b1d6a_row0_col9" class="data row0 col9">2</td>
+      <td id="T_b1d6a_row0_col10" class="data row0 col10">0</td>
+    </tr>
+    <tr>
+      <th id="T_b1d6a_level0_row1" class="row_heading level0 row1">1</th>
+      <td id="T_b1d6a_row1_col0" class="data row1 col0">NoSQL MongoDB Cassandra HBase Postgres</td>
+      <td id="T_b1d6a_row1_col1" class="data row1 col1">1</td>
+      <td id="T_b1d6a_row1_col2" class="data row1 col2">0</td>
+      <td id="T_b1d6a_row1_col3" class="data row1 col3">0</td>
+      <td id="T_b1d6a_row1_col4" class="data row1 col4">0</td>
+      <td id="T_b1d6a_row1_col5" class="data row1 col5">0</td>
+      <td id="T_b1d6a_row1_col6" class="data row1 col6">1</td>
+      <td id="T_b1d6a_row1_col7" class="data row1 col7">1</td>
+      <td id="T_b1d6a_row1_col8" class="data row1 col8">1</td>
+      <td id="T_b1d6a_row1_col9" class="data row1 col9">1</td>
+      <td id="T_b1d6a_row1_col10" class="data row1 col10">0</td>
+    </tr>
+    <tr>
+      <th id="T_b1d6a_level0_row2" class="row_heading level0 row2">2</th>
+      <td id="T_b1d6a_row2_col0" class="data row2 col0">Python scikit-learn scipy numpy statsmodels pandas</td>
+      <td id="T_b1d6a_row2_col1" class="data row2 col1">0</td>
+      <td id="T_b1d6a_row2_col2" class="data row2 col2">0</td>
+      <td id="T_b1d6a_row2_col3" class="data row2 col3">1</td>
+      <td id="T_b1d6a_row2_col4" class="data row2 col4">1</td>
+      <td id="T_b1d6a_row2_col5" class="data row2 col5">1</td>
+      <td id="T_b1d6a_row2_col6" class="data row2 col6">0</td>
+      <td id="T_b1d6a_row2_col7" class="data row2 col7">0</td>
+      <td id="T_b1d6a_row2_col8" class="data row2 col8">0</td>
+      <td id="T_b1d6a_row2_col9" class="data row2 col9">0</td>
+      <td id="T_b1d6a_row2_col10" class="data row2 col10">3</td>
+    </tr>
+    <tr>
+      <th id="T_b1d6a_level0_row3" class="row_heading level0 row3">3</th>
+      <td id="T_b1d6a_row3_col0" class="data row3 col0">R Python statistics regression probability</td>
+      <td id="T_b1d6a_row3_col1" class="data row3 col1">0</td>
+      <td id="T_b1d6a_row3_col2" class="data row3 col2">1</td>
+      <td id="T_b1d6a_row3_col3" class="data row3 col3">0</td>
+      <td id="T_b1d6a_row3_col4" class="data row3 col4">0</td>
+      <td id="T_b1d6a_row3_col5" class="data row3 col5">1</td>
+      <td id="T_b1d6a_row3_col6" class="data row3 col6">0</td>
+      <td id="T_b1d6a_row3_col7" class="data row3 col7">1</td>
+      <td id="T_b1d6a_row3_col8" class="data row3 col8">1</td>
+      <td id="T_b1d6a_row3_col9" class="data row3 col9">0</td>
+      <td id="T_b1d6a_row3_col10" class="data row3 col10">1</td>
+    </tr>
+    <tr>
+      <th id="T_b1d6a_level0_row4" class="row_heading level0 row4">4</th>
+      <td id="T_b1d6a_row4_col0" class="data row4 col0">machine learning regression decision trees libsvm</td>
+      <td id="T_b1d6a_row4_col1" class="data row4 col1">0</td>
+      <td id="T_b1d6a_row4_col2" class="data row4 col2">0</td>
+      <td id="T_b1d6a_row4_col3" class="data row4 col3">1</td>
+      <td id="T_b1d6a_row4_col4" class="data row4 col4">0</td>
+      <td id="T_b1d6a_row4_col5" class="data row4 col5">0</td>
+      <td id="T_b1d6a_row4_col6" class="data row4 col6">0</td>
+      <td id="T_b1d6a_row4_col7" class="data row4 col7">1</td>
+      <td id="T_b1d6a_row4_col8" class="data row4 col8">2</td>
+      <td id="T_b1d6a_row4_col9" class="data row4 col9">2</td>
+      <td id="T_b1d6a_row4_col10" class="data row4 col10">0</td>
+    </tr>
+    <tr>
+      <th id="T_b1d6a_level0_row5" class="row_heading level0 row5">5</th>
+      <td id="T_b1d6a_row5_col0" class="data row5 col0">Python R Java C++ Haskell programming languages</td>
+      <td id="T_b1d6a_row5_col1" class="data row5 col1">1</td>
+      <td id="T_b1d6a_row5_col2" class="data row5 col2">0</td>
+      <td id="T_b1d6a_row5_col3" class="data row5 col3">1</td>
+      <td id="T_b1d6a_row5_col4" class="data row5 col4">1</td>
+      <td id="T_b1d6a_row5_col5" class="data row5 col5">0</td>
+      <td id="T_b1d6a_row5_col6" class="data row5 col6">0</td>
+      <td id="T_b1d6a_row5_col7" class="data row5 col7">1</td>
+      <td id="T_b1d6a_row5_col8" class="data row5 col8">0</td>
+      <td id="T_b1d6a_row5_col9" class="data row5 col9">0</td>
+      <td id="T_b1d6a_row5_col10" class="data row5 col10">3</td>
+    </tr>
+    <tr>
+      <th id="T_b1d6a_level0_row6" class="row_heading level0 row6">6</th>
+      <td id="T_b1d6a_row6_col0" class="data row6 col0">statistics probability mathematics theory</td>
+      <td id="T_b1d6a_row6_col1" class="data row6 col1">2</td>
+      <td id="T_b1d6a_row6_col2" class="data row6 col2">0</td>
+      <td id="T_b1d6a_row6_col3" class="data row6 col3">0</td>
+      <td id="T_b1d6a_row6_col4" class="data row6 col4">1</td>
+      <td id="T_b1d6a_row6_col5" class="data row6 col5">0</td>
+      <td id="T_b1d6a_row6_col6" class="data row6 col6">0</td>
+      <td id="T_b1d6a_row6_col7" class="data row6 col7">1</td>
+      <td id="T_b1d6a_row6_col8" class="data row6 col8">0</td>
+      <td id="T_b1d6a_row6_col9" class="data row6 col9">0</td>
+      <td id="T_b1d6a_row6_col10" class="data row6 col10">0</td>
+    </tr>
+    <tr>
+      <th id="T_b1d6a_level0_row7" class="row_heading level0 row7">7</th>
+      <td id="T_b1d6a_row7_col0" class="data row7 col0">machine learning scikit-learn Mahout neural networks</td>
+      <td id="T_b1d6a_row7_col1" class="data row7 col1">0</td>
+      <td id="T_b1d6a_row7_col2" class="data row7 col2">0</td>
+      <td id="T_b1d6a_row7_col3" class="data row7 col3">0</td>
+      <td id="T_b1d6a_row7_col4" class="data row7 col4">1</td>
+      <td id="T_b1d6a_row7_col5" class="data row7 col5">3</td>
+      <td id="T_b1d6a_row7_col6" class="data row7 col6">1</td>
+      <td id="T_b1d6a_row7_col7" class="data row7 col7">0</td>
+      <td id="T_b1d6a_row7_col8" class="data row7 col8">0</td>
+      <td id="T_b1d6a_row7_col9" class="data row7 col9">0</td>
+      <td id="T_b1d6a_row7_col10" class="data row7 col10">1</td>
+    </tr>
+    <tr>
+      <th id="T_b1d6a_level0_row8" class="row_heading level0 row8">8</th>
+      <td id="T_b1d6a_row8_col0" class="data row8 col0">neural networks deep learning Big Data artificial intelligence</td>
+      <td id="T_b1d6a_row8_col1" class="data row8 col1">1</td>
+      <td id="T_b1d6a_row8_col2" class="data row8 col2">1</td>
+      <td id="T_b1d6a_row8_col3" class="data row8 col3">1</td>
+      <td id="T_b1d6a_row8_col4" class="data row8 col4">1</td>
+      <td id="T_b1d6a_row8_col5" class="data row8 col5">0</td>
+      <td id="T_b1d6a_row8_col6" class="data row8 col6">0</td>
+      <td id="T_b1d6a_row8_col7" class="data row8 col7">3</td>
+      <td id="T_b1d6a_row8_col8" class="data row8 col8">0</td>
+      <td id="T_b1d6a_row8_col9" class="data row8 col9">0</td>
+      <td id="T_b1d6a_row8_col10" class="data row8 col10">1</td>
+    </tr>
+    <tr>
+      <th id="T_b1d6a_level0_row9" class="row_heading level0 row9">9</th>
+      <td id="T_b1d6a_row9_col0" class="data row9 col0">Hadoop Java MapReduce Big Data</td>
+      <td id="T_b1d6a_row9_col1" class="data row9 col1">2</td>
+      <td id="T_b1d6a_row9_col2" class="data row9 col2">0</td>
+      <td id="T_b1d6a_row9_col3" class="data row9 col3">0</td>
+      <td id="T_b1d6a_row9_col4" class="data row9 col4">0</td>
+      <td id="T_b1d6a_row9_col5" class="data row9 col5">0</td>
+      <td id="T_b1d6a_row9_col6" class="data row9 col6">2</td>
+      <td id="T_b1d6a_row9_col7" class="data row9 col7">0</td>
+      <td id="T_b1d6a_row9_col8" class="data row9 col8">1</td>
+      <td id="T_b1d6a_row9_col9" class="data row9 col9">0</td>
+      <td id="T_b1d6a_row9_col10" class="data row9 col10">0</td>
+    </tr>
+    <tr>
+      <th id="T_b1d6a_level0_row10" class="row_heading level0 row10">10</th>
+      <td id="T_b1d6a_row10_col0" class="data row10 col0">statistics R statsmodels</td>
+      <td id="T_b1d6a_row10_col1" class="data row10 col1">0</td>
+      <td id="T_b1d6a_row10_col2" class="data row10 col2">0</td>
+      <td id="T_b1d6a_row10_col3" class="data row10 col3">1</td>
+      <td id="T_b1d6a_row10_col4" class="data row10 col4">0</td>
+      <td id="T_b1d6a_row10_col5" class="data row10 col5">0</td>
+      <td id="T_b1d6a_row10_col6" class="data row10 col6">0</td>
+      <td id="T_b1d6a_row10_col7" class="data row10 col7">1</td>
+      <td id="T_b1d6a_row10_col8" class="data row10 col8">1</td>
+      <td id="T_b1d6a_row10_col9" class="data row10 col9">0</td>
+      <td id="T_b1d6a_row10_col10" class="data row10 col10">0</td>
+    </tr>
+    <tr>
+      <th id="T_b1d6a_level0_row11" class="row_heading level0 row11">11</th>
+      <td id="T_b1d6a_row11_col0" class="data row11 col0">C++ deep learning artificial intelligence probability</td>
+      <td id="T_b1d6a_row11_col1" class="data row11 col1">1</td>
+      <td id="T_b1d6a_row11_col2" class="data row11 col2">0</td>
+      <td id="T_b1d6a_row11_col3" class="data row11 col3">1</td>
+      <td id="T_b1d6a_row11_col4" class="data row11 col4">0</td>
+      <td id="T_b1d6a_row11_col5" class="data row11 col5">1</td>
+      <td id="T_b1d6a_row11_col6" class="data row11 col6">1</td>
+      <td id="T_b1d6a_row11_col7" class="data row11 col7">0</td>
+      <td id="T_b1d6a_row11_col8" class="data row11 col8">0</td>
+      <td id="T_b1d6a_row11_col9" class="data row11 col9">1</td>
+      <td id="T_b1d6a_row11_col10" class="data row11 col10">1</td>
+    </tr>
+    <tr>
+      <th id="T_b1d6a_level0_row12" class="row_heading level0 row12">12</th>
+      <td id="T_b1d6a_row12_col0" class="data row12 col0">pandas R Python</td>
+      <td id="T_b1d6a_row12_col1" class="data row12 col1">0</td>
+      <td id="T_b1d6a_row12_col2" class="data row12 col2">0</td>
+      <td id="T_b1d6a_row12_col3" class="data row12 col3">0</td>
+      <td id="T_b1d6a_row12_col4" class="data row12 col4">1</td>
+      <td id="T_b1d6a_row12_col5" class="data row12 col5">0</td>
+      <td id="T_b1d6a_row12_col6" class="data row12 col6">0</td>
+      <td id="T_b1d6a_row12_col7" class="data row12 col7">2</td>
+      <td id="T_b1d6a_row12_col8" class="data row12 col8">0</td>
+      <td id="T_b1d6a_row12_col9" class="data row12 col9">0</td>
+      <td id="T_b1d6a_row12_col10" class="data row12 col10">0</td>
+    </tr>
+    <tr>
+      <th id="T_b1d6a_level0_row13" class="row_heading level0 row13">13</th>
+      <td id="T_b1d6a_row13_col0" class="data row13 col0">databases HBase Postgres MySQL MongoDB</td>
+      <td id="T_b1d6a_row13_col1" class="data row13 col1">1</td>
+      <td id="T_b1d6a_row13_col2" class="data row13 col2">1</td>
+      <td id="T_b1d6a_row13_col3" class="data row13 col3">1</td>
+      <td id="T_b1d6a_row13_col4" class="data row13 col4">0</td>
+      <td id="T_b1d6a_row13_col5" class="data row13 col5">1</td>
+      <td id="T_b1d6a_row13_col6" class="data row13 col6">0</td>
+      <td id="T_b1d6a_row13_col7" class="data row13 col7">0</td>
+      <td id="T_b1d6a_row13_col8" class="data row13 col8">0</td>
+      <td id="T_b1d6a_row13_col9" class="data row13 col9">1</td>
+      <td id="T_b1d6a_row13_col10" class="data row13 col10">0</td>
+    </tr>
+    <tr>
+      <th id="T_b1d6a_level0_row14" class="row_heading level0 row14">14</th>
+      <td id="T_b1d6a_row14_col0" class="data row14 col0">libsvm regression support vector machines</td>
+      <td id="T_b1d6a_row14_col1" class="data row14 col1">1</td>
+      <td id="T_b1d6a_row14_col2" class="data row14 col2">2</td>
+      <td id="T_b1d6a_row14_col3" class="data row14 col3">1</td>
+      <td id="T_b1d6a_row14_col4" class="data row14 col4">0</td>
+      <td id="T_b1d6a_row14_col5" class="data row14 col5">0</td>
+      <td id="T_b1d6a_row14_col6" class="data row14 col6">1</td>
+      <td id="T_b1d6a_row14_col7" class="data row14 col7">0</td>
+      <td id="T_b1d6a_row14_col8" class="data row14 col8">0</td>
+      <td id="T_b1d6a_row14_col9" class="data row14 col9">0</td>
+      <td id="T_b1d6a_row14_col10" class="data row14 col10">0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../lessons/M07_FeaturesAndComponents/M07_01_PCA.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">PCA from Scratch</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../lessons/M08_TopicModels/M08_02_LDASciKitLearn.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-title">LDA with SciKit Learn</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

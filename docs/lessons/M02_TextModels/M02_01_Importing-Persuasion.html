@@ -1,0 +1,3058 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.262">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Exploratory Text Analytics - 5&nbsp; Text into Data: Importing a Text, or, Clip, Chunk, and Split</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../lessons/M02_TextModels/M02_02_TokenizingWithSciKitLearn.html" rel="next">
+<link href="../../lessons/M01_Intro/M01_04_FurtherExploration.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-title">Text into Data: Importing a Text, or, Clip, Chunk, and Split</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Exploratory Text Analytics</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/ontoligent/DS5001-2024-01-R" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">M01 Introduction</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_01_getting-started.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Setting Up Your Jupyter Environmnet</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_02_hello.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: Hello, World!</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_03_first-foray.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: First Foray</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M01_Intro/M01_04_FurtherExploration.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Lab: Further Exploration</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">M02 TextModels</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_01_Importing-Persuasion.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Text into Data: Importing a Text, or, Clip, Chunk, and Split</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_02_TokenizingWithSciKitLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Tokenizing with SciKit Learn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M02_TextModels/M02_03_Challenge.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Challenge: Convert Another Text</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">M03 LanguageModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_01_Babel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Baby Babel</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_01a_EntropyExamples.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy Examples</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V1.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models v1</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models (v2)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_LanguageModels_V3.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Inferring Language Models (v3)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_02_SimpleLangModel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Demonstration of Simple Language Model</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_03_Entropy-and-Perplexity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy and Peplexity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_04-Entropy-and-Term-Length.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Entropy and Term Length</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M03_LanguageModels/M03_EZ.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">How to Create an N-Gram Model from ScratchHow to Create an N-Gram Model from Scratch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">M04 NLP</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_00_NLTK_Intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">NLTK Parsers</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_01_Pipeline.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">NLP and the Pipeline</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M04_NLP/M04_02_HMM.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Predict POS with an HMM</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">M05 VectorSpaceModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_01_BOW_TFIDF.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Vector Spaces, BOW, and TFIDF</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_02_TimeTokenMatrices.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Time-Token Matrices</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M05_VectorSpaceModels/M05_03_TFIDF_Exploration.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Variant TFIDFs and Document Significance</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false">M06 CusteringSimilarity</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M06_CusteringSimilarity/M06_01_SimilarityMeasures.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Similarity and Distance Measures</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false">M07 FeaturesAndComponents</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M07_FeaturesAndComponents/M07_01_PCA.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">PCA from Scratch</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false">M08 TopicModels</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_01_GibbsSampler.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Gibbs Sampler</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_02_LDASciKitLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">LDA with SciKit Learn</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_03_TopicSimilarity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Topic Similarity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_04_TopicContiguity.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Topic Contiguity</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/M08_05_PyLDAVis.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">PyLDAVis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08_TopicModels/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Untitled.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">M08a Visualization</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-9" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-9" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_01_Gensim.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Other Tools</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_02_GensimRunCompareLDA.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_03_MALLET.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M08a_Visualization/M08a_04_Mazo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">M09 WordEmbedding</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-10" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-10" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_01_GloVe.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_02_PMI_SVD.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_03_SkipgramRepresentation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_04_word2vec.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/M09_05_FastText.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Untitled.html</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M09_WordEmbedding/run_fasttext.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">FastText Model</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="false">M10 SentimentAnalysis</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-11" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-11" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_01_GeneralInquirer.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_02_CombineLexicons.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_03_Novel.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_04_AustenMelville.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_05_WordShiftGraphs.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M10_SentimentAnalysis/M10_06_Doc2Vec.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" aria-expanded="false">M11 Narrative</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-12" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-12" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_01_ExportBooksWithSentiment.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_02_SyuzhetPlots.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_03_Syuzhet_R.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M11_Narrative/M11_04_Syuzhet_RGeneral.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" aria-expanded="false">M12 Classification</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-13" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-13" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_01_NaiveBayesWineReviews.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_01b_SKLearnMNB.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_02_PerceptronWine.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_03.ExpectedMutualInformation.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/M12_04_Viz.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M12_Classification/Untitled.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" aria-expanded="false">M13 LLMs</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-14" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-14" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_01_ChatGPTDemo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_02_ChatGPTDemo2.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_03_ChatGPT4Demo.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/M13_play.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">M13_play.html</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M13_LLMs/tokenizer_training.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Loading the dataset</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" aria-expanded="false">M90 DispersionPlots</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-15" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-15" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M90_DispersionPlots/m01.04-austen-kde.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Synopsis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M90_DispersionPlots/onehot.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">onehot.html</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" aria-expanded="false">M91 Charrette</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-16" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-16" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M91_Charrette/CharretteFIguresAndCharacters.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Figures and Characters</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M91_Charrette/CharretteTokens.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Config</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-17" aria-expanded="false">M92 Helpers</a>
+          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-17" aria-expanded="false">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-17" class="collapse list-unstyled sidebar-section depth1 ">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M92_Helpers/M00_01_VectorizationWithSKLearn.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../lessons/M92_Helpers/M00_02_SpaCy.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Metadata</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#set-up" id="toc-set-up" class="nav-link active" data-scroll-target="#set-up">Set Up</a>
+  <ul class="collapse">
+  <li><a href="#import-config" id="toc-import-config" class="nav-link" data-scroll-target="#import-config">Import Config</a></li>
+  </ul></li>
+  <li><a href="#import-file-into-a-dataframe" id="toc-import-file-into-a-dataframe" class="nav-link" data-scroll-target="#import-file-into-a-dataframe">Import file into a dataframe</a></li>
+  <li><a href="#extract-title" id="toc-extract-title" class="nav-link" data-scroll-target="#extract-title">Extract Title</a></li>
+  <li><a href="#clip-the-cruft" id="toc-clip-the-cruft" class="nav-link" data-scroll-target="#clip-the-cruft">Clip the Cruft</a></li>
+  <li><a href="#chunk-by-chapter" id="toc-chunk-by-chapter" class="nav-link" data-scroll-target="#chunk-by-chapter">Chunk by Chapter</a>
+  <ul class="collapse">
+  <li><a href="#find-all-chapter-headers" id="toc-find-all-chapter-headers" class="nav-link" data-scroll-target="#find-all-chapter-headers">Find all chapter headers</a></li>
+  <li><a href="#assign-numbers-to-chapters" id="toc-assign-numbers-to-chapters" class="nav-link" data-scroll-target="#assign-numbers-to-chapters">Assign numbers to chapters</a></li>
+  <li><a href="#forward-fill-chapter-numbers-to-following-text-lines" id="toc-forward-fill-chapter-numbers-to-following-text-lines" class="nav-link" data-scroll-target="#forward-fill-chapter-numbers-to-following-text-lines">Forward-fill chapter numbers to following text lines</a></li>
+  <li><a href="#clean-up" id="toc-clean-up" class="nav-link" data-scroll-target="#clean-up">Clean up</a></li>
+  <li><a href="#group-lines-into-chapters" id="toc-group-lines-into-chapters" class="nav-link" data-scroll-target="#group-lines-into-chapters">Group lines into chapters</a></li>
+  </ul></li>
+  <li><a href="#split-chapters-into-paragraphs" id="toc-split-chapters-into-paragraphs" class="nav-link" data-scroll-target="#split-chapters-into-paragraphs">Split chapters into paragraphs</a></li>
+  <li><a href="#split-paragraphs-into-sentences" id="toc-split-paragraphs-into-sentences" class="nav-link" data-scroll-target="#split-paragraphs-into-sentences">Split paragraphs into sentences</a></li>
+  <li><a href="#split-sentences-into-tokens" id="toc-split-sentences-into-tokens" class="nav-link" data-scroll-target="#split-sentences-into-tokens">Split sentences into tokens</a></li>
+  <li><a href="#extract-vocabulary" id="toc-extract-vocabulary" class="nav-link" data-scroll-target="#extract-vocabulary">Extract Vocabulary</a></li>
+  <li><a href="#gathering-by-content-object" id="toc-gathering-by-content-object" class="nav-link" data-scroll-target="#gathering-by-content-object">Gathering by Content Object</a></li>
+  <li><a href="#save-work-to-csv" id="toc-save-work-to-csv" class="nav-link" data-scroll-target="#save-work-to-csv">Save work to CSV</a></li>
+  <li><a href="#use-library" id="toc-use-library" class="nav-link" data-scroll-target="#use-library">Use Library</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.dev/ontoligent/DS5001-2024-01-R/blob/main/lessons/M02_TextModels/M02_01_Importing-Persuasion.ipynb" class="toc-action">Edit this page</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-title">Text into Data: Importing a Text, or, Clip, Chunk, and Split</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Course</span><span class="kw">:</span><span class="at">   DS 5001 </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Module</span><span class="kw">:</span><span class="at">   02 Text Models</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Topic</span><span class="kw">:</span><span class="at">    Text into Data: Importing a Text, or, Clip, Chunk, and Split</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">Author</span><span class="kw">:</span><span class="at">   R.C. Alvarado</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">Date</span><span class="kw">:</span><span class="at">     14 October 2022 (revised)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Purpose</strong>: Demonstrate how to tokenize a raw text and map an OHCO onto the resulting dataframe of tokens.</p>
+<section id="set-up" class="level1">
+<h1>Set Up</h1>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="import-config" class="level2">
+<h2 class="anchored" data-anchor-id="import-config">Import Config</h2>
+<div class="cell" data-editable="true" data-slideshow="{&quot;slide_type&quot;:&quot;&quot;}" data-tags="[]" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> configparser</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> configparser.ConfigParser()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-editable="true" data-slideshow="{&quot;slide_type&quot;:&quot;&quot;}" data-tags="[]" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>config.read(<span class="st">"../env.ini"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>data_home <span class="op">=</span> config[<span class="st">'DEFAULT'</span>][<span class="st">'data_home'</span>]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>output_dir <span class="op">=</span> config[<span class="st">'DEFAULT'</span>][<span class="st">'output_dir'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-editable="true" data-slideshow="{&quot;slide_type&quot;:&quot;&quot;}" data-tags="[]" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data_home, output_dir</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>('/Users/rca2t1/Dropbox/Courses/DS/DS5001/DS5001_2024_01_R/data',
+ '/Users/rca2t1/Dropbox/Courses/DS/DS5001/DS5001_2024_01_R/output')</code></pre>
+</div>
+</div>
+<div class="cell" data-editable="true" data-slideshow="{&quot;slide_type&quot;:&quot;&quot;}" data-tags="[]" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>text_file <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>data_home<span class="sc">}</span><span class="ss">/gutenberg/pg105.txt"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>csv_file  <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>output_dir<span class="sc">}</span><span class="ss">/austen-persuasion.csv"</span> <span class="co"># The file we will create</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-editable="true" data-slideshow="{&quot;slide_type&quot;:&quot;&quot;}" data-tags="[]" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>OHCO <span class="op">=</span> [<span class="st">'chap_num'</span>, <span class="st">'para_num'</span>, <span class="st">'sent_num'</span>, <span class="st">'token_num'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="import-file-into-a-dataframe" class="level1">
+<h1>Import file into a dataframe</h1>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>LINES <span class="op">=</span> pd.DataFrame(<span class="bu">open</span>(text_file, <span class="st">'r'</span>, encoding<span class="op">=</span><span class="st">'utf-8-sig'</span>).readlines(), columns<span class="op">=</span>[<span class="st">'line_str'</span>])</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>LINES.index.name <span class="op">=</span> <span class="st">'line_num'</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>LINES.line_str <span class="op">=</span> LINES.line_str.<span class="bu">str</span>.replace(<span class="vs">r'\n+'</span>, <span class="st">' '</span>, regex<span class="op">=</span><span class="va">True</span>).<span class="bu">str</span>.strip()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-editable="true" data-slideshow="{&quot;slide_type&quot;:&quot;&quot;}" data-tags="[]" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>LINES.sample(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>line_str</th>
+    </tr>
+    <tr>
+      <th>line_num</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>4676</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>7431</th>
+      <td>Captain Wentworth left his seat, and walked to...</td>
+    </tr>
+    <tr>
+      <th>4755</th>
+      <td>appeared, in Mr Elliot's great desire of a rec...</td>
+    </tr>
+    <tr>
+      <th>1707</th>
+      <td>how glad again when he had promised in reply t...</td>
+    </tr>
+    <tr>
+      <th>357</th>
+      <td>eyes of sensible people, by acting like a man ...</td>
+    </tr>
+    <tr>
+      <th>7414</th>
+      <td>if Miss Anne could not be with us."</td>
+    </tr>
+    <tr>
+      <th>5035</th>
+      <td>sure to have something to relate that is enter...</td>
+    </tr>
+    <tr>
+      <th>2321</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>8156</th>
+      <td>which the same consciousness sought to conceal...</td>
+    </tr>
+    <tr>
+      <th>8336</th>
+      <td>two.  She was their earliest visitor in their ...</td>
+    </tr>
+    <tr>
+      <th>8591</th>
+      <td>DAMAGE.</td>
+    </tr>
+    <tr>
+      <th>4531</th>
+      <td>of his present keener time of life was another...</td>
+    </tr>
+    <tr>
+      <th>4290</th>
+      <td>extraordinarily.</td>
+    </tr>
+    <tr>
+      <th>4814</th>
+      <td>letter of condolence was received at Kellynch,...</td>
+    </tr>
+    <tr>
+      <th>3205</th>
+      <td>pleasanter feelings which sprang from the sigh...</td>
+    </tr>
+    <tr>
+      <th>7993</th>
+      <td>had been vanquished at last by those sentiment...</td>
+    </tr>
+    <tr>
+      <th>3393</th>
+      <td>noticing of it.  He gave her a momentary glanc...</td>
+    </tr>
+    <tr>
+      <th>4600</th>
+      <td>to ask them how they did.  They could think of...</td>
+    </tr>
+    <tr>
+      <th>3032</th>
+      <td>that in removing thence she might be considere...</td>
+    </tr>
+    <tr>
+      <th>3479</th>
+      <td>undoubtedly a gentleman, and had an air of goo...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="extract-title" class="level1">
+<h1>Extract Title</h1>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>title <span class="op">=</span> LINES.loc[<span class="dv">0</span>].line_str.replace(<span class="st">'The Project Gutenberg EBook of '</span>, <span class="st">''</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(title)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Persuasion, by Jane Austen</code></pre>
+</div>
+</div>
+</section>
+<section id="clip-the-cruft" class="level1">
+<h1>Clip the Cruft</h1>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>clip_pats <span class="op">=</span> [</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="vs">r"\*\*\*\s*START OF (?:THE|THIS) PROJECT"</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="vs">r"\*\*\*\s*END OF (?:THE|THIS) PROJECT"</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pat_a <span class="op">=</span> LINES.line_str.<span class="bu">str</span>.match(clip_pats[<span class="dv">0</span>])</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>pat_b <span class="op">=</span> LINES.line_str.<span class="bu">str</span>.match(clip_pats[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>line_a <span class="op">=</span> LINES.loc[pat_a].index[<span class="dv">0</span>] <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>line_b <span class="op">=</span> LINES.loc[pat_b].index[<span class="dv">0</span>] <span class="op">-</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>line_a, line_b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<pre><code>(19, 8372)</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>LINES <span class="op">=</span> LINES.loc[line_a : line_b]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>LINES.head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="16">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>line_str</th>
+    </tr>
+    <tr>
+      <th>line_num</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>19</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>Produced by Sharon Partridge and Martin Ward. ...</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>by Al Haines.</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>LINES.tail(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>line_str</th>
+    </tr>
+    <tr>
+      <th>line_num</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>8363</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>8364</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>8365</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>8366</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>8367</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>8368</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>8369</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>8370</th>
+      <td></td>
+    </tr>
+    <tr>
+      <th>8371</th>
+      <td>End of the Project Gutenberg EBook of Persuasi...</td>
+    </tr>
+    <tr>
+      <th>8372</th>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="chunk-by-chapter" class="level1">
+<h1>Chunk by Chapter</h1>
+<section id="find-all-chapter-headers" class="level2">
+<h2 class="anchored" data-anchor-id="find-all-chapter-headers">Find all chapter headers</h2>
+<p>The regex will depend on the source text. You need to investigate the source text to figure this out.</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>chap_pat <span class="op">=</span> <span class="vs">r"^\s*(?:chapter|letter)\s+\d+"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>chap_lines <span class="op">=</span> LINES.line_str.<span class="bu">str</span>.match(chap_pat, case<span class="op">=</span><span class="va">False</span>) <span class="co"># Returns a truth vector</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>LINES.loc[chap_lines] <span class="co"># Use as filter for dataframe</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>line_str</th>
+    </tr>
+    <tr>
+      <th>line_num</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>47</th>
+      <td>Chapter 1</td>
+    </tr>
+    <tr>
+      <th>306</th>
+      <td>Chapter 2</td>
+    </tr>
+    <tr>
+      <th>500</th>
+      <td>Chapter 3</td>
+    </tr>
+    <tr>
+      <th>786</th>
+      <td>Chapter 4</td>
+    </tr>
+    <tr>
+      <th>959</th>
+      <td>Chapter 5</td>
+    </tr>
+    <tr>
+      <th>1297</th>
+      <td>Chapter 6</td>
+    </tr>
+    <tr>
+      <th>1657</th>
+      <td>Chapter 7</td>
+    </tr>
+    <tr>
+      <th>1992</th>
+      <td>Chapter 8</td>
+    </tr>
+    <tr>
+      <th>2346</th>
+      <td>Chapter 9</td>
+    </tr>
+    <tr>
+      <th>2632</th>
+      <td>Chapter 10</td>
+    </tr>
+    <tr>
+      <th>3020</th>
+      <td>Chapter 11</td>
+    </tr>
+    <tr>
+      <th>3314</th>
+      <td>Chapter 12</td>
+    </tr>
+    <tr>
+      <th>3876</th>
+      <td>Chapter 13</td>
+    </tr>
+    <tr>
+      <th>4150</th>
+      <td>Chapter 14</td>
+    </tr>
+    <tr>
+      <th>4409</th>
+      <td>Chapter 15</td>
+    </tr>
+    <tr>
+      <th>4677</th>
+      <td>Chapter 16</td>
+    </tr>
+    <tr>
+      <th>4912</th>
+      <td>Chapter 17</td>
+    </tr>
+    <tr>
+      <th>5248</th>
+      <td>Chapter 18</td>
+    </tr>
+    <tr>
+      <th>5654</th>
+      <td>Chapter 19</td>
+    </tr>
+    <tr>
+      <th>5905</th>
+      <td>Chapter 20</td>
+    </tr>
+    <tr>
+      <th>6265</th>
+      <td>Chapter 21</td>
+    </tr>
+    <tr>
+      <th>6970</th>
+      <td>Chapter 22</td>
+    </tr>
+    <tr>
+      <th>7555</th>
+      <td>Chapter 23</td>
+    </tr>
+    <tr>
+      <th>8208</th>
+      <td>Chapter 24</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="assign-numbers-to-chapters" class="level2">
+<h2 class="anchored" data-anchor-id="assign-numbers-to-chapters">Assign numbers to chapters</h2>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>LINES.loc[chap_lines, <span class="st">'chap_num'</span>] <span class="op">=</span> [i<span class="op">+</span><span class="dv">1</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(LINES.loc[chap_lines].shape[<span class="dv">0</span>])]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>LINES.loc[chap_lines]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>line_str</th>
+      <th>chap_num</th>
+    </tr>
+    <tr>
+      <th>line_num</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>47</th>
+      <td>Chapter 1</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>306</th>
+      <td>Chapter 2</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <th>500</th>
+      <td>Chapter 3</td>
+      <td>3.0</td>
+    </tr>
+    <tr>
+      <th>786</th>
+      <td>Chapter 4</td>
+      <td>4.0</td>
+    </tr>
+    <tr>
+      <th>959</th>
+      <td>Chapter 5</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>1297</th>
+      <td>Chapter 6</td>
+      <td>6.0</td>
+    </tr>
+    <tr>
+      <th>1657</th>
+      <td>Chapter 7</td>
+      <td>7.0</td>
+    </tr>
+    <tr>
+      <th>1992</th>
+      <td>Chapter 8</td>
+      <td>8.0</td>
+    </tr>
+    <tr>
+      <th>2346</th>
+      <td>Chapter 9</td>
+      <td>9.0</td>
+    </tr>
+    <tr>
+      <th>2632</th>
+      <td>Chapter 10</td>
+      <td>10.0</td>
+    </tr>
+    <tr>
+      <th>3020</th>
+      <td>Chapter 11</td>
+      <td>11.0</td>
+    </tr>
+    <tr>
+      <th>3314</th>
+      <td>Chapter 12</td>
+      <td>12.0</td>
+    </tr>
+    <tr>
+      <th>3876</th>
+      <td>Chapter 13</td>
+      <td>13.0</td>
+    </tr>
+    <tr>
+      <th>4150</th>
+      <td>Chapter 14</td>
+      <td>14.0</td>
+    </tr>
+    <tr>
+      <th>4409</th>
+      <td>Chapter 15</td>
+      <td>15.0</td>
+    </tr>
+    <tr>
+      <th>4677</th>
+      <td>Chapter 16</td>
+      <td>16.0</td>
+    </tr>
+    <tr>
+      <th>4912</th>
+      <td>Chapter 17</td>
+      <td>17.0</td>
+    </tr>
+    <tr>
+      <th>5248</th>
+      <td>Chapter 18</td>
+      <td>18.0</td>
+    </tr>
+    <tr>
+      <th>5654</th>
+      <td>Chapter 19</td>
+      <td>19.0</td>
+    </tr>
+    <tr>
+      <th>5905</th>
+      <td>Chapter 20</td>
+      <td>20.0</td>
+    </tr>
+    <tr>
+      <th>6265</th>
+      <td>Chapter 21</td>
+      <td>21.0</td>
+    </tr>
+    <tr>
+      <th>6970</th>
+      <td>Chapter 22</td>
+      <td>22.0</td>
+    </tr>
+    <tr>
+      <th>7555</th>
+      <td>Chapter 23</td>
+      <td>23.0</td>
+    </tr>
+    <tr>
+      <th>8208</th>
+      <td>Chapter 24</td>
+      <td>24.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<p>Notice that all lines that are not chapter headers have no chapter number assigned to them.</p>
+<div class="cell" data-tags="[]" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>LINES.sample(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="23">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>line_str</th>
+      <th>chap_num</th>
+    </tr>
+    <tr>
+      <th>line_num</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>3553</th>
+      <td>but as they drew near the Cobb, there was such...</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3698</th>
+      <td>It now became necessary for the party to consi...</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>7399</th>
+      <td>Wentworth was all attention, looking and liste...</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>6092</th>
+      <td>of Colonel Wallis's gallantry, was quite conte...</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>7160</th>
+      <td>long before the term in question, the two fami...</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>140</th>
+      <td>Musgrove; but Anne, with an elegance of mind a...</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>5270</th>
+      <td>introduction.  I should have visited Admiral C...</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3802</th>
+      <td>it might, perhaps, be the occasion of continui...</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>6433</th>
+      <td>safe in his character.  He will not be led ast...</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>8360</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="forward-fill-chapter-numbers-to-following-text-lines" class="level2">
+<h2 class="anchored" data-anchor-id="forward-fill-chapter-numbers-to-following-text-lines">Forward-fill chapter numbers to following text lines</h2>
+<p><code>ffill()</code> will replace null values with the previous non-null value.</p>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>LINES.chap_num <span class="op">=</span> LINES.chap_num.ffill()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>LINES.sample(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>line_str</th>
+      <th>chap_num</th>
+    </tr>
+    <tr>
+      <th>line_num</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>6865</th>
+      <td></td>
+      <td>21.0</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>7063</th>
+      <td>more solicitation; but the charm was broken: h...</td>
+      <td>22.0</td>
+    </tr>
+    <tr>
+      <th>1864</th>
+      <td>Charles Musgrove's way, on account of the chil...</td>
+      <td>7.0</td>
+    </tr>
+    <tr>
+      <th>662</th>
+      <td>who knew it only by description could feel; an...</td>
+      <td>3.0</td>
+    </tr>
+    <tr>
+      <th>1168</th>
+      <td>"Yes, as long as I could bear their noise; but...</td>
+      <td>5.0</td>
+    </tr>
+    <tr>
+      <th>364</th>
+      <td>feelings of the gentleman, and the head of a h...</td>
+      <td>2.0</td>
+    </tr>
+    <tr>
+      <th>7887</th>
+      <td>distracting, and in desperation, she said she ...</td>
+      <td>23.0</td>
+    </tr>
+    <tr>
+      <th>2082</th>
+      <td>"To be sure you did.  What should a young fell...</td>
+      <td>8.0</td>
+    </tr>
+    <tr>
+      <th>7338</th>
+      <td>hands.  He is turning away.  Not know Mr Ellio...</td>
+      <td>22.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<p>Notice that the lines taht precede our first chapter have no chapters, which is what we want. We need to decide whether to keep these lines as textual front matter or to dispose of them.</p>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>LINES.head(<span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="26">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>line_str</th>
+      <th>chap_num</th>
+    </tr>
+    <tr>
+      <th>line_num</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>19</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>Produced by Sharon Partridge and Martin Ward. ...</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>by Al Haines.</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>Persuasion</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td></td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>by</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="clean-up" class="level2">
+<h2 class="anchored" data-anchor-id="clean-up">Clean up</h2>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>LINES <span class="op">=</span> LINES.dropna(subset<span class="op">=</span>[<span class="st">'chap_num'</span>]) <span class="co"># Remove everything before Chapter 1</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co"># LINES = LINES.loc[~LINES.chap_num.isna()] # Remove everything before Chapter 1 (alternate method)</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>LINES <span class="op">=</span> LINES.loc[<span class="op">~</span>chap_lines] <span class="co"># Remove chapter heading lines; their work is done</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>LINES.chap_num <span class="op">=</span> LINES.chap_num.astype(<span class="st">'int'</span>) <span class="co"># Convert chap_num from float to int</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>LINES.sample(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="28">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>line_str</th>
+      <th>chap_num</th>
+    </tr>
+    <tr>
+      <th>line_num</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>3640</th>
+      <td></td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <th>650</th>
+      <td>a hint of the Admiral from a London correspond...</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>8052</th>
+      <td>exist; and he went, therefore, to his brother'...</td>
+      <td>23</td>
+    </tr>
+    <tr>
+      <th>3093</th>
+      <td>very evident they would not have more than tim...</td>
+      <td>11</td>
+    </tr>
+    <tr>
+      <th>4753</th>
+      <td>surprise her, therefore, that Lady Russell sho...</td>
+      <td>16</td>
+    </tr>
+    <tr>
+      <th>5610</th>
+      <td>Captain Wentworth's letter to make you and Mrs...</td>
+      <td>18</td>
+    </tr>
+    <tr>
+      <th>4989</th>
+      <td>languor and depression, to hours of occupation...</td>
+      <td>17</td>
+    </tr>
+    <tr>
+      <th>2638</th>
+      <td>where she knew it would have satisfied neither...</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <th>7956</th>
+      <td>unpacked to the last possible moment, that I m...</td>
+      <td>23</td>
+    </tr>
+    <tr>
+      <th>2209</th>
+      <td>Admiral, in rating the claims of women to ever...</td>
+      <td>8</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="group-lines-into-chapters" class="level2">
+<h2 class="anchored" data-anchor-id="group-lines-into-chapters">Group lines into chapters</h2>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>OHCO[:<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="29">
+<pre><code>['chap_num']</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Make big string for each chapter</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>CHAPS <span class="op">=</span> LINES.groupby(OHCO[:<span class="dv">1</span>])<span class="op">\</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>    .line_str.<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="st">'</span><span class="ch">\n</span><span class="st">'</span>.join(x))<span class="op">\</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    .to_frame(<span class="st">'chap_str'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-tags="[]" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>CHAPS.head(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="31">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>chap_str</th>
+    </tr>
+    <tr>
+      <th>chap_num</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>\n\nSir Walter Elliot, of Kellynch Hall, in So...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>\n\nMr Shepherd, a civil, cautious lawyer, who...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>\n\n"I must take leave to observe, Sir Walter,...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>\n\nHe was not Mr Wentworth, the former curate...</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>\n\nOn the morning appointed for Admiral and M...</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>\n\nAnne had not wanted this visit to Uppercro...</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>\n\nA very few days more, and Captain Wentwort...</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>\n\nFrom this time Captain Wentworth and Anne ...</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>\n\nCaptain Wentworth was come to Kellynch as ...</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>\n\nOther opportunities of making her observat...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>CHAPS[<span class="st">'chap_str'</span>] <span class="op">=</span> CHAPS.chap_str.<span class="bu">str</span>.strip()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>CHAPS</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="33">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>chap_str</th>
+    </tr>
+    <tr>
+      <th>chap_num</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>Sir Walter Elliot, of Kellynch Hall, in Somers...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Mr Shepherd, a civil, cautious lawyer, who, wh...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>"I must take leave to observe, Sir Walter," sa...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>He was not Mr Wentworth, the former curate of ...</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>On the morning appointed for Admiral and Mrs C...</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Anne had not wanted this visit to Uppercross, ...</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>A very few days more, and Captain Wentworth wa...</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>From this time Captain Wentworth and Anne Elli...</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Captain Wentworth was come to Kellynch as to a...</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Other opportunities of making her observations...</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>The time now approached for Lady Russell's ret...</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Anne and Henrietta, finding themselves the ear...</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>The remainder of Anne's time at Uppercross, co...</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>Though Charles and Mary had remained at Lyme m...</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>Sir Walter had taken a very good house in Camd...</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>There was one point which Anne, on returning t...</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>While Sir Walter and Elizabeth were assiduousl...</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>It was the beginning of February; and Anne, ha...</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>While Admiral Croft was taking this walk with ...</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>Sir Walter, his two daughters, and Mrs Clay, w...</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>Anne recollected with pleasure the next mornin...</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>Anne went home to think over all that she had ...</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>One day only had passed since Anne's conversat...</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>Who can be in doubt of what followed?  When an...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<p>So, now we have our text grouped by chapters.</p>
+</section>
+</section>
+<section id="split-chapters-into-paragraphs" class="level1">
+<h1>Split chapters into paragraphs</h1>
+<p>We use Pandas’ convenient <code>.split()</code> method with <code>expand=True</code>, followed by <code>.stack()</code>. Note that this creates zero-based indexes.</p>
+<div class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>para_pat <span class="op">=</span> <span class="vs">r'\n\n+'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CHAPS['chap_str'].str.split(para_pat, expand=True).head()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>PARAS <span class="op">=</span> CHAPS[<span class="st">'chap_str'</span>].<span class="bu">str</span>.split(para_pat, expand<span class="op">=</span><span class="va">True</span>).stack()<span class="op">\</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    .to_frame(<span class="st">'para_str'</span>).sort_index()</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>PARAS.index.names <span class="op">=</span> OHCO[:<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>PARAS.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="37">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>para_str</th>
+    </tr>
+    <tr>
+      <th>chap_num</th>
+      <th>para_num</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">1</th>
+      <th>0</th>
+      <td>Sir Walter Elliot, of Kellynch Hall, in Somers...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>"ELLIOT OF KELLYNCH HALL.</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>"Walter Elliot, born March 1, 1760, married, J...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Precisely such had the paragraph originally st...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Then followed the history and rise of the anci...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>PARAS[<span class="st">'para_str'</span>] <span class="op">=</span> PARAS[<span class="st">'para_str'</span>].<span class="bu">str</span>.replace(<span class="vs">r'\n'</span>, <span class="st">' '</span>, regex<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>PARAS[<span class="st">'para_str'</span>] <span class="op">=</span> PARAS[<span class="st">'para_str'</span>].<span class="bu">str</span>.strip()</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>PARAS <span class="op">=</span> PARAS[<span class="op">~</span>PARAS[<span class="st">'para_str'</span>].<span class="bu">str</span>.match(<span class="vs">r'^\s*$'</span>)] <span class="co"># Remove empty paragraphs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>PARAS.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="39">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>para_str</th>
+    </tr>
+    <tr>
+      <th>chap_num</th>
+      <th>para_num</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">1</th>
+      <th>0</th>
+      <td>Sir Walter Elliot, of Kellynch Hall, in Somers...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>"ELLIOT OF KELLYNCH HALL.</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>"Walter Elliot, born March 1, 1760, married, J...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Precisely such had the paragraph originally st...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Then followed the history and rise of the anci...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="split-paragraphs-into-sentences" class="level1">
+<h1>Split paragraphs into sentences</h1>
+<div class="cell" data-execution_count="40">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># sent_pat = r'[.?!;:"]+'</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>sent_pat <span class="op">=</span> <span class="vs">r'[.?!;:]+'</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>SENTS <span class="op">=</span> PARAS[<span class="st">'para_str'</span>].<span class="bu">str</span>.split(sent_pat, expand<span class="op">=</span><span class="va">True</span>).stack()<span class="op">\</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>    .to_frame(<span class="st">'sent_str'</span>)</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>SENTS.index.names <span class="op">=</span> OHCO[:<span class="dv">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>SENTS <span class="op">=</span> SENTS[<span class="op">~</span>SENTS[<span class="st">'sent_str'</span>].<span class="bu">str</span>.match(<span class="vs">r'^\s*$'</span>)] <span class="co"># Remove empty paragraphs</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>SENTS.sent_str <span class="op">=</span> SENTS.sent_str.<span class="bu">str</span>.strip() <span class="co"># CRUCIAL TO REMOVE BLANK TOKENS</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="42">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>SENTS.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="42">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>sent_str</th>
+    </tr>
+    <tr>
+      <th>chap_num</th>
+      <th>para_num</th>
+      <th>sent_num</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">1</th>
+      <th rowspan="5" valign="top">0</th>
+      <th>0</th>
+      <td>Sir Walter Elliot, of Kellynch Hall, in Somers...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>there he found occupation for an idle hour, an...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>there his faculties were roused into admiratio...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>there any unwelcome sensations, arising from d...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>and there, if every other leaf were powerless,...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>SENTS.sample(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="43">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>sent_str</th>
+    </tr>
+    <tr>
+      <th>chap_num</th>
+      <th>para_num</th>
+      <th>sent_num</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>8</th>
+      <th>52</th>
+      <th>11</th>
+      <td>but as long as we could be together, nothing e...</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <th>56</th>
+      <th>1</th>
+      <td>Are you going near Camden Place</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <th>6</th>
+      <th>5</th>
+      <td>He considered the blessing of beauty as inferi...</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <th>1</th>
+      <th>11</th>
+      <td>I wish his friends would propose it to him</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">23</th>
+      <th>75</th>
+      <th>10</th>
+      <td>With the Musgroves, there was the happy chat o...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <th>0</th>
+      <td>Materials were at hand, on a separate table</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <th>36</th>
+      <th>1</th>
+      <td>but, except from some natural sensation of cur...</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <th>7</th>
+      <th>3</th>
+      <td>They have no difficulties to contend with at h...</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <th>29</th>
+      <th>2</th>
+      <td>I have a great idea that you do not design to ...</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <th>50</th>
+      <th>7</th>
+      <td>and there is nothing very unforgiving in that,...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="split-sentences-into-tokens" class="level1">
+<h1>Split sentences into tokens</h1>
+<div class="cell" data-execution_count="44">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>token_pat <span class="op">=</span> <span class="vs">r"[\s',-]+"</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>TOKENS <span class="op">=</span> SENTS[<span class="st">'sent_str'</span>].<span class="bu">str</span>.split(token_pat, expand<span class="op">=</span><span class="va">True</span>).stack()<span class="op">\</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>    .to_frame(<span class="st">'token_str'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="45">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>TOKENS.index.names <span class="op">=</span> OHCO[:<span class="dv">4</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="46">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>TOKENS</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="46">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>token_str</th>
+    </tr>
+    <tr>
+      <th>chap_num</th>
+      <th>para_num</th>
+      <th>sent_num</th>
+      <th>token_num</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">1</th>
+      <th rowspan="5" valign="top">0</th>
+      <th rowspan="5" valign="top">0</th>
+      <th>0</th>
+      <td>Sir</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Walter</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Elliot</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>of</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Kellynch</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th rowspan="5" valign="top">24</th>
+      <th rowspan="5" valign="top">13</th>
+      <th rowspan="5" valign="top">0</th>
+      <th>6</th>
+      <td>of</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Persuasion</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>by</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Jane</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Austen</td>
+    </tr>
+  </tbody>
+</table>
+<p>85014 rows × 1 columns</p>
+</div>
+</div>
+</div>
+</section>
+<section id="extract-vocabulary" class="level1">
+<h1>Extract Vocabulary</h1>
+<div class="cell" data-execution_count="47">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>TOKENS[<span class="st">'term_str'</span>] <span class="op">=</span> TOKENS.token_str.replace(<span class="vs">r'[\W_]+'</span>, <span class="st">''</span>, regex<span class="op">=</span><span class="va">True</span>).<span class="bu">str</span>.lower()</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>VOCAB <span class="op">=</span> TOKENS.term_str.value_counts().to_frame(<span class="st">'n'</span>).reset_index().rename(columns<span class="op">=</span>{<span class="st">'index'</span>:<span class="st">'term_str'</span>})</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>VOCAB.index.name <span class="op">=</span> <span class="st">'term_id'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="48">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>VOCAB</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="48">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>term_str</th>
+      <th>n</th>
+    </tr>
+    <tr>
+      <th>term_id</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>the</td>
+      <td>3330</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>to</td>
+      <td>2808</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>and</td>
+      <td>2800</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>of</td>
+      <td>2572</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>a</td>
+      <td>1595</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>5755</th>
+      <td>reins</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>5756</th>
+      <td>judiciously</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>5757</th>
+      <td>rut</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>5758</th>
+      <td>dung</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>5759</th>
+      <td>austen</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>5760 rows × 2 columns</p>
+</div>
+</div>
+</div>
+</section>
+<section id="gathering-by-content-object" class="level1">
+<h1>Gathering by Content Object</h1>
+<div class="cell" data-execution_count="49">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> gather(ohco_level):</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> TOKENS</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>    level_name <span class="op">=</span> OHCO[ohco_level<span class="op">-</span><span class="dv">1</span>].split(<span class="st">'_'</span>)[<span class="dv">0</span>]</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> TOKENS.groupby(OHCO[:ohco_level])<span class="op">\</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>        .token_str.<span class="bu">apply</span>(<span class="kw">lambda</span> x: x.<span class="bu">str</span>.cat(sep<span class="op">=</span><span class="st">' '</span>))<span class="op">\</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>        .to_frame(<span class="ss">f"</span><span class="sc">{</span>level_name<span class="sc">}</span><span class="ss">_str"</span>)</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="50">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>gather(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="50">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>chap_str</th>
+    </tr>
+    <tr>
+      <th>chap_num</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>Sir Walter Elliot of Kellynch Hall in Somerset...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Mr Shepherd a civil cautious lawyer who whatev...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>"I must take leave to observe Sir Walter " sai...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>He was not Mr Wentworth the former curate of M...</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>On the morning appointed for Admiral and Mrs C...</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Anne had not wanted this visit to Uppercross t...</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>A very few days more and Captain Wentworth was...</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>From this time Captain Wentworth and Anne Elli...</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Captain Wentworth was come to Kellynch as to a...</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Other opportunities of making her observations...</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>The time now approached for Lady Russell s ret...</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Anne and Henrietta finding themselves the earl...</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>The remainder of Anne s time at Uppercross com...</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>Though Charles and Mary had remained at Lyme m...</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>Sir Walter had taken a very good house in Camd...</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>There was one point which Anne on returning to...</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>While Sir Walter and Elizabeth were assiduousl...</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>It was the beginning of February and Anne havi...</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>While Admiral Croft was taking this walk with ...</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>Sir Walter his two daughters and Mrs Clay were...</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>Anne recollected with pleasure the next mornin...</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>Anne went home to think over all that she had ...</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>One day only had passed since Anne s conversat...</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>Who can be in doubt of what followed When any ...</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>gather(<span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="51">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>para_str</th>
+    </tr>
+    <tr>
+      <th>chap_num</th>
+      <th>para_num</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">1</th>
+      <th>0</th>
+      <td>Sir Walter Elliot of Kellynch Hall in Somerset...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>"ELLIOT OF KELLYNCH HALL</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>"Walter Elliot born March 1 1760 married July ...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Precisely such had the paragraph originally st...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Then followed the history and rise of the anci...</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th rowspan="5" valign="top">24</th>
+      <th>9</th>
+      <td>Anne satisfied at a very early period of Lady ...</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Her recent good offices by Anne had been enoug...</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Mrs Smith s enjoyments were not spoiled by thi...</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>Finis</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>End of the Project Gutenberg EBook of Persuasi...</td>
+    </tr>
+  </tbody>
+</table>
+<p>1008 rows × 1 columns</p>
+</div>
+</div>
+</div>
+<div class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>gather(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="52">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>sent_str</th>
+    </tr>
+    <tr>
+      <th>chap_num</th>
+      <th>para_num</th>
+      <th>sent_num</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">1</th>
+      <th rowspan="5" valign="top">0</th>
+      <th>0</th>
+      <td>Sir Walter Elliot of Kellynch Hall in Somerset...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>there he found occupation for an idle hour and...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>there his faculties were roused into admiratio...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>there any unwelcome sensations arising from do...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>and there if every other leaf were powerless h...</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th rowspan="5" valign="top">24</th>
+      <th rowspan="3" valign="top">11</th>
+      <th>4</th>
+      <td>Anne was tenderness itself and she had the ful...</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>His profession was all that could ever make he...</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>She gloried in being a sailor s wife but she m...</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <th>0</th>
+      <td>Finis</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <th>0</th>
+      <td>End of the Project Gutenberg EBook of Persuasi...</td>
+    </tr>
+  </tbody>
+</table>
+<p>5612 rows × 1 columns</p>
+</div>
+</div>
+</div>
+</section>
+<section id="save-work-to-csv" class="level1">
+<h1>Save work to CSV</h1>
+<p>This is important – will be used for homework.</p>
+<div class="cell" data-execution_count="53">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>TOKENS.to_csv(csv_file)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="use-library" class="level1">
+<h1>Use Library</h1>
+<div class="cell" data-editable="true" data-slideshow="{&quot;slide_type&quot;:&quot;&quot;}" data-tags="[]" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>local_lib <span class="op">=</span> config[<span class="st">'DEFAULT'</span>][<span class="st">'local_lib'</span>]</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>sys.path.append(local_lib) </span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> textimporter <span class="im">import</span> TextImporter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-execution_count="55">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>my_text <span class="op">=</span> TextImporter(src_file<span class="op">=</span>text_file, ohco_pats<span class="op">=</span>[(<span class="st">'chap'</span>, chap_pat, <span class="st">'m'</span>)], clip_pats<span class="op">=</span>clip_pats)</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>my_text.import_source()</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>my_text.parse_tokens()</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>my_text.extract_vocab()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Importing  /Users/rca2t1/Dropbox/Courses/DS/DS5001/DS5001_2024_01_R/data/gutenberg/pg105.txt
+Clipping text
+Parsing OHCO level 0 chap_id by milestone ^\s*(?:chapter|letter)\s+\d+
+Parsing OHCO level 1 para_num by delimitter \n\n
+Parsing OHCO level 2 sent_num by delimitter [.?!;:]+
+Parsing OHCO level 3 token_num by delimitter [\s',-]+</code></pre>
+</div>
+<div class="cell-output cell-output-display" data-execution_count="55">
+<pre><code>&lt;textimporter.TextImporter at 0x1448ae850&gt;</code></pre>
+</div>
+</div>
+<div class="cell" data-execution_count="56">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>my_text.TOKENS</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="56">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>token_str</th>
+      <th>term_str</th>
+    </tr>
+    <tr>
+      <th>chap_id</th>
+      <th>para_num</th>
+      <th>sent_num</th>
+      <th>token_num</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="5" valign="top">1</th>
+      <th rowspan="5" valign="top">0</th>
+      <th rowspan="5" valign="top">0</th>
+      <th>0</th>
+      <td>Sir</td>
+      <td>sir</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Walter</td>
+      <td>walter</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Elliot</td>
+      <td>elliot</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>of</td>
+      <td>of</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Kellynch</td>
+      <td>kellynch</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th rowspan="5" valign="top">24</th>
+      <th rowspan="5" valign="top">17</th>
+      <th rowspan="5" valign="top">0</th>
+      <th>7</th>
+      <td>of</td>
+      <td>of</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Persuasion</td>
+      <td>persuasion</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>by</td>
+      <td>by</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Jane</td>
+      <td>jane</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Austen</td>
+      <td>austen</td>
+    </tr>
+  </tbody>
+</table>
+<p>84904 rows × 2 columns</p>
+</div>
+</div>
+</div>
+<div class="cell" data-editable="true" data-slideshow="{&quot;slide_type&quot;:&quot;&quot;}" data-tags="[]" data-execution_count="57">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>my_text.VOCAB</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="57">
+
+<div>
+
+<table class="dataframe table table-sm table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>n</th>
+      <th>n_chars</th>
+      <th>p</th>
+      <th>s</th>
+      <th>i</th>
+      <th>h</th>
+    </tr>
+    <tr>
+      <th>term_str</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>the</th>
+      <td>3330</td>
+      <td>3</td>
+      <td>0.039221</td>
+      <td>25.496697</td>
+      <td>4.672238</td>
+      <td>0.183249</td>
+    </tr>
+    <tr>
+      <th>to</th>
+      <td>2808</td>
+      <td>2</td>
+      <td>0.033073</td>
+      <td>30.236467</td>
+      <td>4.918218</td>
+      <td>0.162658</td>
+    </tr>
+    <tr>
+      <th>and</th>
+      <td>2800</td>
+      <td>3</td>
+      <td>0.032978</td>
+      <td>30.322857</td>
+      <td>4.922334</td>
+      <td>0.162331</td>
+    </tr>
+    <tr>
+      <th>of</th>
+      <td>2572</td>
+      <td>2</td>
+      <td>0.030293</td>
+      <td>33.010886</td>
+      <td>5.044870</td>
+      <td>0.152824</td>
+    </tr>
+    <tr>
+      <th>a</th>
+      <td>1595</td>
+      <td>1</td>
+      <td>0.018786</td>
+      <td>53.231348</td>
+      <td>5.734204</td>
+      <td>0.107722</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>reins</th>
+      <td>1</td>
+      <td>5</td>
+      <td>0.000012</td>
+      <td>84904.000000</td>
+      <td>16.373545</td>
+      <td>0.000193</td>
+    </tr>
+    <tr>
+      <th>judiciously</th>
+      <td>1</td>
+      <td>11</td>
+      <td>0.000012</td>
+      <td>84904.000000</td>
+      <td>16.373545</td>
+      <td>0.000193</td>
+    </tr>
+    <tr>
+      <th>rut</th>
+      <td>1</td>
+      <td>3</td>
+      <td>0.000012</td>
+      <td>84904.000000</td>
+      <td>16.373545</td>
+      <td>0.000193</td>
+    </tr>
+    <tr>
+      <th>dung</th>
+      <td>1</td>
+      <td>4</td>
+      <td>0.000012</td>
+      <td>84904.000000</td>
+      <td>16.373545</td>
+      <td>0.000193</td>
+    </tr>
+    <tr>
+      <th>austen</th>
+      <td>1</td>
+      <td>6</td>
+      <td>0.000012</td>
+      <td>84904.000000</td>
+      <td>16.373545</td>
+      <td>0.000193</td>
+    </tr>
+  </tbody>
+</table>
+<p>5760 rows × 6 columns</p>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+          // target, if specified
+          link.setAttribute("target", "_blank");
+          // default icon
+          link.classList.add("external");
+      }
+    }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../lessons/M01_Intro/M01_04_FurtherExploration.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Lab: Further Exploration</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../lessons/M02_TextModels/M02_02_TokenizingWithSciKitLearn.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-title">Tokenizing with SciKit Learn</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

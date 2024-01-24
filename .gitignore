@@ -10,6 +10,7 @@ repo.Rproj
 **/__pycache__
 **/.egg-info
 **/mimno-Mallet-*
+**/*~
 
 **/_HIDE
 **/hidden
@@ -27,7 +28,7 @@ lessons/env.ini
 # CONTENT
 **/cookiecutter.png
 !lessons/M01*
-lessons/M02*
+!lessons/M02*
 lessons/M03*
 lessons/M04*
 lessons/M05*

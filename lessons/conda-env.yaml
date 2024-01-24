@@ -1,0 +1,23 @@
+name: ds5001
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11.5
+  - numpy
+  - pandas= 2.1.4
+  - scikit-learn
+  - scipy
+  - seaborn
+  - ipython
+  - ipykernel
+  - plotly
+  - plotly_express
+  - nltk
+  - gensim
+  - openpyxl
+  - Jinja2
+  - pip
+  - nbconvert
+  - shifterator
+  - pyLDAvis

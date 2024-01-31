@@ -1,9 +1,30 @@
 import pandas as pd
 import numpy as np
 
+# def get_ngrams(TOKEN, n=2, sent_key='sent_num'):
+    
+#     OHCO = TOKEN.index.names
+#     grouper = list(OHCO)[:OHCO.index(sent_key)+1]
+
+#     PADDED = TOKEN.groupby(grouper)\
+#         .apply(lambda x: '<s> ' + ' '.join(x.term_str) + ' </s>')\
+#         .apply(lambda x: pd.Series(x.split()))\
+#         .stack().to_frame('term_str')
+#     PADDED.index.names = grouper + ['token_num']
+        
+#     for i in range(1, n):
+#         PADDED = PADDED.join(PADDED.term_str.shift(-i), rsuffix=i)
+
+#     PADDED.columns = [f'w{j}' for j in range(n)]
+
+#     PADDED = PADDED.fillna('<s>')
+#     # PADDED = PADDED[~((PADDED.w0 == '</s>') & (PADDED[f'w{n-1}'] == '<s>'))]
+
+#     return PADDED
+
+
 def get_ngrams(TOKEN, n=2, sent_key='sent_num'):
     
-
     OHCO = TOKEN.index.names
     grouper = list(OHCO)[:OHCO.index(sent_key)+1]
 
@@ -12,16 +33,13 @@ def get_ngrams(TOKEN, n=2, sent_key='sent_num'):
         .apply(lambda x: pd.Series(x.split()))\
         .stack().to_frame('term_str')
     PADDED.index.names = grouper + ['token_num']
-        
-    for i in range(1, n):
-        PADDED = PADDED.join(PADDED.term_str.shift(-i), rsuffix=i)
 
-    PADDED.columns = [f'w{j}' for j in range(n)]
-
-    PADDED = PADDED.fillna('<s>')
-    # PADDED = PADDED[~((PADDED.w0 == '</s>') & (PADDED[f'w{n-1}'] == '<s>'))]
-
-    return PADDED
+    NGRAMS = PADDED.groupby(grouper)\
+        .apply(lambda x: pd.concat([x.shift(0-i) for i in range(n)], axis=1)).reset_index(drop=True)
+    NGRAMS.index = PADDED.index
+    NGRAMS.columns = [f'w{j}' for j in range(n)]
+    
+    return NGRAMS
 
 
 def get_ngram_counts(NGRAM):

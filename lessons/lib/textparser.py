@@ -4,9 +4,9 @@ import nltk
 
 class TextParser():
     """
-    A class to parse a single Gutenberg-type text files into a TOKENS dataframe with
+    A class to parse a single Gutenberg-type text file into a TOKENS dataframe with
     an OHCO index. Also has methods to extract a VOCAB table, although vocabulary
-    tables out to be generated at the corpus level.
+    tables ought to be generated at the corpus level.
     
     Sample parameter values:
 
@@ -183,11 +183,6 @@ class TextParser():
                 self.TOKENS.index.names = self.OHCO[:i+1]
 
             # After iterating through the OHCO
-
-            # Not sure if needed anymore
-            # self.TOKENS[dst_col] = self.TOKENS[dst_col].str.strip()
-            # self.TOKENS[dst_col] = self.TOKENS[dst_col].str.replace(self.join_pat, ' ', regex=True)
-            # self.TOKENS = self.TOKENS[~self.TOKENS[dst_col].str.contains(r'^\s*$', regex=True)]
 
             if not self.use_nltk:
                 self.TOKENS['term_str'] = self.TOKENS.token_str.str.replace(r'[\W_]+', '', regex=True).str.lower()  

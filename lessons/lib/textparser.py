@@ -129,7 +129,7 @@ class TextParser():
                 # By Milestone
                 if parse_type == 'm':
                     if self.verbose: print(f"by milestone {div_pat}")
-                    div_lines = self.TOKENS[src_col].str.contains(div_pat, regex=True, case=True) # TODO: Parametize case
+                    div_lines = self.TOKENS[src_col].str.contains(div_pat, regex=True, case=True)
                     self.TOKENS.loc[div_lines, div_name] = [i+1 for i in range(self.TOKENS.loc[div_lines].shape[0])]
                     self.TOKENS[div_name] = self.TOKENS[div_name].ffill()
                     self.TOKENS = self.TOKENS.loc[~self.TOKENS[div_name].isna()] 

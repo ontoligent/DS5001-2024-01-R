@@ -1,0 +1,19 @@
+digraph G {
+
+    graph [splines=polyline]
+    node [shape=plaintext fontname=arial]
+
+    X [label="X"]
+    A [label="Domesticity"]
+    B [label="Whaling"]
+    C [label="Religion"]
+    D [label="Islands"]
+    E [label="War"]
+    
+    X -> A
+    X -> B
+    B -> C
+    B -> D
+    D -> E
+    
+}

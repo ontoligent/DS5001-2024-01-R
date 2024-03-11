@@ -1,0 +1,318 @@
+graph G {
+# Nodes
+	T00 [label="T00\nemigrants steerage cabin\nmess cook organ water"]
+	T01 [label="T01\nman men things\nwine ha day way"]
+	T02 [label="T02\nair fish round\nday trees groves water"]
+	T03 [label="T03\nway friend nature\nsort stranger confidence kind"]
+	T04 [label="T04\nherb confidence man\nherb doctor ugh doctor dont"]
+	T05 [label="T05\nmother family years\nbrother time aunt child"]
+	T06 [label="T06\nabbey gallery generals\nharpooneer general man nose"]
+	T07 [label="T07\nday country village\nhorse morning road house"]
+	T08 [label="T08\ndoor house moment\ntime bed night hand"]
+	T09 [label="T09\ngod image lord\nidols images wine arms"]
+	T10 [label="T10\nnatives time island\nhouse place islanders feet"]
+	T11 [label="T11\nteeth kings royal\nmilk bull lord item"]
+	T12 [label="T12\ntime land water\nship air day sight"]
+	T13 [label="T13\ncanoe time face\ncook island head sort"]
+	T14 [label="T14\ntime world things\nyears people land times"]
+	T15 [label="T15\nship cabin voyage\ndollars ships man board"]
+	T16 [label="T16\noh body way\nday world sort word"]
+	T17 [label="T17\nhouse king heart\nmind time life people"]
+	T18 [label="T18\nmother room door\nman guide eyes world"]
+	T19 [label="T19\nthings soul man\nheart life love men"]
+	T20 [label="T20\nfeelings heart mind\nmoment letter happiness subject"]
+	T21 [label="T21\nbarber gentleman men\nsort world time life"]
+	T22 [label="T22\ntime men head\nday sailor sea country"]
+	T23 [label="T23\nball sir evening\nway yes room partner"]
+	T24 [label="T24\nday time consul\nboat way ships tailor"]
+	T25 [label="T25\nboat whales ship\nboats head sea line"]
+	T26 [label="T26\nlord king minstrel\nspears land royal throne"]
+	T27 [label="T27\nlord feet bones\nsea things skull ribs"]
+	T28 [label="T28\nthing volume paper\nbooks reading work man"]
+	T29 [label="T29\nmen war gun\nguns deck jacket man war"]
+	T30 [label="T30\nship deck night\nman sail wind time"]
+	T31 [label="T31\njacket auction need\nloan friend bags way"]
+	T32 [label="T32\nman court punishment\nlaws code time cases"]
+	T33 [label="T33\nhead mystery oil\ngirl whale sounds thing"]
+	T34 [label="T34\ndeck men ship\nsailors time captain mate"]
+	T35 [label="T35\nchimney table time\ncock man house room"]
+	T36 [label="T36\nglass place sailors\njacket friend sort sailor"]
+	T37 [label="T37\nthee art brother\noh face eyes heart"]
+	T38 [label="T38\nday house thing\nroom sister man pleasure"]
+	T39 [label="T39\ngentlemen man uncle\nleg operation water hand"]
+# Edges
+	T00 -- T04
+	T00 -- T12
+	T00 -- T14
+	T00 -- T18
+	T00 -- T24
+	T00 -- T28
+	T00 -- T29
+	T00 -- T30
+	T00 -- T34
+	T00 -- T36
+	T01 -- T02
+	T01 -- T03
+	T01 -- T04
+	T01 -- T06
+	T01 -- T07
+	T01 -- T08
+	T01 -- T10
+	T01 -- T12
+	T01 -- T13
+	T01 -- T14
+	T01 -- T17
+	T01 -- T18
+	T01 -- T19
+	T01 -- T23
+	T01 -- T26
+	T01 -- T27
+	T01 -- T30
+	T01 -- T35
+	T01 -- T36
+	T01 -- T37
+	T02 -- T06
+	T02 -- T07
+	T02 -- T09
+	T02 -- T10
+	T02 -- T12
+	T02 -- T13
+	T02 -- T14
+	T02 -- T17
+	T02 -- T19
+	T02 -- T25
+	T02 -- T26
+	T02 -- T27
+	T02 -- T30
+	T02 -- T31
+	T02 -- T32
+	T02 -- T33
+	T02 -- T37
+	T02 -- T39
+	T03 -- T04
+	T03 -- T06
+	T03 -- T07
+	T03 -- T09
+	T03 -- T13
+	T03 -- T14
+	T03 -- T16
+	T03 -- T18
+	T03 -- T19
+	T03 -- T21
+	T03 -- T24
+	T03 -- T28
+	T03 -- T31
+	T03 -- T33
+	T03 -- T35
+	T03 -- T36
+	T04 -- T06
+	T04 -- T07
+	T04 -- T08
+	T04 -- T11
+	T04 -- T13
+	T04 -- T18
+	T04 -- T21
+	T04 -- T23
+	T04 -- T29
+	T04 -- T30
+	T04 -- T32
+	T04 -- T37
+	T04 -- T39
+	T05 -- T17
+	T05 -- T18
+	T05 -- T19
+	T05 -- T20
+	T05 -- T21
+	T05 -- T23
+	T05 -- T33
+	T05 -- T38
+	T06 -- T08
+	T06 -- T11
+	T06 -- T25
+	T06 -- T27
+	T06 -- T28
+	T06 -- T30
+	T06 -- T35
+	T06 -- T36
+	T06 -- T37
+	T07 -- T10
+	T07 -- T12
+	T07 -- T13
+	T07 -- T16
+	T07 -- T20
+	T07 -- T24
+	T07 -- T33
+	T07 -- T34
+	T07 -- T35
+	T07 -- T36
+	T07 -- T37
+	T07 -- T38
+	T08 -- T18
+	T08 -- T19
+	T08 -- T20
+	T08 -- T23
+	T08 -- T28
+	T08 -- T33
+	T08 -- T35
+	T08 -- T36
+	T08 -- T37
+	T08 -- T38
+	T08 -- T39
+	T09 -- T10
+	T09 -- T12
+	T09 -- T13
+	T09 -- T14
+	T09 -- T17
+	T09 -- T18
+	T09 -- T19
+	T09 -- T24
+	T09 -- T26
+	T09 -- T27
+	T09 -- T32
+	T09 -- T37
+	T09 -- T39
+	T10 -- T12
+	T10 -- T13
+	T10 -- T14
+	T10 -- T22
+	T10 -- T24
+	T10 -- T28
+	T10 -- T31
+	T10 -- T34
+	T10 -- T35
+	T10 -- T39
+	T11 -- T12
+	T11 -- T13
+	T11 -- T14
+	T11 -- T19
+	T11 -- T32
+	T12 -- T13
+	T12 -- T14
+	T12 -- T15
+	T12 -- T17
+	T12 -- T19
+	T12 -- T24
+	T12 -- T25
+	T12 -- T26
+	T12 -- T29
+	T12 -- T30
+	T12 -- T34
+	T12 -- T39
+	T13 -- T14
+	T13 -- T17
+	T13 -- T25
+	T13 -- T27
+	T13 -- T28
+	T13 -- T29
+	T13 -- T30
+	T13 -- T32
+	T13 -- T34
+	T13 -- T39
+	T14 -- T17
+	T14 -- T19
+	T14 -- T25
+	T14 -- T26
+	T14 -- T27
+	T14 -- T28
+	T14 -- T29
+	T14 -- T30
+	T14 -- T34
+	T14 -- T35
+	T14 -- T36
+	T15 -- T18
+	T15 -- T19
+	T15 -- T23
+	T15 -- T25
+	T15 -- T28
+	T15 -- T29
+	T15 -- T30
+	T15 -- T32
+	T15 -- T33
+	T15 -- T34
+	T15 -- T36
+	T15 -- T37
+	T15 -- T39
+	T16 -- T20
+	T16 -- T21
+	T16 -- T23
+	T16 -- T28
+	T16 -- T29
+	T16 -- T33
+	T16 -- T36
+	T16 -- T38
+	T16 -- T39
+	T17 -- T18
+	T17 -- T19
+	T17 -- T24
+	T17 -- T26
+	T17 -- T27
+	T17 -- T28
+	T17 -- T30
+	T17 -- T32
+	T17 -- T33
+	T17 -- T35
+	T17 -- T37
+	T18 -- T19
+	T18 -- T21
+	T18 -- T22
+	T18 -- T23
+	T18 -- T26
+	T18 -- T28
+	T18 -- T33
+	T18 -- T35
+	T18 -- T37
+	T18 -- T39
+	T19 -- T21
+	T19 -- T24
+	T19 -- T27
+	T19 -- T28
+	T19 -- T30
+	T19 -- T35
+	T19 -- T37
+	T20 -- T21
+	T20 -- T23
+	T20 -- T38
+	T21 -- T23
+	T21 -- T28
+	T21 -- T29
+	T21 -- T38
+	T23 -- T28
+	T23 -- T38
+	T24 -- T27
+	T24 -- T34
+	T24 -- T37
+	T25 -- T27
+	T25 -- T30
+	T25 -- T32
+	T25 -- T34
+	T25 -- T36
+	T25 -- T37
+	T25 -- T39
+	T26 -- T30
+	T26 -- T32
+	T27 -- T37
+	T27 -- T39
+	T28 -- T29
+	T28 -- T30
+	T28 -- T35
+	T28 -- T36
+	T29 -- T30
+	T29 -- T31
+	T29 -- T34
+	T29 -- T36
+	T30 -- T32
+	T30 -- T34
+	T30 -- T35
+	T30 -- T36
+	T30 -- T37
+	T30 -- T39
+	T32 -- T34
+	T32 -- T36
+	T32 -- T37
+	T33 -- T37
+	T34 -- T36
+	T35 -- T36
+	T35 -- T37
+	T36 -- T39
+	T37 -- T39
+}
